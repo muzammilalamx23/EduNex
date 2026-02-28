@@ -103,8 +103,8 @@ if (process.env.NODE_ENV === 'production') {
 
     app.use(express.static(clientDistPath));
 
-    // Handle SPA Routing: Express 5 requires (.*) for catch-all
-    app.get('(.*)', (req, res) => {
+    // Handle SPA Routing: Express 5 requires named parameters for wildcards
+    app.get('/:path*', (req, res) => {
         if (!req.path.startsWith('/api')) {
             res.sendFile(path.join(clientDistPath, 'index.html'));
         }
