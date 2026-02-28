@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #06b6d4;
+  /* Cyan */
+  --color-primary-hover: #0891b2;
+  --color-secondary: #8b5cf6;
+  /* Violet */
+
+  --color-bg-dark: #09090b;
+  /* Very dark zinc */
+  --color-surface: #18181b;
+  /* Zinc 900 */
+  --color-surface-light: #27272a;
+  /* Zinc 800 */
+
+  --color-text-main: #f8fafc;
+  --color-text-muted: #94a3b8;
+
+  --color-border-glow: rgba(139, 92, 246, 0.3);
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+
+  --font-display: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--color-bg-dark)] text-[var(--color-text-main)] font-body antialiased;
+    background-image:
+      radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight text-white;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply relative inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all duration-300 overflow-hidden;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-white hover:scale-105;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+  }
+
+  .btn-outline {
+    @apply border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/50 backdrop-blur-md text-white hover:border-[var(--color-primary)] hover:bg-[var(--color-surface)];
+  }
+
+  .glass-card {
+    @apply bg-[var(--color-surface)]/40 backdrop-blur-xl border border-[var(--color-border-subtle)] rounded-2xl p-6 transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    @apply border-[var(--color-border-glow)] -translate-y-1;
+    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.12);
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-violet-500;
+  }
+}
