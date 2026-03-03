@@ -21,7 +21,11 @@ if (missing.length > 0) {
 const app = express();
 
 // ─── Security & Performance Middleware ────────────────────────────────────────
-app.use(helmet());
+// ─── Security & Performance Middleware ────────────────────────────────────────
+app.use(helmet({
+    contentSecurityPolicy: false, // Disable strict CSP for now to ensure site loads
+    crossOriginEmbedderPolicy: false
+}));
 app.use(compression()); // Gzip/Brotli compression
 app.use(express.json({ limit: '10kb' })); // Prevents large payload attacks
 
@@ -31,24 +35,8 @@ app.use(cookieParser());
 // Sanitize user input against NoSQL Injection
 app.use(mongoSanitize());
 
-// Strict CORS for frontend credentials
-const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? [process.env.CLIENT_ORIGIN || 'http://localhost:5173']
-    : ['http://localhost:5173', 'http://127.0.0.1:5173'];
+// (CORS moved below health check to avoid blocking static assets)
 
-app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            logger.warn(`Rejected blocked request from origin: ${origin}`);
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type'], // No longer need manual x-auth-token header
-    credentials: true, // Required for reading cookies from frontend
-}));
 
 // ─── Global Rate Limiting ──────────────────────────────────────────────────────
 const globalLimiter = rateLimit({
@@ -69,6 +57,25 @@ app.get('/health', (req, res) => {
         timestamp: Date.now()
     });
 });
+
+// ─── CORS Configuration for API ───────────────────────────────────────────────
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? [process.env.CLIENT_ORIGIN, 'https://edunex-1.onrender.com'].filter(Boolean)
+    : ['http://localhost:5173', 'http://127.0.0.1:5173'];
+
+app.use('/api', cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            logger.warn(`Rejected blocked request from origin: ${origin}`);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true,
+}));
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use('/api/auth', require('./routes/auth'));
@@ -101,14 +108,14 @@ if (process.env.NODE_ENV === 'production') {
     const path = require('path');
     const clientDistPath = path.join(__dirname, '../client/dist');
 
+    // 1. Serve static files FIRST
     app.use(express.static(clientDistPath));
 
-    // Handle SPA Routing
-    app.use((req, res, next) => {
+    // 2. Handle SPA Routing (Redirect ALL non-api requests to index.html)
+    app.get('*', (req, res) => {
         if (!req.path.startsWith('/api')) {
-            return res.sendFile(path.join(clientDistPath, 'index.html'));
+            res.sendFile(path.join(clientDistPath, 'index.html'));
         }
-        next();
     });
 }
 
