@@ -72,7 +72,7 @@ const CourseDetail = () => {
             }
 
             setIsEnrolling(true);
-            await api.post('/api/auth/enroll', {
+            await api.post('/auth/enroll', {
                 courseId: course._id,
                 title: course.title,
                 thumbnail: course.thumbnail,

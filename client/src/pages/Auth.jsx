@@ -45,10 +45,8 @@ const Auth = () => {
             const endpoint = isLogin ? '/auth/login' : '/auth/register';
             const response = await api.post(endpoint, formData);
 
-            // New backend returns: { success: true, data: { token } }
-            const token = response.data?.data?.token;
-            if (token) {
-                login(token); // AuthContext handles localStorage + user fetch
+            if (response.data?.success) {
+                login(); // AuthContext handled cookie-based refresh
                 toast.success(isLogin ? 'Welcome back!' : 'Account created! Welcome to EduNex 🚀');
                 navigate('/dashboard');
             }
