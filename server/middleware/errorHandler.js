@@ -8,10 +8,9 @@
  * Response shape: { success: false, message: string }
  */
 const errorHandler = (err, req, res, next) => { // eslint-disable-line no-unused-vars
-    // Log the full error stack only in development
-    if (process.env.NODE_ENV === 'development') {
-        console.error(`[${req.method}] ${req.url} →`, err.stack);
-    }
+    // ALWAYS log the error to console in production/development
+    // Render captures console.error so this is vital for debugging
+    console.error(`[${req.method}] ${req.url} →`, err.stack || err);
 
     // Mongoose bad ObjectId (e.g., invalid :id param)
     if (err.name === 'CastError') {
@@ -50,5 +49,6 @@ const errorHandler = (err, req, res, next) => { // eslint-disable-line no-unused
             : (err.message || 'An internal server error occurred.')
     });
 };
+
 
 module.exports = errorHandler;
