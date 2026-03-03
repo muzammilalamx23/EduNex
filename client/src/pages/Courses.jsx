@@ -64,7 +64,7 @@ const Courses = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await api.get('/api/courses');
+                const res = await api.get('/courses');
                 // New backend: { success: true, data: [...] }
                 setCourses(res.data.data || []);
             } catch {

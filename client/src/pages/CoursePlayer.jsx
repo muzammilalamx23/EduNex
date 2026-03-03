@@ -21,7 +21,7 @@ const CoursePlayer = () => {
     const handleLessonComplete = async () => {
         setIsCompleting(true);
         try {
-            const res = await api.post('/api/auth/lesson-complete', {
+            const res = await api.post('/auth/lesson-complete', {
                 courseId,
                 xpGain: 100,
             });
@@ -62,8 +62,8 @@ const CoursePlayer = () => {
         const fetchCourse = async () => {
             try {
                 const [courseRes, profileRes] = await Promise.all([
-                    api.get(`/api/courses/${courseId}`),
-                    api.get('/api/auth/user')
+                    api.get(`/courses/${courseId}`),
+                    api.get('/auth/user')
                 ]);
 
                 const fetchedCourse = courseRes.data.data;
@@ -91,7 +91,7 @@ const CoursePlayer = () => {
 
         timeInterval = setInterval(async () => {
             try {
-                await api.post('/api/auth/update-time', { minutes: 1 });
+                await api.post('/auth/update-time', { minutes: 1 });
             } catch { }
         }, 60000);
 

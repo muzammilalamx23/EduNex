@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
     const fetchUser = useCallback(async () => {
         try {
-            const res = await api.get('/api/auth/user');
+            const res = await api.get('/auth/user');
             if (res.data.success) {
                 setUser(res.data.data);
             }
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await api.post('/api/auth/logout');
+            await api.post('/auth/logout');
         } catch (error) {
             console.error('Logout failed:', error);
         } finally {

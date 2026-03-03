@@ -23,7 +23,7 @@ const AdminEditCourse = () => {
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const res = await api.get(`/api/courses/${courseId}`);
+                const res = await api.get(`/courses/${courseId}`);
                 setCourseData(res.data.data);
             } catch (err) {
                 toast.error("Failed to load course");
@@ -58,7 +58,7 @@ const AdminEditCourse = () => {
         e.preventDefault();
         setSaving(true);
         try {
-            await api.put(`/api/courses/${courseId}`, courseData);
+            await api.put(`/courses/${courseId}`, courseData);
             toast.success('Course updated successfully!');
             navigate('/admin');
         } catch (err) {

@@ -43,7 +43,7 @@ const AdminCreateCourse = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await api.post('/api/courses', courseData);
+            await api.post('/courses', courseData);
             toast.success('Course created successfully!');
             navigate('/admin');
         } catch (err) {

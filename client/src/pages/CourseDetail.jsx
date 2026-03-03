@@ -37,9 +37,9 @@ const CourseDetail = () => {
         const fetchCourseData = async () => {
             try {
                 const [courseRes, userRes] = await Promise.all([
-                    api.get(`/api/courses/${courseId}`),
+                    api.get(`/courses/${courseId}`),
                     localStorage.getItem('token')
-                        ? api.get('/api/auth/user')
+                        ? api.get('/auth/user')
                         : Promise.resolve({ data: { data: { enrolledCourses: [] } } })
                 ]);
 

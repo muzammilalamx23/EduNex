@@ -32,7 +32,7 @@ const ProfileSettings = ({ user, onUpdate }) => {
         setMessage({ type: '', text: '' });
 
         try {
-            const response = await api.put('/api/auth/profile', formData);
+            const response = await api.put('/auth/profile', formData);
             // New backend: { success: true, message: '...' }
             setMessage({ type: 'success', text: response.data.message || 'Profile updated.' });
             onUpdate();
@@ -151,8 +151,8 @@ const Dashboard = () => {
     const fetchUserData = useCallback(async () => {
         try {
             const [userRes, coursesRes] = await Promise.all([
-                api.get('/api/auth/user'),
-                api.get('/api/courses')
+                api.get('/auth/user'),
+                api.get('/courses')
             ]);
 
             // New backend response: { success, data: {...} }

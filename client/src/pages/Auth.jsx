@@ -42,7 +42,7 @@ const Auth = () => {
 
         setLoading(true);
         try {
-            const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+            const endpoint = isLogin ? '/auth/login' : '/auth/register';
             const response = await api.post(endpoint, formData);
 
             // New backend returns: { success: true, data: { token } }

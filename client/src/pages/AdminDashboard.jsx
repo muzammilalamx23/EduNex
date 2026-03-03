@@ -23,9 +23,9 @@ const AdminDashboard = () => {
     const fetchData = async () => {
         try {
             const [usersRes, statsRes, coursesRes] = await Promise.all([
-                api.get('/api/admin/users'),
-                api.get('/api/admin/stats'),
-                api.get('/api/courses/admin/all')
+                api.get('/admin/users'),
+                api.get('/admin/stats'),
+                api.get('/courses/admin/all')
             ]);
             setUsers(usersRes.data.data || []);
             setStats(statsRes.data.data || {});
@@ -44,7 +44,7 @@ const AdminDashboard = () => {
     const handleDeleteCourse = async (id) => {
         if (!window.confirm("Are you sure you want to delete this course?")) return;
         try {
-            await api.delete(`/api/courses/${id}`);
+            await api.delete(`/courses/${id}`);
             toast.success("Course deleted");
             setCourses(courses.filter(c => c._id !== id));
         } catch (err) {
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
 
     const handleTogglePublish = async (id) => {
         try {
-            const res = await api.patch(`/api/courses/${id}/publish`);
+            const res = await api.patch(`/courses/${id}/publish`);
             toast.success(`Course ${res.data.status}`);
             setCourses(courses.map(c => c._id === id ? { ...c, status: res.data.status } : c));
         } catch (err) {
@@ -180,8 +180,8 @@ const AdminDashboard = () => {
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <span className={`text-[10px] tracking-widest uppercase font-black px-2 py-0.5 rounded border ${course.difficulty === 'Beginner' ? 'border-emerald-500/20 text-emerald-400 bg-emerald-500/5' :
-                                                            course.difficulty === 'Intermediate' ? 'border-cyan-500/20 text-cyan-400 bg-cyan-500/5' :
-                                                                'border-violet-500/20 text-violet-400 bg-violet-500/5'
+                                                        course.difficulty === 'Intermediate' ? 'border-cyan-500/20 text-cyan-400 bg-cyan-500/5' :
+                                                            'border-violet-500/20 text-violet-400 bg-violet-500/5'
                                                         }`}>
                                                         {course.difficulty}
                                                     </span>
@@ -190,8 +190,8 @@ const AdminDashboard = () => {
                                                     <button
                                                         onClick={() => handleTogglePublish(course._id)}
                                                         className={`flex items-center gap-1.5 text-[10px] font-black uppercase px-2 py-1 rounded-lg border transition-all ${course.status === 'published'
-                                                                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
-                                                                : 'border-orange-500/30 bg-orange-500/10 text-orange-400'
+                                                            ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                                                            : 'border-orange-500/30 bg-orange-500/10 text-orange-400'
                                                             }`}
                                                     >
                                                         {course.status === 'published' ? <CheckCircle size={10} /> : <XCircle size={10} />}
