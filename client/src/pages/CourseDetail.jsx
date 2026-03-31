@@ -24,37 +24,25 @@ import api from '../utils/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BackgroundAnimation from '../components/BackgroundAnimation';
+import { useAuth } from '../context/AuthContext';
 
 const CourseDetail = () => {
     const { courseId } = useParams();
     const navigate = useNavigate();
+    const { user, refreshUser } = useAuth();
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isEnrolled, setIsEnrolled] = useState(false);
     const [isEnrolling, setIsEnrolling] = useState(false);
 
+    // 1. Fetch Course Data initially
     useEffect(() => {
         const fetchCourseData = async () => {
             try {
-                const [courseRes, userRes] = await Promise.all([
-                    api.get(`/courses/${courseId}`),
-                    localStorage.getItem('token')
-                        ? api.get('/auth/user')
-                        : Promise.resolve({ data: { data: { enrolledCourses: [] } } })
-                ]);
-
-                // New backend: { success, data: {...} }
-                const courseData = courseRes.data.data;
-                const userData = userRes.data.data;
-
-                setCourse(courseData);
-
-                const enrolled = (userData.enrolledCourses || []).find(
-                    (c) => c.courseId === courseId
-                );
-                if (enrolled) setIsEnrolled(true);
-            } catch {
-                // Course not found — handled by the !course render below
+                const res = await api.get(`/courses/${courseId}`);
+                setCourse(res.data.data);
+            } catch (err) {
+                console.error(err);
             } finally {
                 setLoading(false);
             }
@@ -63,10 +51,20 @@ const CourseDetail = () => {
         fetchCourseData();
     }, [courseId]);
 
+    // 2. Check Enrollment Status silently when user or course updates
+    useEffect(() => {
+        if (user && course) {
+            const enrolled = (user.enrolledCourses || []).find(
+                (c) => c.courseId === courseId
+            );
+            if (enrolled) setIsEnrolled(true);
+        }
+    }, [user, course, courseId]);
+
     const handleEnroll = async () => {
         try {
-            const token = localStorage.getItem('token');
-            if (!token) {
+            if (!user) {
+                toast.error('Please log in to enroll.');
                 navigate('/auth');
                 return;
             }
@@ -77,6 +75,10 @@ const CourseDetail = () => {
                 title: course.title,
                 thumbnail: course.thumbnail,
             });
+            
+            // Re-sync global context so enrolledCourses gets populated instantly
+            await refreshUser();
+            
             setIsEnrolled(true);
             toast.success('Successfully enrolled! Starting your journey...');
             navigate(`/course/${course._id}`);
@@ -234,7 +236,7 @@ const CourseDetail = () => {
                                                     </div>
                                                 </div>
                                                 <div className="flex gap-4">
-                                                    <div className="w-12 h-12 shrink-0 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-500">
+                                                    <div className="w-12 h-12 shrink-0 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-500">
                                                         <Globe size={24} />
                                                     </div>
                                                     <div>
@@ -268,7 +270,7 @@ const CourseDetail = () => {
 
                                 <div className="flex items-center justify-between mb-8">
                                     <span className="text-3xl font-black text-white">FREE <span className="text-xs text-zinc-500 line-through font-normal ml-2">$99.00</span></span>
-                                    <div className="px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[10px] font-bold rounded-lg border border-emerald-500/20">
+                                    <div className="px-3 py-1 bg-blue-500/10 text-blue-500 text-[10px] font-bold rounded-lg border border-blue-500/20">
                                         100% OFF
                                     </div>
                                 </div>
@@ -292,7 +294,7 @@ const CourseDetail = () => {
                                     onClick={isEnrolled ? () => navigate(`/course/${course._id}`) : handleEnroll}
                                     disabled={isEnrolling}
                                     className={`w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg ${isEnrolled
-                                        ? 'bg-emerald-500 text-white shadow-emerald-500/20'
+                                        ? 'bg-blue-500 text-white shadow-blue-500/20'
                                         : 'bg-white text-black hover:bg-cyan-500 hover:text-white shadow-white/10'
                                         }`}
                                 >

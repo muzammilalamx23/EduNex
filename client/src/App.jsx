@@ -21,8 +21,8 @@ const AdminEditCourse = lazy(() => import('./pages/AdminEditCourse'));
 
 // ─── Full-screen page loading fallback ────────────────────────────────────────
 const PageLoader = () => (
-  <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
-    <Loader2 className="animate-spin text-cyan-500" size={40} />
+  <div className="min-h-screen bg-[#030712] flex items-center justify-center">
+    <Loader2 className="animate-spin text-blue-500" size={40} />
   </div>
 );
 
@@ -36,14 +36,15 @@ export default function App() {
           position="top-right"
           toastOptions={{
             style: {
-              background: '#18181b',
-              color: '#f8fafc',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: '12px',
+              background: '#111827',
+              color: '#f9fafb',
+              border: '1px solid rgba(255,255,255,0.06)',
+              borderRadius: '14px',
               fontSize: '14px',
+              fontFamily: "'Inter', system-ui, sans-serif",
             },
-            success: { iconTheme: { primary: '#06b6d4', secondary: '#18181b' } },
-            error: { iconTheme: { primary: '#ef4444', secondary: '#18181b' } },
+            success: { iconTheme: { primary: '#3B82F6', secondary: '#111827' } },
+            error: { iconTheme: { primary: '#ef4444', secondary: '#111827' } },
             duration: 4000,
           }}
         />

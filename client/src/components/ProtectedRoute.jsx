@@ -23,8 +23,8 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
     // Without this, the page would flash-redirect to /auth momentarily.
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
-                <Loader2 className="animate-spin text-cyan-500" size={40} />
+            <div className="min-h-screen bg-[var(--color-bg-dark)] flex items-center justify-center">
+                <Loader2 className="animate-spin text-indigo-500" size={40} />
             </div>
         );
     }

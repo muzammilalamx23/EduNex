@@ -1,75 +1,61 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Radar, OrbitIcon } from './ui/radar-effect';
+import { Code } from 'lucide-react';
 
 const TechStack = () => {
-    const techData = [
-        { name: "React", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-        { name: "Next.js", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg", filter: "invert(1)" },
-        { name: "TypeScript", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
-        { name: "Node.js", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
-        { name: "Express", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg", filter: "invert(1)" },
-        { name: "MongoDB", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
-        { name: "Tailwind", logo: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg" },
-        { name: "Python", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
-    ];
-
-    // Double the data for seamless infinite loop
-    const doubledTech = [...techData, ...techData];
-
     return (
-        <div className="py-20 bg-[#09090b] relative overflow-hidden border-y border-zinc-900">
-            {/* Background Glows */}
-            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-72 h-32 bg-cyan-500/10 blur-[100px] pointer-events-none"></div>
-            <div className="absolute top-1/2 right-0 -translate-y-1/2 w-72 h-32 bg-violet-500/10 blur-[100px] pointer-events-none"></div>
+        <div className="py-24 relative overflow-hidden">
+            {/* Background */}
+            <div className="absolute inset-0 bg-[var(--color-surface)]"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.04)_0%,transparent_50%)] pointer-events-none"></div>
 
-            <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
-                <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-xs font-bold text-zinc-500 uppercase tracking-[0.3em]"
-                >
-                    Master the Tech Stack
-                </motion.h2>
-            </div>
+            <div className="max-w-7xl mx-auto px-6 relative z-10">
+                {/* Header */}
+                <div className="mb-16 text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="flex justify-center mb-6"
+                    >
+                        <span className="section-label">
+                            <Code size={14} /> Technologies
+                        </span>
+                    </motion.div>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="text-3xl md:text-4xl font-bold text-white mb-4"
+                    >
+                        Master the <span className="text-gradient">Tech Stack</span>
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="text-sm md:text-base text-[var(--color-text-muted)] max-w-xl mx-auto"
+                    >
+                        Built with modern, production-ready technologies to ensure maximum performance,
+                        scalability, and a world-class developer experience.
+                    </motion.p>
+                </div>
 
-            {/* Marquee Container */}
-            <div className="flex overflow-hidden relative group">
-                {/* Overlay gradients for fade effect */}
-                <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#09090b] to-transparent z-20"></div>
-                <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#09090b] to-transparent z-20"></div>
-
-                <motion.div
-                    initial={{ x: 0 }}
-                    animate={{ x: "-50%" }}
-                    transition={{
-                        duration: 30,
-                        repeat: Infinity,
-                        ease: "linear"
-                    }}
-                    className="flex items-center gap-12 md:gap-24 whitespace-nowrap px-12"
-                >
-                    {doubledTech.map((tech, i) => (
-                        <div
-                            key={i}
-                            className="flex items-center gap-4 group/item cursor-pointer"
-                        >
-                            <div className="relative">
-                                {/* Icon Glow */}
-                                <div className="absolute inset-0 bg-white/20 blur-xl opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
-                                <img
-                                    src={tech.logo}
-                                    alt={tech.name}
-                                    className="h-10 md:h-12 w-auto grayscale transition-all duration-500 group-hover/item:grayscale-0 group-hover/item:scale-110 relative z-10"
-                                    style={{ filter: tech.filter }}
-                                />
-                            </div>
-                            <span className="text-xl md:text-2xl font-bold text-zinc-700 tracking-tighter transition-colors duration-500 group-hover/item:text-zinc-200">
-                                {tech.name}
-                            </span>
-                        </div>
-                    ))}
-                </motion.div>
+                <div className="flex w-full items-center justify-center my-10">
+                    <Radar>
+                        <OrbitIcon angle={45} radius={110} text="React" img="https://raw.githubusercontent.com/github/explore/main/topics/react/react.png" />
+                        <OrbitIcon angle={225} radius={110} text="Node.js" img="https://raw.githubusercontent.com/github/explore/main/topics/nodejs/nodejs.png" />
+                        <OrbitIcon angle={315} radius={165} text="TypeScript" img="https://raw.githubusercontent.com/github/explore/main/topics/typescript/typescript.png" />
+                        <OrbitIcon angle={135} radius={165} text="MongoDB" img="https://raw.githubusercontent.com/github/explore/main/topics/mongodb/mongodb.png" />
+                        <OrbitIcon angle={90} radius={220} text="Python" img="https://raw.githubusercontent.com/github/explore/main/topics/python/python.png" />
+                        <OrbitIcon angle={270} radius={220} text="JavaScript" img="https://raw.githubusercontent.com/github/explore/main/topics/javascript/javascript.png" />
+                        <OrbitIcon angle={180} radius={275} text="Docker" img="https://raw.githubusercontent.com/github/explore/main/topics/docker/docker.png" />
+                        <OrbitIcon angle={0} radius={275} text="Tailwind" img="https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg" />
+                    </Radar>
+                </div>
             </div>
         </div>
     );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { HelpCircle, ChevronDown } from 'lucide-react';
 
 const FAQ = () => {
     const faqs = [
@@ -24,25 +25,63 @@ const FAQ = () => {
     const [openIndex, setOpenIndex] = useState(0);
 
     return (
-        <section className="py-32 px-6 bg-[#0c0c0e] border-y border-zinc-800 relative">
-            <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_100%_0%,rgba(139,92,246,0.05)_0%,transparent_50%)] pointer-events-none"></div>
+        <section className="py-32 px-6 relative">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.04)_0%,transparent_50%)] pointer-events-none"></div>
             <div className="max-w-3xl mx-auto relative z-10">
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl font-bold text-white mb-4">Frequently Asked <span className="text-gradient">Questions</span></h2>
-                    <p className="text-white text-lg">Everything you need to know about the product and billing.</p>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="flex justify-center mb-6"
+                    >
+                        <span className="section-label">
+                            <HelpCircle size={14} /> FAQ
+                        </span>
+                    </motion.div>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="text-4xl md:text-5xl font-bold text-white mb-5"
+                    >
+                        Frequently Asked <span className="text-gradient">Questions</span>
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="text-[var(--color-text-muted)] text-lg"
+                    >
+                        Everything you need to know about the product and billing.
+                    </motion.p>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                     {faqs.map((faq, i) => (
-                        <div
+                        <motion.div
                             key={i}
-                            className={`glass-card cursor-pointer transition-all duration-300 ${openIndex === i ? 'border-violet-500/30 bg-zinc-900/60' : 'hover:border-zinc-700'}`}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.05 }}
+                            className={`rounded-2xl cursor-pointer transition-all duration-300 border p-6 
+                                ${openIndex === i
+                                    ? 'border-blue-500/30 bg-blue-500/[0.03]'
+                                    : 'border-white/[0.06] bg-[var(--color-surface)] hover:border-white/10'
+                                }`}
                             onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
                         >
                             <div className="flex justify-between items-center">
                                 <h4 className="text-lg font-bold text-white pr-8">{faq.q}</h4>
-                                <div className={`w-6 h-6 rounded-full flex items-center justify-center border transition-colors ${openIndex === i ? 'border-violet-400 text-violet-400' : 'border-zinc-700 text-zinc-500'}`}>
-                                    <span className={`transform transition-transform duration-300 ${openIndex === i ? 'rotate-45' : ''}`}>+</span>
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center border flex-shrink-0 transition-all duration-300 ${
+                                    openIndex === i
+                                        ? 'border-blue-500/40 bg-blue-500/10 text-blue-400 rotate-180'
+                                        : 'border-white/10 text-zinc-500'
+                                }`}>
+                                    <ChevronDown size={16} />
                                 </div>
                             </div>
                             <AnimatePresence>
@@ -51,13 +90,13 @@ const FAQ = () => {
                                         initial={{ height: 0, opacity: 0, marginTop: 0 }}
                                         animate={{ height: "auto", opacity: 1, marginTop: 16 }}
                                         exit={{ height: 0, opacity: 0, marginTop: 0 }}
-                                        className="overflow-hidden text-zinc-300 leading-relaxed text-sm"
+                                        className="overflow-hidden text-[var(--color-text-muted)] leading-relaxed text-[0.95rem]"
                                     >
                                         {faq.a}
                                     </motion.div>
                                 )}
                             </AnimatePresence>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>

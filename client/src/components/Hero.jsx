@@ -1,6 +1,6 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react'; // useState/useEffect still used by TypewriterEffect above
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Play, Zap, Infinity, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Play, Zap, Sparkles, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fadeUp, staggerContainer } from '../utils/animations';
@@ -45,107 +45,132 @@ const TypewriterEffect = ({ words }) => {
     return (
         <>
             <span className="text-gradient">{(words[index] || "").substring(0, subIndex)}</span>
-            <span className={`inline-block w-[3px] h-[0.9em] bg-cyan-400 align-middle ml-1 ${blink ? 'opacity-100' : 'opacity-0'} shadow-[0_0_8px_#06b6d4]`}></span>
+            <span className={`inline-block w-[3px] h-[0.85em] bg-blue-400 align-middle ml-1 rounded-full transition-opacity duration-200 ${blink ? 'opacity-100' : 'opacity-0'}`}></span>
         </>
     );
 };
 
 const Hero = () => {
-    const { user } = useAuth(); // reads from shared context — no extra API call
+    const { user } = useAuth();
 
     return (
         <section className="relative min-h-screen pt-40 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden flex flex-col items-center justify-center text-center">
             {/* Background Effects */}
-            <div className="absolute inset-0 z-0 bg-[#09090b]">
+            <div className="absolute inset-0 z-0 bg-[var(--color-bg-dark)]">
                 <Suspense fallback={null}>
                     <LightPillar
-                        topColor="#06b6d4"
-                        bottomColor="#8b5cf6"
-                        intensity={0.6}
-                        rotationSpeed={0.1}
+                        topColor="#3B82F6"
+                        bottomColor="#06B6D4"
+                        intensity={0.4}
+                        rotationSpeed={0.08}
                         pillarWidth={4.0}
                         pillarHeight={0.2}
                         mixBlendMode="plus-lighter"
                     />
                 </Suspense>
-                <div className="absolute inset-0 bg-[#09090b]/40 backdrop-blur-[2px]"></div>
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-30"></div>
+                <div className="absolute inset-0 bg-[var(--color-bg-dark)]/50 backdrop-blur-[2px]"></div>
+                {/* Radial gradient overlay */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.08)_0%,transparent_60%)]"></div>
             </div>
 
             <motion.div
                 variants={staggerContainer}
                 initial="hidden"
                 animate="visible"
-                className="max-w-4xl mx-auto z-10"
+                className="max-w-5xl mx-auto z-10"
             >
-                <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 text-white text-xs font-semibold uppercase tracking-wider mb-8">
-                    <Zap size={14} className="text-violet-400" /> Introducing AI-Powered Learning
+                {/* Badge */}
+                <motion.div variants={fadeUp} className="section-label mb-8">
+                    <Sparkles size={14} className="text-blue-400" /> AI-Powered Learning Platform
                 </motion.div>
 
-                <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl font-black mb-6 leading-tight text-white min-h-[150px] sm:min-h-[120px] md:min-h-[180px]">
+                {/* Main headline */}
+                <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[1.05] text-white min-h-[150px] sm:min-h-[120px] md:min-h-[200px]">
                     Master Tech Skills <br />
-                    <TypewriterEffect words={["at Light Speed.", "for Production.", "in the Browser.", "with AI Tutors."]} />
+                    <TypewriterEffect words={["at Light Speed.", "for Production.", "with AI Tutors.", "in the Browser."]} />
                 </motion.h1>
 
-                <motion.p variants={fadeUp} className="text-lg md:text-xl text-white mb-10 max-w-2xl mx-auto font-light leading-relaxed mt-4">
+                {/* Subtitle */}
+                <motion.p variants={fadeUp} className="text-lg md:text-xl text-[var(--color-text-muted)] mb-12 max-w-2xl mx-auto font-normal leading-relaxed mt-4">
                     The most advanced platform for developers and designers. Learn through interactive environments, real-time feedback, and massive communities.
                 </motion.p>
 
+                {/* CTA Buttons */}
                 <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     {user?.role === 'admin' && (
-                        <Link to="/admin" className="btn bg-cyan-500/10 border border-cyan-500/50 hover:bg-cyan-500/20 w-full sm:w-auto px-8 py-4 text-base flex items-center gap-2 group text-cyan-400 font-bold shadow-[0_0_20px_rgba(6,182,212,0.1)]">
-                            <ShieldCheck size={18} />
+                        <Link to="/admin" className="btn btn-outline w-full sm:w-auto px-8 py-4 text-base flex items-center gap-2 group">
+                            <ShieldCheck size={18} className="text-blue-400" />
                             Admin Dashboard
                         </Link>
                     )}
-                    <Link to="/courses" className="btn btn-primary w-full sm:w-auto px-8 py-4 text-base flex items-center gap-2 group text-white">
+                    <Link to="/courses" className="btn btn-primary w-full sm:w-auto px-10 py-4 text-base flex items-center gap-2 group text-white">
                         Explore Courses
                         <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
-                    <a href="#" className="btn btn-outline w-full sm:w-auto px-8 py-4 text-base flex items-center gap-2 group text-white">
-                        <Play size={18} className="text-cyan-400 group-hover:scale-110 transition-transform" /> View Demo
+                    <a href="#" className="btn btn-outline w-full sm:w-auto px-8 py-4 text-base flex items-center gap-2 group">
+                        <Play size={18} className="text-blue-400 group-hover:scale-110 transition-transform" /> Watch Demo
                     </a>
                 </motion.div>
             </motion.div>
 
-            {/* Floating UI Mockup */}
+            {/* Floating UI Mockup — Code Editor */}
             <motion.div
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-                className="mt-20 w-full max-w-5xl mx-auto relative z-10 perspective-1000"
+                className="mt-20 w-full max-w-5xl mx-auto relative z-10"
             >
-                <div className="w-full aspect-[16/9] rounded-2xl border border-zinc-800 bg-[#0c0c0e] shadow-[0_0_100px_rgba(139,92,246,0.15)] overflow-hidden relative">
-                    <div className="h-8 border-b border-zinc-800 flex items-center px-4 gap-2 bg-zinc-900">
-                        <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-                        <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                        <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                    </div>
-                    <div className="p-1 md:p-6 grid grid-cols-3 gap-6 h-[calc(100%-2rem)]">
-                        <div className="col-span-2 bg-[#1e1e1e] rounded-xl border border-zinc-800 p-4 font-mono text-sm overflow-hidden text-left relative">
-                            <div className="text-white mb-2">// WebGL Render Engine Init</div>
-                            <div className="text-purple-400">const<span className="text-white"> engine = </span><span className="text-cyan-400">new</span><span className="text-white"> WebApp();</span></div>
-                            <div className="text-purple-400 mt-2">await<span className="text-white"> engine.</span><span className="text-blue-400">initialize</span><span className="text-white">({'{'}</span></div>
-                            <div className="text-white ml-4">quality: <span className="text-orange-400">'ultra'</span>,</div>
-                            <div className="text-white ml-4">particles: <span className="text-green-400">true</span></div>
-                            <div className="text-white">{'}'});</div>
-                            <div className="absolute bottom-4 right-4 animate-pulse w-3 h-3 bg-cyan-500 rounded-full shadow-[0_0_10px_#06b6d4]"></div>
-                        </div>
-                        <div className="col-span-1 flex flex-col gap-4">
-                            <div className="flex-1 bg-zinc-900 rounded-xl border border-zinc-800 flex flex-col items-center justify-center relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-transparent"></div>
-                                <Infinity size={40} className="text-violet-400 mb-2" />
-                                <div className="text-xs font-semibold text-white">Live Preview Running</div>
+                <div className="w-full aspect-[16/9] rounded-2xl border border-white/[0.06] bg-[var(--color-surface)] shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden relative">
+                    {/* Browser chrome */}
+                    <div className="h-10 border-b border-white/[0.06] flex items-center px-4 gap-2 bg-[var(--color-bg-dark)]/80">
+                        <div className="w-3 h-3 rounded-full bg-red-500/60"></div>
+                        <div className="w-3 h-3 rounded-full bg-yellow-500/60"></div>
+                        <div className="w-3 h-3 rounded-full bg-blue-500/60"></div>
+                        <div className="flex-1 mx-8">
+                            <div className="bg-[var(--color-surface)] rounded-lg px-4 py-1.5 text-xs text-zinc-500 text-center border border-white/[0.06]">
+                                edunex.dev/playground
                             </div>
-                            <div className="h-24 bg-zinc-900 rounded-xl border border-zinc-800 p-4">
-                                <div className="h-2 w-full bg-zinc-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-cyan-400 w-[75%] shadow-[0_0_10px_#06b6d4]"></div>
+                        </div>
+                    </div>
+                    {/* Code content */}
+                    <div className="p-4 md:p-8 grid grid-cols-3 gap-6 h-[calc(100%-2.5rem)]">
+                        <div className="col-span-2 bg-[var(--color-bg-dark)] rounded-xl border border-white/[0.06] p-6 font-mono text-sm overflow-hidden text-left relative flex flex-col justify-center">
+                            <div className="text-zinc-600 mb-4">// AI-Powered Learning Engine</div>
+                            <div><span className="text-blue-400">const</span><span className="text-white"> engine = </span><span className="text-cyan-400">new</span><span className="text-white"> EduNex();</span></div>
+                            <div className="mt-2"><span className="text-blue-400">await</span><span className="text-white"> engine.</span><span className="text-cyan-400">initialize</span><span className="text-white">({'{'}</span></div>
+                            <div className="text-white ml-6 mt-1">mode: <span className="text-amber-400">'interactive'</span>,</div>
+                            <div className="text-white ml-6 mt-1">ai: <span className="text-blue-400">true</span>,</div>
+                            <div className="text-white ml-6 mt-1">performance: <span className="text-amber-400">'optimum'</span></div>
+                            <div className="text-white mt-1">{'}'});</div>
+                            <div className="absolute bottom-6 right-6 w-2.5 h-2.5 bg-blue-500 rounded-full animate-pulse"></div>
+                        </div>
+                        <div className="col-span-1 flex flex-col gap-6">
+                            <div className="flex-1 bg-[var(--color-bg-dark)] rounded-xl border border-white/[0.06] flex flex-col items-center justify-center relative overflow-hidden">
+                                <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-3">
+                                    <Zap size={28} className="text-blue-400" />
                                 </div>
-                                <div className="text-xs text-white mt-2">Compilation: 75%</div>
+                                <div className="text-xs font-semibold text-zinc-400 tracking-wide uppercase">System Active</div>
+                            </div>
+                            <div className="h-24 bg-[var(--color-bg-dark)] rounded-xl border border-white/[0.06] p-5 flex flex-col justify-center">
+                                <div className="flex justify-between text-xs text-zinc-400 mb-3 font-semibold uppercase tracking-wide">
+                                    <span>Progress</span>
+                                    <span className="text-blue-400">75%</span>
+                                </div>
+                                <div className="h-2 w-full bg-[var(--color-surface)] rounded-full overflow-hidden">
+                                    <motion.div
+                                        initial={{ width: "0%" }}
+                                        animate={{ width: "75%" }}
+                                        transition={{ duration: 2, delay: 1.5, ease: "easeOut" }}
+                                        className="h-full rounded-full"
+                                        style={{ background: 'linear-gradient(90deg, #3B82F6, #60A5FA)' }}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                {/* Glow underneath the mockup */}
+                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 h-20 bg-blue-500/10 blur-3xl rounded-full pointer-events-none"></div>
             </motion.div>
         </section>
     );

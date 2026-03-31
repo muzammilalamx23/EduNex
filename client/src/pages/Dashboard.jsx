@@ -55,7 +55,7 @@ const ProfileSettings = ({ user, onUpdate }) => {
             </div>
 
             {message.text && (
-                <div className={`mb-6 p-4 rounded-xl text-sm ${message.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+                <div className={`mb-6 p-4 rounded-xl text-sm ${message.type === 'success' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
                     {message.text}
                 </div>
             )}
@@ -283,7 +283,7 @@ const Dashboard = () => {
                                         </div>
                                         <div className="flex items-center gap-2 text-xs">
                                             {userData?.dailyLearningTime >= 30 ? (
-                                                <span className="text-emerald-400 flex items-center gap-1 font-medium">
+                                                <span className="text-blue-400 flex items-center gap-1 font-medium">
                                                     <Zap size={12} /> Daily Goal Met! (+1 day added)
                                                 </span>
                                             ) : (
@@ -376,7 +376,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                             <div className="glass-card bg-white/5 border-white/5 flex items-center gap-4">
-                                <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
+                                <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
                                     <Clock size={20} />
                                 </div>
                                 <div>
@@ -466,7 +466,7 @@ const Dashboard = () => {
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                                             <div className="absolute bottom-4 left-4 font-bold text-white drop-shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform flex items-center gap-2">
                                                 {course.title.split(':')[0]}
-                                                {course.progress === 100 && <FileCheck size={16} className="text-emerald-400" />}
+                                                {course.progress === 100 && <FileCheck size={16} className="text-blue-400" />}
                                             </div>
                                         </div>
                                         <h4 className="font-bold text-sm mb-3 text-zinc-300 line-clamp-1">{course.title}</h4>
@@ -482,7 +482,7 @@ const Dashboard = () => {
                                         {course.progress === 100 ? (
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); toast.success('🎓 Certificate generation coming soon!'); }}
-                                                className="w-full py-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold transition-all flex items-center justify-center gap-2 hover:bg-emerald-500 hover:text-white"
+                                                className="w-full py-2.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold transition-all flex items-center justify-center gap-2 hover:bg-blue-500 hover:text-white"
                                             >
                                                 <FileCheck size={14} />
                                                 Download Certificate
