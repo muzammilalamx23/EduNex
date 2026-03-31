@@ -17,6 +17,7 @@ const CoursePlayer = lazy(() => import('./pages/CoursePlayer'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminCreateCourse = lazy(() => import('./pages/AdminCreateCourse'));
 const AdminEditCourse = lazy(() => import('./pages/AdminEditCourse'));
+const Playground = lazy(() => import('./pages/Playground'));
 
 
 // ─── Full-screen page loading fallback ────────────────────────────────────────
@@ -57,6 +58,7 @@ export default function App() {
             <Route path="/auth" element={<Auth />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/course-detail/:courseId" element={<CourseDetail />} />
+            <Route path="/playground" element={<Playground />} />
 
             {/* Protected: any logged-in user */}
             <Route path="/dashboard" element={

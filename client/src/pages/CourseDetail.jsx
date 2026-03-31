@@ -17,7 +17,8 @@ import {
     Layout,
     Code2,
     Cpu,
-    Video
+    Video,
+    Bot
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
@@ -246,6 +247,21 @@ const CourseDetail = () => {
                                                 </div>
                                             </>
                                         )}
+                                    </div>
+                                    
+                                    <div className="mt-8 p-6 bg-blue-500/10 border border-blue-500/30 rounded-2xl flex flex-col md:flex-row items-center justify-between group cursor-pointer hover:bg-blue-500/20 transition-all gap-4 text-left" onClick={() => navigate('/playground')}>
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase tracking-wider">New Feature</span>
+                                            </div>
+                                            <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-1">
+                                                <Bot className="text-blue-500" size={24} /> AI Interactive Playground
+                                            </h3>
+                                            <p className="text-sm text-zinc-400">Practice what you learn with a real-time AI Coach guiding you step-by-step.</p>
+                                        </div>
+                                        <div className="md:shrink-0 w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(59,130,246,0.5)]">
+                                            <ArrowRight size={20} />
+                                        </div>
                                     </div>
                                 </div>
                             )}
