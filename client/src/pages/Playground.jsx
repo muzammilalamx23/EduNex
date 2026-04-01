@@ -27,6 +27,114 @@ const DEFAULT_CSS = `body {
 }
 `;
 
+const MISSIONS = [
+  {
+    level: 1,
+    title: "The Foundation",
+    description: "Every website needs structure. Start by creating a `<div>` with the class `container`.",
+    task: "**Task 1:** Create a `<div>` with the class `container` inside the body.",
+    xp: 50,
+    validate: (html, css) => /<div[^>]*class\s*=\s*(["'])container\1[^>]*>/i.test(html),
+    errorMessage: "Make sure you added the `<div class=\"container\">`.",
+    successMessage: "Great start! The container is the wrapper for our content."
+  },
+  {
+    level: 2,
+    title: "Main Heading",
+    description: "Your page needs a title. Add an `<h1>` tag inside the container.",
+    task: "**Task 2:** Create an `<h1>` element inside the container and add some text like 'My Portfolio'.",
+    xp: 60,
+    validate: (html, css) => /<h1\b[^>]*>.*<\/h1>/i.test(html) && /<div[^>]*class\s*=\s*["']container["'][^>]*>[\s\S]*<h1\b/i.test(html),
+    errorMessage: "I don't see an `<h1>` inside the container. Make sure you don't delete the container!",
+    successMessage: "Awesome! The main heading is crucial for SEO and accessibility."
+  },
+  {
+    level: 3,
+    title: "A Little About You",
+    description: "Let's add a description. Use a `<p>` tag.",
+    task: "**Task 3:** Add a `<p>` (paragraph) tag below the heading with some text about yourself.",
+    xp: 70,
+    validate: (html, css) => /<p\b[^>]*>[\s\S]*<\/p>/i.test(html),
+    errorMessage: "No paragraph tag found. Ensure you used `<p>` and closed it with `</p>`.",
+    successMessage: "Perfect paragraph!"
+  },
+  {
+    level: 4,
+    title: "List Your Skills",
+    description: "HTML uses `<ul>` and `<li>` tags for unordered (bulleted) lists.",
+    task: "**Task 4:** Create an unordered list `<ul>` with at least two list items `<li>` inside it.",
+    xp: 80,
+    validate: (html, css) => {
+      const ulMatch = html.match(/<ul\b[^>]*>([\s\S]*?)<\/ul>/i);
+      if (!ulMatch) return false;
+      const liMatches = ulMatch[1].match(/<li\b[^>]*>/gi);
+      return liMatches && liMatches.length >= 2;
+    },
+    errorMessage: "You need a `<ul>` block that contains at least two `<li>` items.",
+    successMessage: "Great list!"
+  },
+  {
+    level: 5,
+    title: "Adding Links",
+    description: "The web is interconnected! Let's build a hyperlink.",
+    task: "**Task 5:** Add an `<a>` tag with an `href` attribute pointing to a valid URL.",
+    xp: 90,
+    validate: (html, css) => /<a\s+[^>]*href\s*=\s*["']https?:\/\/[^"']+["'][^>]*>/i.test(html),
+    errorMessage: "Oh no, there's no valid `<a>` tag with a full URL starting with http/https in the `href` attribute.",
+    successMessage: "You nailed the hyperlink!"
+  },
+  {
+    level: 6,
+    title: "Image Embedding",
+    description: "Visuals make sites pop.",
+    task: "**Task 6:** Add an `<img>` tag with `src` and `alt` attributes.",
+    xp: 100,
+    validate: (html, css) => (/<img\s+[^>]*src\s*=\s*["'][^"']+["'][^>]*alt\s*=\s*["'][^"']*["'][^>]*>/i.test(html) || /<img\s+[^>]*alt\s*=\s*["'][^"']*["'][^>]*src\s*=\s*["'][^"']+["'][^>]*>/i.test(html)),
+    errorMessage: "Missing an `<img>` tag, or forgot either the `src` or `alt` attribute.",
+    successMessage: "Good job adding an image! Remember, `alt` is critical for accessibility."
+  },
+  {
+    level: 7,
+    title: "Interactive Button",
+    description: "Users love to click things.",
+    task: "**Task 7:** Create a `<button>` tag with the class `btn` and the text 'Click Me'.",
+    xp: 110,
+    validate: (html, css) => /<button[^>]*class\s*=\s*(["'])btn\1[^>]*>[\s\S]*<\/button>/i.test(html),
+    errorMessage: "I don't see a `<button>` tag with the class `btn`.",
+    successMessage: "Clickable! Buttons are essential for modern web applications."
+  },
+  {
+    level: 8,
+    title: "Styling Setup",
+    description: "Our HTML is ready, let's inject some life. Switch to the CSS tab.",
+    task: "**Task 8:** In `styles.css`, target your `.container` class and add `padding: 20px;`.",
+    xp: 120,
+    validate: (html, css) => /\.container\s*\{[^}]*padding\s*:\s*20px/i.test(css),
+    errorMessage: "Make sure you used `.container { padding: 20px; }` exactly.",
+    successMessage: "Nice CSS basics!"
+  },
+  {
+    level: 9,
+    title: "Hover States",
+    description: "Make the button interactive when the mouse is over it.",
+    task: "**Task 9:** Target `.btn:hover` in your CSS and change its `background-color`.",
+    xp: 130,
+    validate: (html, css) => /\.btn\s*:\s*hover\s*\{[^}]*(background-color|background)\s*:/i.test(css),
+    errorMessage: "Didn't find `.btn:hover` with a background property change.",
+    successMessage: "Looking very dynamic!"
+  },
+  {
+    level: 10,
+    title: "CSS Flexbox",
+    description: "Final boss: flexbox layout.",
+    task: "**Task 10:** Let's lay out the list items side by side. Target `ul` in CSS and set `display: flex;`.",
+    xp: 200,
+    validate: (html, css) => /ul\s*\{[^}]*display\s*:\s*flex/i.test(css),
+    errorMessage: "Need to select `ul` and set `display: flex;`.",
+    successMessage: "You are a flexbox master!"
+  }
+];
+
 export default function Playground() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('html');
@@ -38,14 +146,18 @@ export default function Playground() {
   const [xp, setXp] = useState(1240);
   const [level, setLevel] = useState(4);
   const [streak, setStreak] = useState(7);
-  const [progress, setProgress] = useState(1); // 1 = First task, 2 = Second, 3 = Third
+  const [progress, setProgress] = useState(1); // 1 = Level 1, up to 11 (Completed)
   const [showXpAnim, setShowXpAnim] = useState(false);
+  const [earnedXp, setEarnedXp] = useState(0);
+
+  // Derive current mission
+  const currentMission = MISSIONS[progress - 1] || null;
 
   // Chat State
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [chatMessages, setChatMessages] = useState([
-    { role: 'assistant', text: "Hey! Let's complete today's mission. We're building a Pricing Card.\n\n**Task 1:** Create a `<div>` with the class `pricing-card` and add an `<h2>` title inside it." }
+    { role: 'assistant', text: `Hey! Let's master HTML & CSS.\n\n${MISSIONS[0].task}` }
   ]);
 
   // Handle iframe srcDoc update
@@ -74,90 +186,46 @@ export default function Playground() {
 
     setTimeout(() => {
       setIsTyping(false);
-      setChatMessages(prev => [...prev, { role: 'assistant', text: "Remember, you need to write the code in the middle editor. Click the 'AI Review Code' button when you're ready to submit it for XP!" }]);
+      setChatMessages(prev => [...prev, { role: 'assistant', text: "Remember, write the code in the editor. Click 'Submit Code' when you're ready to submit it for XP!" }]);
     }, 1200);
   };
 
-  // Gamified Verification step!
   const handleReviewCode = () => {
+    if (progress > MISSIONS.length) return;
     setIsTyping(true);
+    
     setTimeout(() => {
       setIsTyping(false);
       
-      // Basic validation logic based on the progress step
-      let isSuccess = false;
-      let errorMessage = "Hmm, something is missing.";
+      const mission = MISSIONS[progress - 1];
+      const isSuccess = mission.validate(htmlCode, cssCode);
 
-      if (progress === 1) {
-        const hasDiv = /class\s*=\s*(["'])pricing-card\1/i.test(htmlCode);
-        const hasH2 = /<h2\b[^>]*>/i.test(htmlCode);
-        if (hasDiv && hasH2) {
-          isSuccess = true;
-        } else if (!hasDiv) {
-          errorMessage = "It looks like you haven't added the `<div class=\"pricing-card\">` correctly. Double-check your spelling and the hyphen!";
-        } else {
-          errorMessage = "You added the div, but you missed the `<h2>` tag inside it!";
-        }
-      } else if (progress === 2) {
-        const hasClass = /\.pricing-card\s*\{/i.test(cssCode);
-        const hasBorder = /border\s*:/i.test(cssCode);
-        const hasPadding = /padding\s*:/i.test(cssCode);
-        
-        if (hasClass && (hasBorder || hasPadding)) {
-          isSuccess = true;
-        } else if (!hasClass) {
-          errorMessage = "I don't see the `.pricing-card` class in your CSS. Make sure you included the dot and spelled it exactly right!";
-        } else {
-          errorMessage = "You selected `.pricing-card` perfectly, but missed the `border` or `padding` rule.";
-        }
-      } else if (progress === 3) {
-        // Allow for optional spaces between class, colon, and hover, then opening brace
-        const hasHover = /\.pricing-card\s*:\s*hover.*\s*\{/i.test(cssCode);
-        if (hasHover) {
-          isSuccess = true;
-        } else {
-          errorMessage = "I can't find `.pricing-card:hover`. Make sure you spelled it perfectly (no spaces between 'pricing' and 'card')!";
-        }
-      }
-
-      // If they failed the validation, don't award XP
-      if (progress <= 3 && !isSuccess) {
+      if (!isSuccess) {
         setChatMessages(prev => [...prev, 
-          { role: 'assistant', text: `❌ **Not Quite Yet!**\n\n${errorMessage}` }
+          { role: 'assistant', text: `❌ **Not Quite Yet!**\n\n${mission.errorMessage}` }
         ]);
         return;
       }
 
-      if (progress < 3) {
-        // Success Logic!
+      // Success Logic
+      setXp(x => x + mission.xp);
+      setEarnedXp(mission.xp);
+      setShowXpAnim(true);
+      setTimeout(() => setShowXpAnim(false), 2500);
+      
+      if (progress < MISSIONS.length) {
+        const nextMission = MISSIONS[progress];
         setProgress(p => p + 1);
-        setXp(x => x + 50); // Award 50 XP
-        setShowXpAnim(true);
-        setTimeout(() => setShowXpAnim(false), 2500);
-        
-        const nextTask = progress === 1 
-          ? "**Task 2:** Great! Now switch to `styles.css` and style `.pricing-card` with a border and padding."
-          : "**Task 3:** Almost done! Add a hover effect to the card in CSS.";
-
         setChatMessages(prev => [...prev, 
-          { role: 'assistant', text: `🎉 BOOM! Your code looks absolutely perfect.\n\nAwarded **+50 XP**!\n\n${nextTask}` }
-        ]);
-      } else if (progress === 3) {
-        // Final Success
-        setProgress(4);
-        setXp(x => x + 100);
-        setShowXpAnim(true);
-        setTimeout(() => setShowXpAnim(false), 2500);
-        
-        setChatMessages(prev => [...prev, 
-          { role: 'assistant', text: `🏆 **MISSION ACCOMPLISHED!**\n\nYou are a beast. I just awarded you **+100 Bonus XP**. You're well on your way to Level 5. See you in the next challenge.` }
+          { role: 'assistant', text: `🎉 ${mission.successMessage}\n\nAwarded **+${mission.xp} XP**!\n\n${nextMission.task}` }
         ]);
       } else {
+        setProgress(p => p + 1);
         setChatMessages(prev => [...prev, 
-          { role: 'assistant', text: `You've already finished this mission. Go check out the next course module!` }
+          { role: 'assistant', text: `🏆 **COURSE ACCOMPLISHED!**\n\nYou've finished all 10 levels of the HTML Mastery Practice! You are unstoppable. I awarded you your final **+${mission.xp} XP**! See you in the next module.` }
         ]);
       }
-    }, 1500);
+    }, 1200);
   };
 
   const handleReset = () => {
@@ -165,7 +233,7 @@ export default function Playground() {
     setCssCode(DEFAULT_CSS);
     setProgress(1);
     setChatMessages([
-      { role: 'assistant', text: "Progress reset! Let's try this mission again from the beginning. Create that `<div>`!" }
+      { role: 'assistant', text: `Progress reset! Let's try this 10-level challenge again.\n\n${MISSIONS[0].task}` }
     ]);
   };
 
@@ -183,7 +251,7 @@ export default function Playground() {
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none flex flex-col items-center"
           >
             <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-t from-blue-600 to-blue-300 drop-shadow-[0_0_20px_rgba(59,130,246,0.8)]">
-              +{progress === 4 ? '100' : '50'} XP
+              +{earnedXp} XP
             </div>
             <div className="text-xl font-bold text-yellow-400 mt-2 tracking-widest uppercase">Excellent!</div>
           </motion.div>
@@ -203,7 +271,7 @@ export default function Playground() {
             </div>
             <div>
               <h1 className="font-bold text-[13px] leading-tight text-white mb-0.5">EduNex Arcade</h1>
-              <p className="text-[9px] text-blue-400 uppercase tracking-widest font-black">Daily Challenge</p>
+              <p className="text-[9px] text-blue-400 uppercase tracking-widest font-black">HTML Mastery (10 Levels)</p>
             </div>
           </div>
         </div>
@@ -235,7 +303,7 @@ export default function Playground() {
           </button>
           <button 
             onClick={handleReviewCode}
-            disabled={progress > 3}
+            disabled={progress > MISSIONS.length}
             className="flex items-center gap-2 text-xs font-bold px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] disabled:opacity-50 disabled:pointer-events-none"
           >
              <Sparkles size={14} /> Submit Code
@@ -253,10 +321,21 @@ export default function Playground() {
           <div className="p-5 border-b border-light/[0.06] bg-[#0A0F1C]">
             <div className="flex justify-between items-end mb-3">
               <div>
-                <h3 className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1.5">Current Mission</h3>
-                <h2 className="text-white text-[15px] font-black flex items-center gap-2">Build Pricing Card <div className="px-2 py-0.5 rounded-md bg-green-500/20 text-green-400 text-[10px] uppercase tracking-wider font-bold">+200 XP</div></h2>
+                <h3 className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1.5">
+                  Phase {Math.min(progress, RegExp(MISSIONS.length).source)}
+                </h3>
+                <h2 className="text-white text-[15px] font-black flex items-center gap-2">
+                  {currentMission ? currentMission.title : "Challenge Completed!"} 
+                  {currentMission && (
+                    <div className="px-2 py-0.5 rounded-md bg-green-500/20 text-green-400 text-[10px] uppercase tracking-wider font-bold">
+                      +{currentMission.xp} XP
+                    </div>
+                  )}
+                </h2>
               </div>
-              <span className="text-sm font-black text-blue-500 bg-blue-500/10 px-2 py-1 rounded-lg border border-blue-500/20">{Math.min(progress, 3)}/3</span>
+              <span className="text-sm font-black text-blue-500 bg-blue-500/10 px-2 py-1 rounded-lg border border-blue-500/20">
+                {Math.min(progress, MISSIONS.length)}/{MISSIONS.length}
+              </span>
             </div>
             
             {/* Progress Bar */}
@@ -264,28 +343,17 @@ export default function Playground() {
               <motion.div 
                 className="bg-gradient-to-r from-blue-600 to-blue-400 h-full rounded-full relative"
                 initial={{ width: '0%' }}
-                animate={{ width: `${(Math.min(progress - 1, 3) / 3) * 100}%` }}
+                animate={{ width: `${(Math.min(progress - 1, MISSIONS.length) / MISSIONS.length) * 100}%` }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
               >
                  <div className="absolute top-0 left-0 w-full h-full bg-white/20 animate-pulse"></div>
               </motion.div>
             </div>
 
-            {/* Tasks Checklist */}
-            <div className="space-y-2.5">
-              <div className={`flex items-center gap-3 text-xs ${progress > 1 ? 'text-zinc-500 line-through' : 'text-white font-bold'}`}>
-                 {progress > 1 ? <CheckCircle2 size={14} className="text-green-500" /> : <Circle size={14} className="text-blue-500" />} 
-                 1. Add 'pricing-card' div & title
-              </div>
-              <div className={`flex items-center gap-3 text-xs ${progress > 2 ? 'text-zinc-500 line-through' : progress === 2 ? 'text-white font-bold' : 'text-zinc-600'}`}>
-                 {progress > 2 ? <CheckCircle2 size={14} className="text-green-500" /> : <Circle size={14} className={progress === 2 ? "text-blue-500" : ""} />} 
-                 2. Style standard card borders in CSS
-              </div>
-              <div className={`flex items-center gap-3 text-xs ${progress > 3 ? 'text-green-400 font-bold' : progress === 3 ? 'text-white font-bold' : 'text-zinc-600'}`}>
-                 {progress > 3 ? <CheckCircle2 size={14} className="text-green-500" /> : <Circle size={14} className={progress === 3 ? "text-blue-500" : ""} />} 
-                 3. Implement interactive hover states
-              </div>
-            </div>
+            {/* Quick overview text */}
+            <p className="text-xs text-zinc-400 italic">
+               {currentMission ? currentMission.description : "All levels conquered!"}
+            </p>
           </div>
           
           {/* AI Chat Area */}

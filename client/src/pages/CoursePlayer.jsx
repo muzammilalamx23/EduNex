@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, Play, CheckCircle2, Trophy, Clock, BookOpen, ChevronRight, Menu, X, FileText } from 'lucide-react';
+import { ChevronLeft, Play, CheckCircle2, Trophy, Clock, BookOpen, ChevronRight, Menu, X, FileText, Zap, Layout } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 
