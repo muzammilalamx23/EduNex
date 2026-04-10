@@ -21,7 +21,17 @@ const LessonSchema = new mongoose.Schema({
         trim: true,
         maxlength: [200, 'Lesson title cannot exceed 200 characters']
     },
+    // Original YouTube URL as pasted by the admin (for display/audit purposes).
+    // Route validator enforces YouTube-only via isValidYouTubeUrl().
     videoUrl: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    // Pre-extracted 11-char YouTube video ID.
+    // Computed server-side from videoUrl on create/update — never set by client.
+    // Stored to avoid URL parsing at render time.
+    videoId: {
         type: String,
         trim: true,
         default: ''
@@ -36,9 +46,6 @@ const LessonSchema = new mongoose.Schema({
         trim: true,
         default: ''
     },
-    // Duration stored as a Number (minutes) — enables totalDuration calculation.
-    // Breaking change from String: old documents with "5:30" will read as NaN.
-    // Migration script should be run if any courses exist in production.
     duration: {
         type: Number,
         default: 0,
@@ -49,7 +56,8 @@ const LessonSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
-}, { _id: true }); // _id: true so each lesson has its own ObjectId for completedLessons tracking
+}, { _id: true });
+
 
 // ─── Course Schema ────────────────────────────────────────────────────────────
 const CourseSchema = new mongoose.Schema({

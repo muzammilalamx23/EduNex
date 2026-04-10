@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Play, CheckCircle2, Trophy, Clock, BookOpen, ChevronRight, Menu, X, FileText, Zap, Layout } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
+import YouTubePlayer from '../components/YouTubePlayer';
 
 const CoursePlayer = () => {
     const { courseId } = useParams();
@@ -165,17 +166,13 @@ const CoursePlayer = () => {
 
                         {/* Dynamic Lesson Content */}
                         <div className="space-y-8">
-                            {activeLesson?.videoUrl ? (
-                                <div className="aspect-video bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border border-white/5 relative group">
-                                    <iframe
-                                        className="w-full h-full"
-                                        src={`${activeLesson.videoUrl.includes('youtube.com') ? activeLesson.videoUrl.replace('watch?v=', 'embed/') : activeLesson.videoUrl}?autoplay=0&rel=0`}
-                                        title={activeLesson.title}
-                                        frameBorder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    ></iframe>
-                                </div>
+                            {/* ── YouTube video ──────────────────────────────────────────────── */}
+                            {activeLesson?.videoId ? (
+                                <YouTubePlayer
+                                    videoId={activeLesson.videoId}
+                                    title={activeLesson.title}
+                                    autoplay={false}
+                                />
                             ) : activeLesson?.pdfUrl ? (
                                 <div className="bg-zinc-900/30 border border-zinc-800 rounded-3xl p-4 shadow-2xl overflow-hidden">
                                     <div className="flex items-center justify-between mb-4 px-4 pt-2">
@@ -264,7 +261,7 @@ const CoursePlayer = () => {
                                 </span>
                                 <span className="flex items-center gap-1.5 text-zinc-500 text-xs">
                                     <Clock size={14} />
-                                    {activeLesson?.duration}
+                                    {activeLesson?.duration ? `${activeLesson.duration} min` : ''}
                                 </span>
                             </div>
                             <h2 className="text-2xl md:text-3xl font-bold mb-4">{activeLesson?.title}</h2>

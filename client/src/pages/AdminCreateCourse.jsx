@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Plus, Trash2, ArrowLeft, Loader2, Video, FileText, Clock, Layout, Save, Image as ImageIcon } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, Loader2, Video, FileText, Clock, Layout, Save, Image as ImageIcon, CheckCircle2, XCircle } from 'lucide-react';
 import api from '../utils/api';
 import Navbar from '../components/Navbar';
 import toast from 'react-hot-toast';
+import { extractYouTubeId, isValidYouTubeUrl, getYouTubeThumbnail } from '../utils/youtube';
 
 const AdminCreateCourse = () => {
     const navigate = useNavigate();
@@ -63,6 +64,13 @@ const AdminCreateCourse = () => {
         const badLesson = courseData.lessons.findIndex(l => !l.title.trim());
         if (badLesson !== -1) {
             return toast.error(`Lesson ${badLesson + 1} is missing a title.`);
+        }
+        // Catch invalid YouTube URLs before the API round-trip
+        const badVideoLesson = courseData.lessons.findIndex(
+            l => l.videoUrl && !isValidYouTubeUrl(l.videoUrl)
+        );
+        if (badVideoLesson !== -1) {
+            return toast.error(`Lesson ${badVideoLesson + 1}: Invalid YouTube URL. Use youtube.com/watch?v=... or youtu.be/...`);
         }
 
         setLoading(true);
@@ -249,14 +257,54 @@ const AdminCreateCourse = () => {
 
                                             {/* Row 2: Video & PDF */}
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div className="relative">
-                                                    <Video className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
-                                                    <input
-                                                        placeholder="Video URL (YouTube/MP4) - Optional"
-                                                        value={lesson.videoUrl}
-                                                        onChange={(e) => handleLessonChange(index, 'videoUrl', e.target.value)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
-                                                    />
+                                                {/* YouTube URL with live validation + thumbnail preview */}
+                                                <div className="space-y-2">
+                                                    <div className="relative">
+                                                        <Video className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
+                                                        <input
+                                                            placeholder="YouTube URL (youtube.com/watch?v=... or youtu.be/...)"
+                                                            value={lesson.videoUrl}
+                                                            onChange={(e) => handleLessonChange(index, 'videoUrl', e.target.value)}
+                                                            className={`w-full bg-black/20 border rounded-lg py-2 pl-9 pr-9 text-sm focus:outline-none transition-colors ${
+                                                                lesson.videoUrl
+                                                                    ? isValidYouTubeUrl(lesson.videoUrl)
+                                                                        ? 'border-green-500/60 focus:border-green-500'
+                                                                        : 'border-red-500/60 focus:border-red-500'
+                                                                    : 'border-zinc-800 focus:border-violet-500'
+                                                            }`}
+                                                        />
+                                                        {/* Inline validation icon */}
+                                                        {lesson.videoUrl && (
+                                                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                                                                {isValidYouTubeUrl(lesson.videoUrl)
+                                                                    ? <CheckCircle2 size={14} className="text-green-400" />
+                                                                    : <XCircle size={14} className="text-red-400" />}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    {/* YouTube video ID + thumbnail preview */}
+                                                    {lesson.videoUrl && isValidYouTubeUrl(lesson.videoUrl) && (() => {
+                                                        const vid = extractYouTubeId(lesson.videoUrl);
+                                                        return vid ? (
+                                                            <div className="flex items-center gap-3 p-2 rounded-lg bg-green-500/5 border border-green-500/20">
+                                                                <img
+                                                                    src={getYouTubeThumbnail(vid, 'mq')}
+                                                                    alt="Video preview"
+                                                                    className="w-24 h-14 object-cover rounded-md flex-shrink-0"
+                                                                />
+                                                                <div className="min-w-0">
+                                                                    <p className="text-[10px] text-green-400 font-bold uppercase tracking-widest">YouTube detected</p>
+                                                                    <p className="text-[10px] text-zinc-500 font-mono truncate">ID: {vid}</p>
+                                                                </div>
+                                                            </div>
+                                                        ) : null;
+                                                    })()}
+                                                    {/* Invalid URL error hint */}
+                                                    {lesson.videoUrl && !isValidYouTubeUrl(lesson.videoUrl) && (
+                                                        <p className="text-[10px] text-red-400">
+                                                            Not a valid YouTube URL. Use youtube.com/watch?v=... or youtu.be/...
+                                                        </p>
+                                                    )}
                                                 </div>
                                                 <div className="relative">
                                                     <FileText className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />

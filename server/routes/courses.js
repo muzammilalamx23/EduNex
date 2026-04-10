@@ -6,6 +6,7 @@ const User = require('../models/User');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const asyncHandler = require('../utils/asyncHandler');
+const { extractYouTubeId, isValidYouTubeUrl } = require('../utils/youtube');
 
 // ─── Local constants ──────────────────────────────────────────────────────────
 // Hardcoded here (not via Course.schema.statics) for load-time safety.
@@ -50,6 +51,22 @@ const validate = (req, res) => {
     return true;
 };
 
+// ─── Utility: inject videoId into every lesson ────────────────────────────────────
+// Processes the lessons array from the request body:
+// - Extracts videoId from videoUrl using the YouTube parser
+// - Strips any client-sent videoId (server is the sole source)
+// - Preserves all other whitelisted lesson fields
+const processLessons = (lessons) =>
+    (lessons || []).map(({ title, videoUrl, content, pdfUrl, duration, order }) => ({
+        title,
+        videoUrl: videoUrl || '',
+        videoId: videoUrl ? (extractYouTubeId(videoUrl) || '') : '',
+        content: content || '',
+        pdfUrl: pdfUrl || '',
+        duration: typeof duration === 'number' ? duration : 0,
+        order: typeof order === 'number' ? order : 0,
+    }));
+
 // ─── Shared lesson field validators ──────────────────────────────────────────
 // Reused by both POST and PUT to keep validation DRY.
 const lessonValidators = [
@@ -62,8 +79,16 @@ const lessonValidators = [
         .isLength({ max: 200 }).withMessage('Lesson title cannot exceed 200 characters.'),
     body('lessons.*.videoUrl')
         .optional({ checkFalsy: true })
-        .isURL({ protocols: ['http', 'https'] })
-        .withMessage('Lesson video URL must be a valid http/https URL.'),
+        .custom((url) => {
+            // Only YouTube URLs are accepted. Rejects all other hosts including
+            // direct MP4 links, Vimeo, Dailymotion, raw embed URLs, etc.
+            if (url && !isValidYouTubeUrl(url)) {
+                throw new Error(
+                    'Video URL must be a valid YouTube link (youtube.com/watch?v=..., youtu.be/..., or youtube.com/embed/...)'
+                );
+            }
+            return true;
+        }),
     body('lessons.*.pdfUrl')
         .optional({ checkFalsy: true })
         .isURL({ protocols: ['http', 'https', 'ftp'] })
@@ -243,8 +268,8 @@ router.post('/', [auth, admin], [
         description,
         category:   category   || 'Development',
         difficulty: difficulty || 'Beginner',
-        lessons:    lessons    || [],
-        tags: normalizeTags(tags), // deduplicated, trimmed, lowercased, no empty strings
+        lessons:    processLessons(lessons), // strips client-sent videoId, injects server-computed one
+        tags: normalizeTags(tags),
         createdBy: req.user.id,
         status: 'draft',
     };
@@ -307,7 +332,7 @@ router.put('/:id', [auth, admin], [
     if (category    !== undefined) allowedUpdates.category    = category;
     if (difficulty  !== undefined) allowedUpdates.difficulty  = difficulty;
     if (thumbnail   !== undefined) allowedUpdates.thumbnail   = thumbnail;
-    if (lessons     !== undefined) allowedUpdates.lessons     = lessons;
+    if (lessons !== undefined) allowedUpdates.lessons = processLessons(lessons);
     if (tags        !== undefined) allowedUpdates.tags        = normalizeTags(tags);
 
     const updated = await Course.findByIdAndUpdate(req.params.id, allowedUpdates, {
