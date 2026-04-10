@@ -194,7 +194,7 @@ router.post('/lesson-complete', auth, [
             progress: enrollment.progress,
             coursesCompleted: user.coursesCompleted,
             completedLessons: enrollment.completedLessons,
-        }\r
+        }
     });
 }));
 
