@@ -82,17 +82,39 @@ const Courses = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
     const [levelFilter, setLevelFilter] = useState('All');
+    const [total, setTotal] = useState(0);
+    const [page, setPage] = useState(1);
+    const LIMIT = 12;
 
+    // Debounce the search term
     useEffect(() => {
-        const timer = setTimeout(() => setDebouncedSearch(searchTerm), 300);
+        const timer = setTimeout(() => setDebouncedSearch(searchTerm), 400);
         return () => clearTimeout(timer);
     }, [searchTerm]);
 
+    // Reset to page 1 whenever filters change
+    useEffect(() => {
+        setPage(1);
+        setCourses([]);
+    }, [debouncedSearch, levelFilter]);
+
+    // Fetch from backend with query params — no more client-side filtering
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
-                const res = await api.get('/courses');
-                setCourses(res.data.data || []);
+                const params = new URLSearchParams({
+                    page,
+                    limit: LIMIT,
+                });
+                if (debouncedSearch) params.set('search', debouncedSearch);
+                if (levelFilter !== 'All') params.set('difficulty', levelFilter);
+
+                const res = await api.get(`/courses?${params.toString()}`);
+                const data = res.data.data || [];
+                // Append for load-more, replace for new filter
+                setCourses(prev => page === 1 ? data : [...prev, ...data]);
+                setTotal(res.data.pagination?.total || 0);
             } catch {
                 toast.error('Failed to load courses. Please try again later.');
             } finally {
@@ -100,15 +122,11 @@ const Courses = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [debouncedSearch, levelFilter, page]);
 
-    const filteredCourses = courses.filter(course => {
-        const matchesSearch = course.title.toLowerCase().includes(debouncedSearch.toLowerCase());
-        const matchesLevel = levelFilter === "All" || course.difficulty === levelFilter;
-        return matchesSearch && matchesLevel;
-    });
-
+    const hasMore = courses.length < total;
     const levels = ['All', 'Beginner', 'Intermediate', 'Advanced'];
+
 
     return (
         <div className="min-h-screen bg-[var(--color-bg-dark)] text-white relative">
@@ -201,7 +219,7 @@ const Courses = () => {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredCourses.map((course, i) => (
+                        {courses.map((course, i) => (
                             <CourseCard
                                 key={course._id}
                                 {...course}
@@ -213,7 +231,7 @@ const Courses = () => {
                 )}
 
                 {/* Empty state */}
-                {filteredCourses.length === 0 && !loading && (
+                {courses.length === 0 && !loading && (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -223,12 +241,29 @@ const Courses = () => {
                         <h3 className="text-xl font-semibold text-white mb-2">No courses match your criteria</h3>
                         <p className="text-[var(--color-text-dim)] text-sm mb-6">Try adjusting your search or filters</p>
                         <button
-                            onClick={() => { setSearchTerm(""); setLevelFilter("All"); }}
+                            onClick={() => { setSearchTerm(''); setLevelFilter('All'); }}
                             className="text-blue-400 font-semibold hover:text-blue-300 transition-colors"
                         >
                             Clear all filters
                         </button>
                     </motion.div>
+                )}
+
+                {/* Load more */}
+                {hasMore && !loading && (
+                    <div className="flex justify-center mt-12">
+                        <button
+                            onClick={() => setPage(p => p + 1)}
+                            className="px-8 py-3 rounded-xl bg-zinc-900 border border-white/[0.06] text-white font-semibold hover:border-blue-500/40 hover:text-blue-400 transition-all"
+                        >
+                            Load More Courses
+                        </button>
+                    </div>
+                )}
+                {loading && courses.length > 0 && (
+                    <div className="flex justify-center mt-8">
+                        <div className="w-8 h-8 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+                    </div>
                 )}
             </main>
 

@@ -146,33 +146,12 @@ const Dashboard = () => {
     const { logout } = useAuth();
 
     // fetchUserData runs on mount and after profile updates.
-    // It fetches the user profile + course catalog together so that
-    // enrolledCourses can be reconciled with the current catalog IDs.
+    // The enrolled courses are now stored with proper ObjectId references,
+    // so we trust the user document directly — no catalog reconciliation needed.
     const fetchUserData = useCallback(async () => {
         try {
-            const [userRes, coursesRes] = await Promise.all([
-                api.get('/auth/user'),
-                api.get('/courses')
-            ]);
-
-            // New backend response: { success, data: {...} }
-            const profile = userRes.data.data;
-            const catalog = coursesRes.data.data;
-
-            // Reconcile enrolled course IDs against the live catalog
-            const syncedCourses = (profile.enrolledCourses || [])
-                .map((enrolled) => {
-                    const live = catalog.find((c) => c.title === enrolled.title);
-                    return live ? { ...enrolled, courseId: live._id } : null;
-                })
-                .filter(Boolean);
-
-            // Deduplicate by title (guards against legacy duplicate DB entries)
-            const uniqueCourses = syncedCourses.reduce((acc, cur) => {
-                return acc.find((x) => x.title === cur.title) ? acc : [...acc, cur];
-            }, []);
-
-            setUserData({ ...profile, enrolledCourses: uniqueCourses });
+            const userRes = await api.get('/auth/user');
+            setUserData(userRes.data.data);
         } catch {
             toast.error('Session expired. Please log in again.');
             logout();
@@ -180,7 +159,8 @@ const Dashboard = () => {
         } finally {
             setLoading(false);
         }
-    }, [navigate, logout]); // stable deps — navigate and logout never change
+    }, [navigate, logout]);
+
 
     useEffect(() => {
         fetchUserData();

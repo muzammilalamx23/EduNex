@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Editor from '@monaco-editor/react';
 import { ArrowLeft, Send, Bot, Code2, Globe, Layout, Maximize2, Sparkles, User, RefreshCw, Layers, Flame, Zap, Trophy, CheckCircle2, Circle, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import api from '../utils/api';
 
 const DEFAULT_HTML = `<!DOCTYPE html>
 <html lang="en">
@@ -137,18 +139,24 @@ const MISSIONS = [
 
 export default function Playground() {
   const navigate = useNavigate();
+  const { user, refreshUser } = useAuth(); // ← real user data
   const [activeTab, setActiveTab] = useState('html');
   const [htmlCode, setHtmlCode] = useState(DEFAULT_HTML);
   const [cssCode, setCssCode] = useState(DEFAULT_CSS);
   const [srcDoc, setSrcDoc] = useState('');
   
-  // Gamification State
-  const [xp, setXp] = useState(1240);
-  const [level, setLevel] = useState(4);
-  const [streak, setStreak] = useState(7);
+  // Gamification State — derived from real user where possible
+  // XP and streak come from the auth context; local 'progress' tracks playground level
   const [progress, setProgress] = useState(1); // 1 = Level 1, up to 11 (Completed)
   const [showXpAnim, setShowXpAnim] = useState(false);
   const [earnedXp, setEarnedXp] = useState(0);
+  const [isSavingXp, setIsSavingXp] = useState(false);
+
+  // Derive stats from real user — never hardcode these
+  const xp = user?.xp ?? 0;
+  const streak = user?.streak ?? 0;
+  // Approximate level from XP (every 500 XP = 1 level)
+  const level = Math.max(1, Math.floor(xp / 500) + 1);
 
   // Derive current mission
   const currentMission = MISSIONS[progress - 1] || null;
@@ -157,7 +165,7 @@ export default function Playground() {
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [chatMessages, setChatMessages] = useState([
-    { role: 'assistant', text: `Hey! Let's master HTML & CSS.\n\n${MISSIONS[0].task}` }
+    { role: 'assistant', text: `Hey${user ? ` ${user.fullName?.split(' ')[0]}` : ''}! Let's master HTML & CSS.\n\n${MISSIONS[0].task}` }
   ]);
 
   // Handle iframe srcDoc update
@@ -190,42 +198,60 @@ export default function Playground() {
     }, 1200);
   };
 
-  const handleReviewCode = () => {
+  const handleReviewCode = async () => {
     if (progress > MISSIONS.length) return;
     setIsTyping(true);
     
-    setTimeout(() => {
-      setIsTyping(false);
+    // Small artificial delay for UX — feels like the AI is thinking
+    await new Promise(resolve => setTimeout(resolve, 800));
+    setIsTyping(false);
       
-      const mission = MISSIONS[progress - 1];
-      const isSuccess = mission.validate(htmlCode, cssCode);
+    const mission = MISSIONS[progress - 1];
+    const isSuccess = mission.validate(htmlCode, cssCode);
 
-      if (!isSuccess) {
-        setChatMessages(prev => [...prev, 
-          { role: 'assistant', text: `❌ **Not Quite Yet!**\n\n${mission.errorMessage}` }
-        ]);
-        return;
-      }
+    if (!isSuccess) {
+      setChatMessages(prev => [...prev, 
+        { role: 'assistant', text: `❌ **Not Quite Yet!**\n\n${mission.errorMessage}` }
+      ]);
+      return;
+    }
 
-      // Success Logic
-      setXp(x => x + mission.xp);
-      setEarnedXp(mission.xp);
-      setShowXpAnim(true);
-      setTimeout(() => setShowXpAnim(false), 2500);
-      
-      if (progress < MISSIONS.length) {
-        const nextMission = MISSIONS[progress];
-        setProgress(p => p + 1);
-        setChatMessages(prev => [...prev, 
-          { role: 'assistant', text: `🎉 ${mission.successMessage}\n\nAwarded **+${mission.xp} XP**!\n\n${nextMission.task}` }
-        ]);
-      } else {
-        setProgress(p => p + 1);
-        setChatMessages(prev => [...prev, 
-          { role: 'assistant', text: `🏆 **COURSE ACCOMPLISHED!**\n\nYou've finished all 10 levels of the HTML Mastery Practice! You are unstoppable. I awarded you your final **+${mission.xp} XP**! See you in the next module.` }
-        ]);
+    // ── Persist XP to Backend ────────────────────────────────────────────────
+    // XP amount is determined server-side via the PLAYGROUND_XP_MAP.
+    // The client only sends the activity key, never the XP value.
+    setIsSavingXp(true);
+    let savedXp = mission.xp; // optimistic fallback for display
+    if (user) {
+      try {
+        const activityKey = `playground_level_${progress}`;
+        const res = await api.post('/auth/add-xp', { activity: activityKey });
+        savedXp = res.data.data?.awarded ?? mission.xp;
+        // Refresh the user context so the header XP counter updates
+        await refreshUser();
+      } catch (err) {
+        // Non-fatal: the mission still completes, XP save is best-effort
+        console.error('Failed to save playground XP:', err?.response?.data?.message || err.message);
       }
-    }, 1200);
+    }
+    setIsSavingXp(false);
+
+    // ── XP Animation ─────────────────────────────────────────────────────────
+    setEarnedXp(savedXp);
+    setShowXpAnim(true);
+    setTimeout(() => setShowXpAnim(false), 2500);
+    
+    if (progress < MISSIONS.length) {
+      const nextMission = MISSIONS[progress];
+      setProgress(p => p + 1);
+      setChatMessages(prev => [...prev, 
+        { role: 'assistant', text: `🎉 ${mission.successMessage}\n\nAwarded **+${savedXp} XP**!\n\n${nextMission.task}` }
+      ]);
+    } else {
+      setProgress(p => p + 1);
+      setChatMessages(prev => [...prev, 
+        { role: 'assistant', text: `🏆 **COURSE ACCOMPLISHED!**\n\nYou've finished all 10 levels of the HTML Mastery Practice! You are unstoppable. **+${savedXp} XP** saved to your profile!` }
+      ]);
+    }
   };
 
   const handleReset = () => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, Reorder } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Plus, Trash2, ArrowLeft, Loader2, Video, FileText, Clock, Layout, Save, Image as ImageIcon } from 'lucide-react';
 import api from '../utils/api';
 import Navbar from '../components/Navbar';
@@ -9,27 +9,38 @@ import toast from 'react-hot-toast';
 const AdminCreateCourse = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    // Categories MUST match the enum in server/models/Course.js
+    const CATEGORIES = [
+        'Development', 'Design', 'Business', 'Data Science',
+        'Marketing', 'IT & Software', 'Personal Development', 'Other'
+    ];
+
     const [courseData, setCourseData] = useState({
         title: '',
         description: '',
         category: 'Development',
         difficulty: 'Beginner',
         thumbnail: '',
+        tags: [],          // stored as string array, edited as comma-separated input
         lessons: [
-            { title: '', videoUrl: '', content: '', duration: '0:00' }
+            { title: '', videoUrl: '', content: '', pdfUrl: '', duration: 0 }
         ]
     });
 
+    // Tags are displayed as a comma-separated string in the input
+    const [tagsInput, setTagsInput] = useState('');
+
     const handleLessonChange = (index, field, value) => {
         const newLessons = [...courseData.lessons];
-        newLessons[index][field] = value;
+        // Important: spread the lesson object to avoid mutating the original reference.
+        newLessons[index] = { ...newLessons[index], [field]: value };
         setCourseData({ ...courseData, lessons: newLessons });
     };
 
     const addLesson = () => {
         setCourseData({
             ...courseData,
-            lessons: [...courseData.lessons, { title: '', videoUrl: '', content: '', duration: '0:00' }]
+            lessons: [...courseData.lessons, { title: '', videoUrl: '', content: '', pdfUrl: '', duration: 0 }]
         });
     };
 
@@ -41,13 +52,32 @@ const AdminCreateCourse = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // ── Pre-submit validation (fast fail before the network round-trip) ──
+        if (!courseData.title.trim()) {
+            return toast.error('Course title is required.');
+        }
+        if (!courseData.description.trim()) {
+            return toast.error('Course description is required.');
+        }
+        const badLesson = courseData.lessons.findIndex(l => !l.title.trim());
+        if (badLesson !== -1) {
+            return toast.error(`Lesson ${badLesson + 1} is missing a title.`);
+        }
+
         setLoading(true);
         try {
-            await api.post('/courses', courseData);
+            // Parse tags from comma-separated input string → trimmed lowercase array
+            const parsedTags = tagsInput
+                .split(',')
+                .map(t => t.trim().toLowerCase())
+                .filter(Boolean);
+
+            await api.post('/courses', { ...courseData, tags: parsedTags });
             toast.success('Course created successfully!');
             navigate('/admin');
         } catch (err) {
-            toast.error(err.response?.data?.message || 'Failed to create course');
+            toast.error(err.response?.data?.message || 'Failed to create course.');
         } finally {
             setLoading(false);
         }
@@ -92,14 +122,15 @@ const AdminCreateCourse = () => {
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Category</label>
-                                <input
-                                    required
-                                    type="text"
-                                    placeholder="e.g. Development, Design, Business"
+                                <select
                                     value={courseData.category}
                                     onChange={(e) => setCourseData({ ...courseData, category: e.target.value })}
-                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors"
-                                />
+                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors appearance-none"
+                                >
+                                    {CATEGORIES.map(cat => (
+                                        <option key={cat} value={cat}>{cat}</option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
 
@@ -140,7 +171,39 @@ const AdminCreateCourse = () => {
                                         className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-cyan-500 transition-colors"
                                     />
                                 </div>
+                                {/* Live thumbnail preview */}
+                                {courseData.thumbnail && (
+                                    <img
+                                        src={courseData.thumbnail}
+                                        alt="Thumbnail preview"
+                                        className="mt-2 w-full h-36 object-cover rounded-xl border border-zinc-800"
+                                        onError={(e) => { e.target.style.display = 'none'; }}
+                                        onLoad={(e) => { e.target.style.display = 'block'; }}
+                                    />
+                                )}
                             </div>
+                        </div>
+
+                        {/* Tags */}
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Tags <span className="normal-case font-normal text-zinc-600">(comma-separated, e.g. async, closures, flexbox)</span></label>
+                            <input
+                                type="text"
+                                placeholder="javascript, async, promises, closures"
+                                value={tagsInput}
+                                onChange={(e) => setTagsInput(e.target.value)}
+                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                            />
+                            {/* Preview parsed tags */}
+                            {tagsInput && (
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                    {tagsInput.split(',').map(t => t.trim()).filter(Boolean).map((tag, i) => (
+                                        <span key={i} className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-medium">
+                                            #{tag.toLowerCase()}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -209,20 +272,25 @@ const AdminCreateCourse = () => {
                                             {/* Row 3: Text Content & Duration */}
                                             <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                                                 <div className="md:col-span-9 relative">
-                                                    <Layout className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
-                                                    <input
-                                                        placeholder="Reading Content / Text Notes (Optional)"
+                                                    <Layout className="absolute left-3 top-3 text-zinc-600" size={14} />
+                                                    <textarea
+                                                        rows={3}
+                                                        placeholder="Reading Content / Text Notes (Optional) — supports multiple paragraphs"
                                                         value={lesson.content}
                                                         onChange={(e) => handleLessonChange(index, 'content', e.target.value)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors resize-none"
                                                     />
                                                 </div>
                                                 <div className="md:col-span-3 relative">
                                                     <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
                                                     <input
-                                                        placeholder="Duration"
+                                                        type="number"
+                                                        min="0"
+                                                        max="600"
+                                                        step="0.5"
+                                                        placeholder="Mins"
                                                         value={lesson.duration}
-                                                        onChange={(e) => handleLessonChange(index, 'duration', e.target.value)}
+                                                        onChange={(e) => handleLessonChange(index, 'duration', parseFloat(e.target.value) || 0)}
                                                         className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
                                                     />
                                                 </div>

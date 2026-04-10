@@ -112,42 +112,139 @@ router.put('/profile', auth, [
 }));
 
 // ─── @route  POST /api/auth/lesson-complete ───────────────────────────────────
+// @desc   Mark a specific lesson as done. Awards 100 XP (server-defined).
+//         Idempotent: completing the same lesson twice has no effect.
+// @access Private
 router.post('/lesson-complete', auth, [
     body('courseId').notEmpty().withMessage('courseId is required.'),
+    body('lessonId').notEmpty().withMessage('lessonId is required.'),
 ], asyncHandler(async (req, res) => {
     if (!validate(req, res)) return;
 
-    const { courseId, xpGain = 100 } = req.body;
-    const user = await User.findById(req.user.id);
+    // XP is SERVER-DEFINED. We never trust a value from the client.
+    const XP_PER_LESSON = 100;
+    const { courseId, lessonId } = req.body;
 
-    const course = user.enrolledCourses.find(
-        (c) => c.courseId.toString() === courseId.toString()
-    );
+    // Fetch both the user and the course in parallel for efficiency
+    const [user, course] = await Promise.all([
+        User.findById(req.user.id),
+        require('../models/Course').findById(courseId).select('lessons').lean(),
+    ]);
+
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found.');
+    }
     if (!course) {
         res.status(404);
-        throw new Error('Course not found in your enrollments.');
+        throw new Error('Course not found.');
     }
 
-    if (course.progress < 100) {
-        course.progress = Math.min(course.progress + 10, 100);
-        user.xp += xpGain;
+    // Find the user's enrollment record
+    const enrollment = user.enrolledCourses.find(
+        (c) => c.courseId.toString() === courseId.toString()
+    );
+    if (!enrollment) {
+        res.status(404);
+        throw new Error('You are not enrolled in this course.');
+    }
 
-        if (course.progress === 100) {
-            user.coursesCompleted += 1;
-        }
+    // ── Idempotency Guard ─────────────────────────────────────────────────────
+    // If the lesson was already completed, return current state without mutation.
+    const alreadyCompleted = enrollment.completedLessons.includes(lessonId);
+    if (alreadyCompleted) {
+        return res.json({
+            success: true,
+            alreadyCompleted: true,
+            message: 'Lesson was already completed.',
+            data: {
+                xp: user.xp,
+                progress: enrollment.progress,
+                coursesCompleted: user.coursesCompleted,
+                completedLessons: enrollment.completedLessons,
+            }
+        });
+    }
+
+    // ── Update Lesson Completion ──────────────────────────────────────────────
+    enrollment.completedLessons.push(lessonId);
+
+    // Progress = (completedLessons / totalLessons) * 100
+    const totalLessons = course.lessons.length;
+    const newProgress = totalLessons > 0
+        ? Math.round((enrollment.completedLessons.length / totalLessons) * 100)
+        : 100;
+
+    const wasCompleteBefore = enrollment.progress >= 100;
+    enrollment.progress = newProgress;
+    user.xp += XP_PER_LESSON;
+
+    // Only increment coursesCompleted the first time progress hits 100
+    if (newProgress >= 100 && !wasCompleteBefore) {
+        user.coursesCompleted += 1;
     }
 
     await user.save();
     res.json({
         success: true,
+        alreadyCompleted: false,
         message: 'Lesson completed.',
         data: {
             xp: user.xp,
-            progress: course.progress,
+            progress: enrollment.progress,
             coursesCompleted: user.coursesCompleted,
+            completedLessons: enrollment.completedLessons,
         }
     });
 }));
+
+// ─── @route  POST /api/auth/add-xp ────────────────────────────────────────────
+// @desc   Award a fixed, server-defined XP amount for playground completions.
+//         The client sends an 'activity' key; the server maps it to a safe amount.
+// @access Private
+const PLAYGROUND_XP_MAP = {
+    mission_complete: 50,
+    playground_level_1: 50,
+    playground_level_2: 60,
+    playground_level_3: 70,
+    playground_level_4: 80,
+    playground_level_5: 90,
+    playground_level_6: 100,
+    playground_level_7: 110,
+    playground_level_8: 120,
+    playground_level_9: 130,
+    playground_level_10: 200,
+};
+
+router.post('/add-xp', auth, [
+    body('activity').notEmpty().withMessage('activity key is required.'),
+], asyncHandler(async (req, res) => {
+    if (!validate(req, res)) return;
+
+    const { activity } = req.body;
+    const xpToAdd = PLAYGROUND_XP_MAP[activity];
+
+    if (!xpToAdd) {
+        res.status(400);
+        throw new Error('Unknown activity. No XP awarded.');
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found.');
+    }
+
+    user.xp += xpToAdd;
+    await user.save();
+
+    res.json({
+        success: true,
+        message: `+${xpToAdd} XP awarded.`,
+        data: { xp: user.xp, awarded: xpToAdd }
+    });
+}));
+
 
 // ─── @route  POST /api/auth/update-time ──────────────────────────────────────
 router.post('/update-time', auth, [
@@ -193,13 +290,27 @@ router.post('/update-time', auth, [
 }));
 
 // ─── @route  POST /api/auth/enroll ───────────────────────────────────────────
+// @desc   Enroll the authenticated user in a course.
+//         Course data is fetched from DB — client-provided title/thumbnail is ignored.
+// @access Private
 router.post('/enroll', auth, [
     body('courseId').notEmpty().withMessage('courseId is required.'),
-    body('title').notEmpty().withMessage('Course title is required.'),
 ], asyncHandler(async (req, res) => {
     if (!validate(req, res)) return;
 
-    const { courseId, title, thumbnail } = req.body;
+    const { courseId } = req.body;
+
+    // Verify the course actually exists and is published
+    const course = await require('../models/Course').findById(courseId).lean();
+    if (!course) {
+        res.status(404);
+        throw new Error('Course not found.');
+    }
+    if (course.status !== 'published') {
+        res.status(400);
+        throw new Error('This course is not available for enrollment.');
+    }
+
     const user = await User.findById(req.user.id);
 
     const alreadyEnrolled = user.enrolledCourses.some(
@@ -210,8 +321,21 @@ router.post('/enroll', auth, [
         throw new Error('You are already enrolled in this course.');
     }
 
-    user.enrolledCourses.push({ courseId, title, thumbnail: thumbnail || '', progress: 0 });
-    await user.save();
+    // Use data from the DB — never trust the client for title/thumbnail
+    user.enrolledCourses.push({
+        courseId: course._id,
+        title: course.title,
+        thumbnail: course.thumbnail || '',
+        progress: 0,
+        completedLessons: []
+    });
+
+    // Atomically increment the denormalized enrollment counter on the course.
+    // $inc is atomic — safe under concurrent enrollment requests.
+    await Promise.all([
+        user.save(),
+        require('../models/Course').findByIdAndUpdate(courseId, { $inc: { enrollmentCount: 1 } })
+    ]);
 
     res.json({
         success: true,
@@ -219,6 +343,8 @@ router.post('/enroll', auth, [
         data: user.enrolledCourses,
     });
 }));
+
+
 
 // ─── @route  POST /api/auth/register ─────────────────────────────────────────
 router.post('/register', authLimiter, [

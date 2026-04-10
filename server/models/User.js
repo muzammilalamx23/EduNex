@@ -1,14 +1,38 @@
 const mongoose = require('mongoose');
 
+// ─── Enrolled Course Subdocument ──────────────────────────────────────────────
+// completedLessons stores lesson IDs that the user has completed.
+// This enables: accurate progress %, XP deduplication, and sidebar checkmarks.
+const EnrolledCourseSchema = new mongoose.Schema({
+    courseId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course',
+        required: true
+    },
+    title: String,
+    thumbnail: String,
+    progress: {
+        type: Number,
+        default: 0
+    },
+    completedLessons: {
+        type: [String], // stores lessonId strings
+        default: []
+    }
+}, { _id: false });
+
 const UserSchema = new mongoose.Schema({
     fullName: {
         type: String,
         required: true,
+        trim: true,
     },
     email: {
         type: String,
         required: true,
         unique: true,
+        lowercase: true,
+        trim: true,
     },
     password: {
         type: String,
@@ -16,58 +40,55 @@ const UserSchema = new mongoose.Schema({
     },
     xp: {
         type: Number,
-        default: 0
+        default: 0,
+        min: 0
     },
     coursesCompleted: {
         type: Number,
-        default: 0
+        default: 0,
+        min: 0
     },
     learningTime: {
-        type: Number, // in minutes
-        default: 0
+        type: Number, // cumulative minutes
+        default: 0,
+        min: 0
     },
     streak: {
         type: Number,
-        default: 0
+        default: 0,
+        min: 0
     },
     lastActiveDate: {
         type: Date,
         default: null
     },
     dailyLearningTime: {
-        type: Number,
-        default: 0
+        type: Number, // resets each day
+        default: 0,
+        min: 0
     },
     lastStreakUpdate: {
         type: Date,
         default: null
     },
-    enrolledCourses: [{
-        courseId: String,
-        title: String,
-        progress: {
-            type: Number,
-            default: 0
-        },
-        thumbnail: String
-    }],
+    enrolledCourses: [EnrolledCourseSchema],
     linkedin: {
         type: String,
-        default: ""
+        default: '',
+        trim: true,
     },
     github: {
         type: String,
-        default: ""
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
+        default: '',
+        trim: true,
     },
     role: {
         type: String,
         enum: ['user', 'admin'],
         default: 'user'
     }
+}, {
+    timestamps: true // adds createdAt and updatedAt automatically
 });
 
 module.exports = mongoose.model('User', UserSchema);
