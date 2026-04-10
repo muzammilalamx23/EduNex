@@ -194,9 +194,81 @@ router.post('/lesson-complete', auth, [
             progress: enrollment.progress,
             coursesCompleted: user.coursesCompleted,
             completedLessons: enrollment.completedLessons,
+        }\r
+    });
+}));
+
+
+// ─── @route  GET /api/auth/progress/:courseId ─────────────────────────────────
+// @desc   Get enrollment progress for a single course without fetching full profile.
+//         Returns: progress %, completedLessons[], lastLessonId.
+//         Called on CoursePlayer mount to initialize the progress HUD efficiently.
+// @access Private
+router.get('/progress/:courseId', auth, asyncHandler(async (req, res) => {
+    const { courseId } = req.params;
+
+    // Use projection to avoid loading the entire user doc
+    const user = await User.findById(req.user.id)
+        .select('enrolledCourses')
+        .lean();
+
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found.');
+    }
+
+    const enrollment = user.enrolledCourses.find(
+        (c) => c.courseId.toString() === courseId
+    );
+
+    if (!enrollment) {
+        res.status(404);
+        throw new Error('You are not enrolled in this course.');
+    }
+
+    res.json({
+        success: true,
+        data: {
+            progress: enrollment.progress,
+            completedLessons: enrollment.completedLessons,
+            lastLessonId: enrollment.lastLessonId || null,
         }
     });
 }));
+
+
+// ─── @route  POST /api/auth/save-position ────────────────────────────────────
+// @desc   Persist the lesson the user is currently viewing.
+//         Called every time the active lesson changes in CoursePlayer.
+//         Powers the "Continue Learning" resume feature on Dashboard.
+// @access Private
+router.post('/save-position', auth, [
+    body('courseId').notEmpty().withMessage('courseId is required.'),
+    body('lessonId').notEmpty().withMessage('lessonId is required.'),
+], asyncHandler(async (req, res) => {
+    if (!validate(req, res)) return;
+
+    const { courseId, lessonId } = req.body;
+
+    // Use arrayFilters for a targeted atomic update — no need to load the full user doc.
+    const result = await User.updateOne(
+        {
+            _id: req.user.id,
+            'enrolledCourses.courseId': courseId
+        },
+        {
+            $set: { 'enrolledCourses.$.lastLessonId': lessonId }
+        }
+    );
+
+    if (result.matchedCount === 0) {
+        res.status(404);
+        throw new Error('Enrollment not found.');
+    }
+
+    res.json({ success: true, message: 'Position saved.' });
+}));
+
 
 // ─── @route  POST /api/auth/add-xp ────────────────────────────────────────────
 // @desc   Award a fixed, server-defined XP amount for playground completions.

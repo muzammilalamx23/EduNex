@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 // ─── Enrolled Course Subdocument ──────────────────────────────────────────────
-// completedLessons stores lesson IDs that the user has completed.
-// This enables: accurate progress %, XP deduplication, and sidebar checkmarks.
+// completedLessons: lesson IDs the user has finished (for progress %, XP dedup, checkmarks)
+// lastLessonId:     the lesson the user was viewing last — enables "Continue Learning" resume
 const EnrolledCourseSchema = new mongoose.Schema({
     courseId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -18,8 +18,15 @@ const EnrolledCourseSchema = new mongoose.Schema({
     completedLessons: {
         type: [String], // stores lessonId strings
         default: []
+    },
+    // ID of the last lesson the user had open — null means start from lesson 0.
+    // Updated every time the user switches to a different lesson.
+    lastLessonId: {
+        type: String,
+        default: null
     }
 }, { _id: false });
+
 
 const UserSchema = new mongoose.Schema({
     fullName: {
