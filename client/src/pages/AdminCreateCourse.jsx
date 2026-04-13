@@ -382,7 +382,9 @@ const AdminCreateCourse = () => {
                                                     />
                                                 </div>
                                             </div>
-                                        </div>
+                                        </>
+                                    )}
+                                </div>
                                         <div className="md:col-span-1 flex items-center justify-center">
                                             <button
                                                 type="button"
