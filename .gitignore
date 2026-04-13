@@ -40,3 +40,17 @@ tmp/
 client/dist/
 server/logs/
 npm-debug.log*
+
+# Local diagnostic & temporary scripts (never push these)
+server/check_dbs.js
+server/check_test.js
+server/test-admins.js
+server/listUsers.js
+server/admins.txt
+server/promoteAdmin.js
+server/seed.js
+client/check_case.cjs
+codebase_analysis_report.md
+cli_history.txt
+utf8_history.txt
+*.pdf
