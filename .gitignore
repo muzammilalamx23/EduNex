@@ -27,6 +27,7 @@ build/
 !.vscode/extensions.json
 .idea/
 .DS_Store
+.vite/
 *.suo
 *.ntvs*
 *.njsproj
