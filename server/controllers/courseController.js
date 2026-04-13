@@ -32,8 +32,9 @@ exports.getAllCourses = async (req, res) => {
     ]);
 
     const totalPages = Math.ceil(count / limitNum) || 1;
-    return ApiResponse.success(res, 'Courses retrieved.', {
-        courses: courses.map(withTotalDuration),
+    res.json({
+        success: true,
+        data: courses.map(withTotalDuration),
         pagination: {
             total: count,
             pages: totalPages,
@@ -80,8 +81,9 @@ exports.getAdminCourses = async (req, res) => {
     ]);
 
     const totalPages = Math.ceil(count / limitNum) || 1;
-    return ApiResponse.success(res, 'Admin courses retrieved.', {
-        courses: courses.map(withTotalDuration),
+    res.json({
+        success: true,
+        data: courses.map(withTotalDuration),
         pagination: {
             total: count,
             pages: totalPages,

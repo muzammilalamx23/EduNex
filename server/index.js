@@ -20,16 +20,16 @@ if (missing.length > 0) {
 
 const app = express();
 
-// ─── Security & Performance Middleware ────────────────────────────────────────
-// ─── Security & Performance Middleware ────────────────────────────────────────
+const isDev = process.env.NODE_ENV !== 'production';
 app.use(helmet({
-    contentSecurityPolicy: {
+    contentSecurityPolicy: isDev ? false : {
         directives: {
             ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-            "img-src": ["'self'", "data:", "https:", "https://i.pravatar.cc", "https://raw.githubusercontent.com", "https://upload.wikimedia.org"],
-            "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // unsafe-eval needed for some three.js features if any
-            "frame-src": ["'self'", "https://www.youtube.com", "https://youtube.com"],
-            "connect-src": ["'self'", "https:", "wss:", "http://localhost:5000", "ws://localhost:5000"],
+            "img-src": ["'self'", "data:", "https:"],
+            "script-src": ["'self'", "'unsafe-inline'"],
+            "script-src-attr": ["'unsafe-inline'"], // needed for React event handlers
+            "frame-src": ["'self'", "https://www.youtube.com"],
+            "connect-src": ["'self'", "https:", "wss:"],
         },
     },
     crossOriginEmbedderPolicy: false
