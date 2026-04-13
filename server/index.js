@@ -47,11 +47,14 @@ app.use(mongoSanitize());
 
 
 // ─── Global Rate Limiting ──────────────────────────────────────────────────────
+// Only apply in production. In development the React dev server + hot-reload
+// easily burn through a low limit during normal usage.
 const globalLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100, // Reasonable cap per IP
+    windowMs: 15 * 60 * 1000,  // 15 minutes
+    max: 500,                   // raised: SPA apps make many small requests per session
     standardHeaders: true,
     legacyHeaders: false,
+    skip: () => process.env.NODE_ENV !== 'production', // disabled in development
     message: { success: false, message: 'Too many requests. Please try again later.' },
 });
 app.use(globalLimiter);
