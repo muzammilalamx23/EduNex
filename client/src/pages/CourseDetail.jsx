@@ -170,28 +170,50 @@ const CourseDetail = () => {
                                     Course Curriculum
                                 </h2>
                                 <div className="space-y-4">
-                                    {(course.lessons || []).map((lesson, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-zinc-700 transition-all flex items-center justify-between group"
-                                        >
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-zinc-500 font-bold border border-zinc-700 group-hover:bg-cyan-500/10 group-hover:text-cyan-400 group-hover:border-cyan-500/30 transition-all">
-                                                    {idx + 1}
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-bold text-white group-hover:text-cyan-400 transition-colors">{lesson.title}</h3>
-                                                    <p className="text-xs text-zinc-500 flex items-center gap-3 mt-1">
-                                                        <span className="flex items-center gap-1"><Video size={12} /> Video</span>
-                                                        <span className="flex items-center gap-1"><Clock size={12} /> {lesson.duration}</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <PlayCircle className="text-cyan-500" size={24} />
-                                            </div>
-                                        </div>
-                                    ))}
+                                    {(course.lessons || []).map((lesson, idx) => {
+                                        const showSectionHeader = idx === 0 || (lesson.section && lesson.section !== (course.lessons[idx - 1].section));
+                                        const isHeadingType = lesson.type === 'heading';
+                                        return (
+                                            <React.Fragment key={idx}>
+                                                {showSectionHeader && lesson.section && (
+                                                    <div className="flex items-center gap-4 pt-6 pb-2 first:pt-0">
+                                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-500 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">
+                                                            {lesson.section}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                {isHeadingType ? (
+                                                    <div className="pt-8 pb-4">
+                                                        <h3 className="text-xl font-black text-white border-l-4 border-cyan-500 pl-4 uppercase tracking-tight">
+                                                            {lesson.title}
+                                                        </h3>
+                                                    </div>
+                                                ) : (
+                                                    <div
+                                                        className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-zinc-700 transition-all flex items-center justify-between group"
+                                                    >
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-zinc-500 font-bold border border-zinc-700 group-hover:bg-cyan-500/10 group-hover:text-cyan-400 group-hover:border-cyan-500/30 transition-all">
+                                                                {idx + 1}
+                                                            </div>
+                                                            <div>
+                                                                <h3 className="font-bold text-white group-hover:text-cyan-400 transition-colors uppercase text-sm tracking-tight">{lesson.title}</h3>
+                                                                <p className="text-xs text-zinc-500 flex items-center gap-3 mt-1">
+                                                                    <span className="flex items-center gap-1"><Video size={12} /> Video</span>
+                                                                    {lesson.duration > 0 && (
+                                                                        <span className="flex items-center gap-1"><Clock size={12} /> {lesson.duration}m</span>
+                                                                    )}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <PlayCircle className="text-cyan-500" size={24} />
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </React.Fragment>
+                                        );
+                                    })}
                                 </div>
                             </div>
 

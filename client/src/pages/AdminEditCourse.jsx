@@ -170,14 +170,29 @@ const AdminEditCourse = () => {
                                 <Video size={20} />
                                 Edit Curriculum ({courseData.lessons?.length || 0} Lessons)
                             </div>
-                            <button
-                                type="button"
-                                onClick={addLesson}
-                                className="flex items-center gap-2 text-xs font-black uppercase tracking-widest bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-lg transition-colors border border-zinc-700"
-                            >
-                                <Plus size={14} />
-                                Add New Lesson
-                            </button>
+                            <div className="flex items-center gap-4">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setCourseData({
+                                            ...courseData,
+                                            lessons: [...courseData.lessons, { title: '', type: 'heading', section: '' }]
+                                        });
+                                    }}
+                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-cyan-400 hover:text-cyan-300 transition-colors"
+                                >
+                                    <Layout size={14} />
+                                    Add Heading
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={addLesson}
+                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-lg transition-colors border border-zinc-700"
+                                >
+                                    <Plus size={14} />
+                                    Add New Lesson
+                                </button>
+                            </div>
                         </div>
 
                         <div className="space-y-4">
@@ -194,58 +209,83 @@ const AdminEditCourse = () => {
 
                                     <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
                                         <div className="md:col-span-11 space-y-4">
-                                            {/* Row 1: Title */}
-                                            <input
-                                                required
-                                                placeholder="Lesson Title"
-                                                value={lesson.title}
-                                                onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
-                                                className="bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
-                                            />
+                                            {lesson.type === 'heading' ? (
+                                                <div className="space-y-4">
+                                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-cyan-500">
+                                                        <Layout size={12} /> Curriculum Heading
+                                                    </div>
+                                                    <input
+                                                        required
+                                                        placeholder="Section Heading Title (e.g. Phase 1: HTML Fundamentals)"
+                                                        value={lesson.title}
+                                                        onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
+                                                        className="w-full bg-cyan-500/5 border border-cyan-500/20 rounded-lg py-3 px-4 text-sm font-bold placeholder:font-normal focus:outline-none focus:border-cyan-500 transition-colors"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    {/* Row 1: Title & Section */}
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <input
+                                                            required
+                                                            placeholder="Lesson Title"
+                                                            value={lesson.title}
+                                                            onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
+                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                        />
+                                                        <input
+                                                            placeholder="Section (e.g. HTML, CSS, Basics)"
+                                                            value={lesson.section || ''}
+                                                            onChange={(e) => handleLessonChange(index, 'section', e.target.value)}
+                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                        />
+                                                    </div>
 
-                                            {/* Row 2: Video & PDF */}
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div className="relative">
-                                                    <Video className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
-                                                    <input
-                                                        placeholder="Video URL (Optional)"
-                                                        value={lesson.videoUrl}
-                                                        onChange={(e) => handleLessonChange(index, 'videoUrl', e.target.value)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
-                                                    />
-                                                </div>
-                                                <div className="relative">
-                                                    <FileText className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
-                                                    <input
-                                                        placeholder="PDF URL / Drive Link (Optional)"
-                                                        value={lesson.pdfUrl || ''}
-                                                        onChange={(e) => handleLessonChange(index, 'pdfUrl', e.target.value)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
-                                                    />
-                                                </div>
-                                            </div>
+                                                    {/* Row 2: Video & PDF */}
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div className="relative">
+                                                            <Video className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
+                                                            <input
+                                                                placeholder="Video URL (Optional)"
+                                                                value={lesson.videoUrl}
+                                                                onChange={(e) => handleLessonChange(index, 'videoUrl', e.target.value)}
+                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                            />
+                                                        </div>
+                                                        <div className="relative">
+                                                            <FileText className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
+                                                            <input
+                                                                placeholder="PDF URL / Drive Link (Optional)"
+                                                                value={lesson.pdfUrl || ''}
+                                                                onChange={(e) => handleLessonChange(index, 'pdfUrl', e.target.value)}
+                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                            />
+                                                        </div>
+                                                    </div>
 
-                                            {/* Row 3: Lesson Content & Duration */}
-                                            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-                                                <div className="md:col-span-9 relative">
-                                                    <Layout className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
-                                                    <input
-                                                        placeholder="Reading Content / Text Notes (Optional)"
-                                                        value={lesson.content}
-                                                        onChange={(e) => handleLessonChange(index, 'content', e.target.value)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
-                                                    />
-                                                </div>
-                                                <div className="md:col-span-3 relative">
-                                                    <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
-                                                    <input
-                                                        placeholder="Duration"
-                                                        value={lesson.duration}
-                                                        onChange={(e) => handleLessonChange(index, 'duration', e.target.value)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
-                                                    />
-                                                </div>
-                                            </div>
+                                                    {/* Row 3: Lesson Content & Duration */}
+                                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                                        <div className="md:col-span-9 relative">
+                                                            <Layout className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
+                                                            <input
+                                                                placeholder="Reading Content / Text Notes (Optional)"
+                                                                value={lesson.content}
+                                                                onChange={(e) => handleLessonChange(index, 'content', e.target.value)}
+                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                            />
+                                                        </div>
+                                                        <div className="md:col-span-3 relative">
+                                                            <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
+                                                            <input
+                                                                placeholder="Duration"
+                                                                value={lesson.duration}
+                                                                onChange={(e) => handleLessonChange(index, 'duration', e.target.value)}
+                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
                                         <div className="md:col-span-1 flex items-center justify-center">
                                             <button

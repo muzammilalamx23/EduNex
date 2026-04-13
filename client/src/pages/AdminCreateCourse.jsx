@@ -222,14 +222,29 @@ const AdminCreateCourse = () => {
                                 <Video size={20} />
                                 Curriculum Builder
                             </div>
-                            <button
-                                type="button"
-                                onClick={addLesson}
-                                className="flex items-center gap-2 text-xs font-black uppercase tracking-widest bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-lg transition-colors border border-zinc-700"
-                            >
-                                <Plus size={14} />
-                                Add Lesson
-                            </button>
+                            <div className="flex items-center gap-4">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setCourseData({
+                                            ...courseData,
+                                            lessons: [...courseData.lessons, { title: '', type: 'heading', section: '' }]
+                                        });
+                                    }}
+                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-cyan-400 hover:text-cyan-300 transition-colors"
+                                >
+                                    <Layout size={14} />
+                                    Add Heading
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={addLesson}
+                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-lg transition-colors border border-zinc-700"
+                                >
+                                    <Plus size={14} />
+                                    Add Lesson
+                                </button>
+                            </div>
                         </div>
 
                         <div className="space-y-4">
@@ -246,35 +261,58 @@ const AdminCreateCourse = () => {
 
                                     <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
                                         <div className="md:col-span-11 space-y-4">
-                                            {/* Row 1: Title */}
-                                            <input
-                                                required
-                                                placeholder="Lesson Title"
-                                                value={lesson.title}
-                                                onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
-                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
-                                            />
-
-                                            {/* Row 2: Video & PDF */}
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {/* YouTube URL with live validation + thumbnail preview */}
-                                                <div className="space-y-2">
-                                                    <div className="relative">
-                                                        <Video className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
+                                            {lesson.type === 'heading' ? (
+                                                <div className="space-y-4">
+                                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-cyan-500">
+                                                        <Layout size={12} /> Curriculum Heading
+                                                    </div>
+                                                    <input
+                                                        required
+                                                        placeholder="Section Heading Title (e.g. Phase 1: HTML Fundamentals)"
+                                                        value={lesson.title}
+                                                        onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
+                                                        className="w-full bg-cyan-500/5 border border-cyan-500/20 rounded-lg py-3 px-4 text-sm font-bold placeholder:font-normal focus:outline-none focus:border-cyan-500 transition-colors"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    {/* Row 1: Title & Section */}
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                         <input
-                                                            placeholder="YouTube URL (youtube.com/watch?v=... or youtu.be/...)"
-                                                            value={lesson.videoUrl}
-                                                            onChange={(e) => handleLessonChange(index, 'videoUrl', e.target.value)}
-                                                            className={`w-full bg-black/20 border rounded-lg py-2 pl-9 pr-9 text-sm focus:outline-none transition-colors ${
-                                                                lesson.videoUrl
-                                                                    ? isValidYouTubeUrl(lesson.videoUrl)
-                                                                        ? 'border-green-500/60 focus:border-green-500'
-                                                                        : 'border-red-500/60 focus:border-red-500'
-                                                                    : 'border-zinc-800 focus:border-violet-500'
-                                                            }`}
+                                                            required
+                                                            placeholder="Lesson Title"
+                                                            value={lesson.title}
+                                                            onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
+                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
                                                         />
-                                                        {/* Inline validation icon */}
-                                                        {lesson.videoUrl && (
+                                                        <input
+                                                            placeholder="Section (e.g. HTML, CSS, Basics)"
+                                                            value={lesson.section || ''}
+                                                            onChange={(e) => handleLessonChange(index, 'section', e.target.value)}
+                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                        />
+                                                    </div>
+
+                                                    {/* Row 2: Video & PDF */}
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        {/* YouTube URL with live validation + thumbnail preview */}
+                                                        <div className="space-y-2">
+                                                            <div className="relative">
+                                                                <Video className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
+                                                                <input
+                                                                    placeholder="YouTube URL (youtube.com/watch?v=... or youtu.be/...)"
+                                                                    value={lesson.videoUrl}
+                                                                    onChange={(e) => handleLessonChange(index, 'videoUrl', e.target.value)}
+                                                                    className={`w-full bg-black/20 border rounded-lg py-2 pl-9 pr-9 text-sm focus:outline-none transition-colors ${
+                                                                        lesson.videoUrl
+                                                                            ? isValidYouTubeUrl(lesson.videoUrl)
+                                                                                ? 'border-green-500/60 focus:border-green-500'
+                                                                                : 'border-red-500/60 focus:border-red-500'
+                                                                            : 'border-zinc-800 focus:border-violet-500'
+                                                                    }`}
+                                                                />
+                                                                {/* Inline validation icon */}
+                                                                {lesson.videoUrl && (
                                                             <div className="absolute right-3 top-1/2 -translate-y-1/2">
                                                                 {isValidYouTubeUrl(lesson.videoUrl)
                                                                     ? <CheckCircle2 size={14} className="text-green-400" />

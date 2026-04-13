@@ -284,8 +284,8 @@ const CoursePlayer = () => {
             <div className="flex flex-1 overflow-hidden relative">
 
                 {/* ── Main content area ── */}
-                <main className={`flex-1 overflow-y-auto transition-all duration-500 ${sidebarOpen ? 'lg:mr-80' : ''}`}>
-                    <div className="max-w-5xl mx-auto p-4 md:p-8 space-y-8">
+                <main className={`flex-1 overflow-y-auto transition-all duration-500`}>
+                    <div className="max-w-7xl mx-auto p-4 md:px-10 md:py-8 space-y-8">
 
                         {/* Lesson status badge */}
                         <div className="flex items-center gap-3">
@@ -354,7 +354,7 @@ const CoursePlayer = () => {
                                         </div>
                                         <h3 className="text-xl font-bold">Lesson Notes</h3>
                                     </div>
-                                    <div className="text-zinc-300 leading-relaxed space-y-4 whitespace-pre-wrap font-medium text-base max-w-3xl">
+                                    <div className="text-zinc-300 leading-relaxed space-y-4 whitespace-pre-wrap font-medium text-base max-w-5xl">
                                         {activeLesson.content}
                                     </div>
                                 </div>
@@ -403,9 +403,9 @@ const CoursePlayer = () => {
                         {/* ── Lesson info + navigation ── */}
                         <div>
                             <h2 className="text-2xl md:text-3xl font-bold mb-2">{activeLesson?.title}</h2>
-                            <p className="text-zinc-500 leading-relaxed max-w-3xl text-sm">{course?.description}</p>
+                            <p className="text-zinc-500 leading-relaxed max-w-5xl text-sm">{course?.description}</p>
 
-                            <div className="mt-10 pt-8 border-t border-zinc-900 space-y-4">
+                        <div className="mt-6 pt-6 border-t border-zinc-900 space-y-4">
                                 {/* Manual unlock button — visible only when video not yet timed out */}
                                 {activeLesson?.videoId && !canComplete && !activeLessonDone && (
                                     <motion.button
@@ -503,60 +503,83 @@ const CoursePlayer = () => {
                                 </div>
                             </div>
 
-                            {/* Lesson list */}
+                            {/* Lesson list with section headers */}
                             <div className="flex-1 overflow-y-auto p-3 space-y-1 custom-scrollbar">
                                 {(course?.lessons || []).map((lesson, idx) => {
                                     const isActive = activeLesson?._id === lesson._id;
                                     const isDone = isLessonDone(lesson._id);
                                     const isResume = lesson._id?.toString() === lastLessonId;
 
+                                    // Render section header if it's the first lesson or the section changed
+                                    const showSectionHeader = idx === 0 || (lesson.section && lesson.section !== (course.lessons[idx - 1].section));
+                                    const isHeadingType = lesson.type === 'heading';
+
                                     return (
-                                        <button
-                                            key={lesson._id || idx}
-                                            onClick={() => switchLesson(lesson)}
-                                            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all group text-left
-                                                ${isActive
-                                                    ? 'bg-cyan-500/10 border border-cyan-500/20'
-                                                    : 'hover:bg-zinc-900/60 border border-transparent'
-                                                }`}
-                                        >
-                                            {/* Status icon */}
-                                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all
-                                                ${isDone
-                                                    ? 'bg-green-500/20 text-green-400'
-                                                    : isActive
-                                                        ? 'bg-cyan-500 text-black'
-                                                        : 'bg-zinc-800 text-zinc-500 group-hover:bg-zinc-700'
-                                                }`}>
-                                                {isDone
-                                                    ? <CheckCircle2 size={14} />
-                                                    : isActive
-                                                        ? <Play size={13} fill="currentColor" />
-                                                        : <span className="text-[10px] font-black">{idx + 1}</span>
-                                                }
-                                            </div>
-
-                                            {/* Lesson info */}
-                                            <div className="flex-1 min-w-0">
-                                                <p className={`text-xs font-semibold line-clamp-2 leading-snug
-                                                    ${isDone ? 'text-green-400/80' : isActive ? 'text-white' : 'text-zinc-400'}`}>
-                                                    {lesson.title}
-                                                </p>
-                                                <div className="flex items-center gap-2 mt-0.5">
-                                                    {lesson.duration > 0 && (
-                                                        <span className="text-[10px] text-zinc-600">{lesson.duration} min</span>
-                                                    )}
-                                                    {isResume && !isDone && (
-                                                        <span className="text-[10px] text-amber-400 font-bold">Resume</span>
-                                                    )}
+                                        <React.Fragment key={lesson._id || idx}>
+                                            {showSectionHeader && lesson.section && (
+                                                <div className="px-3 py-4 mt-2 flex items-center gap-2">
+                                                    <div className="h-px bg-zinc-900 flex-1"></div>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 whitespace-nowrap">
+                                                        {lesson.section}
+                                                    </span>
+                                                    <div className="h-px bg-zinc-900 flex-1"></div>
                                                 </div>
-                                            </div>
-
-                                            {/* Active pulse */}
-                                            {isActive && (
-                                                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shrink-0" />
                                             )}
-                                        </button>
+
+                                            {isHeadingType ? (
+                                                <div className="px-3 py-6 mt-4 mb-2">
+                                                    <h4 className="text-xs font-black text-cyan-400 uppercase tracking-widest border-l-2 border-cyan-500 pl-3">
+                                                        {lesson.title}
+                                                    </h4>
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    onClick={() => switchLesson(lesson)}
+                                                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all group text-left
+                                                        ${isActive
+                                                            ? 'bg-cyan-500/10 border border-cyan-500/20'
+                                                            : 'hover:bg-zinc-900/60 border border-transparent'
+                                                        }`}
+                                                >
+                                                    {/* Status icon */}
+                                                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all
+                                                        ${isDone
+                                                            ? 'bg-green-500/20 text-green-400'
+                                                            : isActive
+                                                                ? 'bg-cyan-500 text-black'
+                                                                : 'bg-zinc-800 text-zinc-500 group-hover:bg-zinc-700'
+                                                        }`}>
+                                                        {isDone
+                                                            ? <CheckCircle2 size={14} />
+                                                            : isActive
+                                                                ? <Play size={13} fill="currentColor" />
+                                                                : <span className="text-[10px] font-black">{idx + 1}</span>
+                                                        }
+                                                    </div>
+
+                                                    {/* Lesson info */}
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className={`text-xs font-semibold line-clamp-2 leading-snug
+                                                            ${isDone ? 'text-green-400/80' : isActive ? 'text-white' : 'text-zinc-400'}`}>
+                                                            {lesson.title}
+                                                        </p>
+                                                        <div className="flex items-center gap-2 mt-0.5">
+                                                            {lesson.duration > 0 && (
+                                                                <span className="text-[10px] text-zinc-600">{lesson.duration} min</span>
+                                                            )}
+                                                            {isResume && !isDone && (
+                                                                <span className="text-[10px] text-amber-400 font-bold">Resume</span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Active pulse */}
+                                                    {isActive && (
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shrink-0" />
+                                                    )}
+                                                </button>
+                                            )}
+                                        </React.Fragment>
                                     );
                                 })}
                             </div>

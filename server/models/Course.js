@@ -21,6 +21,10 @@ const LessonSchema = new mongoose.Schema({
         trim: true,
         maxlength: [200, 'Lesson title cannot exceed 200 characters']
     },
+    section: {
+        type: String,
+        default: 'General'
+    },
     // Original YouTube URL as pasted by the admin (for display/audit purposes).
     // Route validator enforces YouTube-only via isValidYouTubeUrl().
     videoUrl: {
@@ -51,6 +55,11 @@ const LessonSchema = new mongoose.Schema({
         default: 0,
         min: [0, 'Duration cannot be negative'],
         max: [600, 'Single lesson duration cannot exceed 600 minutes (10 hours)']
+    },
+    type: {
+        type: String,
+        enum: ['video', 'reading', 'heading'],
+        default: 'video'
     },
     order: {
         type: Number,
