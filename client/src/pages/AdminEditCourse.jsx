@@ -44,7 +44,7 @@ const AdminEditCourse = () => {
     const addLesson = () => {
         setCourseData({
             ...courseData,
-            lessons: [...courseData.lessons, { title: '', videoUrl: '', content: '', duration: '0:00' }]
+            lessons: [...courseData.lessons, { title: '', type: 'video', videoUrl: '', content: '', pdfUrl: '', duration: 0, section: '' }]
         });
     };
 
@@ -70,7 +70,7 @@ const AdminEditCourse = () => {
 
     if (loading) return (
         <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
-            <Loader2 className="animate-spin text-cyan-400" size={48} />
+            <Loader2 className="animate-spin text-[#00FF00]" size={48} />
         </div>
     );
 
@@ -96,7 +96,7 @@ const AdminEditCourse = () => {
                 <form onSubmit={handleSubmit} className="space-y-8">
                     {/* Basic Info */}
                     <div className="glass-card border-zinc-800 p-8 space-y-6">
-                        <div className="flex items-center gap-2 text-cyan-400 font-bold mb-2">
+                        <div className="flex items-center gap-2 text-[#00FF00] font-bold mb-2">
                             <Layout size={20} />
                             Modify Course Settings
                         </div>
@@ -109,7 +109,7 @@ const AdminEditCourse = () => {
                                     type="text"
                                     value={courseData.title}
                                     onChange={(e) => setCourseData({ ...courseData, title: e.target.value })}
-                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -119,7 +119,7 @@ const AdminEditCourse = () => {
                                     type="text"
                                     value={courseData.category}
                                     onChange={(e) => setCourseData({ ...courseData, category: e.target.value })}
-                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                                 />
                             </div>
                         </div>
@@ -131,7 +131,7 @@ const AdminEditCourse = () => {
                                 rows={4}
                                 value={courseData.description}
                                 onChange={(e) => setCourseData({ ...courseData, description: e.target.value })}
-                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                             />
                         </div>
 
@@ -141,7 +141,7 @@ const AdminEditCourse = () => {
                                 <select
                                     value={courseData.difficulty}
                                     onChange={(e) => setCourseData({ ...courseData, difficulty: e.target.value })}
-                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors appearance-none text-white"
+                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors appearance-none text-white"
                                 >
                                     <option value="Beginner">Beginner</option>
                                     <option value="Intermediate">Intermediate</option>
@@ -156,7 +156,7 @@ const AdminEditCourse = () => {
                                         type="url"
                                         value={courseData.thumbnail}
                                         onChange={(e) => setCourseData({ ...courseData, thumbnail: e.target.value })}
-                                        className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                                        className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                                     />
                                 </div>
                             </div>
@@ -166,7 +166,7 @@ const AdminEditCourse = () => {
                     {/* Lesson Builder */}
                     <div className="space-y-6">
                         <div className="flex justify-between items-center">
-                            <div className="flex items-center gap-2 text-violet-400 font-bold">
+                            <div className="flex items-center gap-2 text-[#00FF00] font-bold">
                                 <Video size={20} />
                                 Edit Curriculum ({courseData.lessons?.length || 0} Lessons)
                             </div>
@@ -179,7 +179,7 @@ const AdminEditCourse = () => {
                                             lessons: [...courseData.lessons, { title: '', type: 'heading', section: '' }]
                                         });
                                     }}
-                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-cyan-400 hover:text-cyan-300 transition-colors"
+                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#00FF00] hover:text-[#00E600] transition-colors"
                                 >
                                     <Layout size={14} />
                                     Add Heading
@@ -201,7 +201,7 @@ const AdminEditCourse = () => {
                                     key={index}
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="glass-card border-zinc-800 bg-zinc-900/10 p-6 relative"
+                                    className="glass-card border-zinc-800 bg-zinc-900/10 p-6 relative group"
                                 >
                                     <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-zinc-800 rounded-full flex items-center justify-center text-[10px] font-black border border-zinc-700">
                                         {index + 1}
@@ -211,7 +211,7 @@ const AdminEditCourse = () => {
                                         <div className="md:col-span-11 space-y-4">
                                             {lesson.type === 'heading' ? (
                                                 <div className="space-y-4">
-                                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-cyan-500">
+                                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#00FF00]">
                                                         <Layout size={12} /> Curriculum Heading
                                                     </div>
                                                     <input
@@ -219,7 +219,7 @@ const AdminEditCourse = () => {
                                                         placeholder="Section Heading Title (e.g. Phase 1: HTML Fundamentals)"
                                                         value={lesson.title}
                                                         onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
-                                                        className="w-full bg-cyan-500/5 border border-cyan-500/20 rounded-lg py-3 px-4 text-sm font-bold placeholder:font-normal focus:outline-none focus:border-cyan-500 transition-colors"
+                                                        className="w-full bg-[#00FF00]/5 border border-[#00FF00]/20 rounded-lg py-3 px-4 text-sm font-bold placeholder:font-normal focus:outline-none focus:border-[#00FF00] transition-colors"
                                                     />
                                                 </div>
                                             ) : (
@@ -231,13 +231,13 @@ const AdminEditCourse = () => {
                                                             placeholder="Lesson Title"
                                                             value={lesson.title}
                                                             onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
-                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors"
                                                         />
                                                         <input
                                                             placeholder="Section (e.g. HTML, CSS, Basics)"
                                                             value={lesson.section || ''}
                                                             onChange={(e) => handleLessonChange(index, 'section', e.target.value)}
-                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors"
                                                         />
                                                     </div>
 
@@ -247,9 +247,9 @@ const AdminEditCourse = () => {
                                                             <Video className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
                                                             <input
                                                                 placeholder="Video URL (Optional)"
-                                                                value={lesson.videoUrl}
+                                                                value={lesson.videoUrl || ''}
                                                                 onChange={(e) => handleLessonChange(index, 'videoUrl', e.target.value)}
-                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors"
                                                             />
                                                         </div>
                                                         <div className="relative">
@@ -258,7 +258,7 @@ const AdminEditCourse = () => {
                                                                 placeholder="PDF URL / Drive Link (Optional)"
                                                                 value={lesson.pdfUrl || ''}
                                                                 onChange={(e) => handleLessonChange(index, 'pdfUrl', e.target.value)}
-                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors"
                                                             />
                                                         </div>
                                                     </div>
@@ -266,21 +266,24 @@ const AdminEditCourse = () => {
                                                     {/* Row 3: Lesson Content & Duration */}
                                                     <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                                                         <div className="md:col-span-9 relative">
-                                                            <Layout className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
-                                                            <input
+                                                            <Layout className="absolute left-3 top-3 text-zinc-600" size={14} />
+                                                            <textarea
+                                                                rows={3}
                                                                 placeholder="Reading Content / Text Notes (Optional)"
-                                                                value={lesson.content}
+                                                                value={lesson.content || ''}
                                                                 onChange={(e) => handleLessonChange(index, 'content', e.target.value)}
-                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors resize-none"
                                                             />
                                                         </div>
                                                         <div className="md:col-span-3 relative">
                                                             <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
                                                             <input
-                                                                placeholder="Duration"
-                                                                value={lesson.duration}
-                                                                onChange={(e) => handleLessonChange(index, 'duration', e.target.value)}
-                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                                type="number"
+                                                                step="0.5"
+                                                                placeholder="Mins"
+                                                                value={lesson.duration || 0}
+                                                                onChange={(e) => handleLessonChange(index, 'duration', parseFloat(e.target.value) || 0)}
+                                                                className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors"
                                                             />
                                                         </div>
                                                     </div>
@@ -313,7 +316,7 @@ const AdminEditCourse = () => {
                         <button
                             disabled={saving}
                             type="submit"
-                            className="flex items-center gap-2 bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-400 hover:to-indigo-400 text-white px-10 py-3 rounded-xl font-black transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100"
+                            className="flex items-center gap-2 bg-gradient-to-r from-[#00FF00] to-[#ADFF2F] hover:from-[#00FF00] hover:to-teal-400 text-black px-10 py-3 rounded-xl font-black transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100"
                         >
                             {saving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                             Update Course

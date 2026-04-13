@@ -1,28 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-  /* ─── Premium Blue-on-Black Palette ─── */
-  --color-primary: #3B82F6;           /* Blue 500 */
-  --color-primary-hover: #2563EB;     /* Blue 600 */
-  --color-primary-glow: rgba(59, 130, 246, 0.15);
-  --color-primary-muted: rgba(59, 130, 246, 0.08);
+  /* ─── Ultra Bright Neon Green Palette ─── */
+  --color-primary: #00FF00;           /* Pure Neon Green */
+  --color-primary-hover: #00E600;     /* Slightly deeper neon */
+  --color-primary-glow: rgba(0, 255, 0, 0.2);
+  --color-primary-muted: rgba(0, 255, 0, 0.1);
 
-  --color-accent: #60A5FA;           /* Blue 400 — light accent for text */
-  --color-accent-warm: #F59E0B;      /* Amber 500 — secondary spark */
+  --color-accent: #ADFF2F;           /* GreenYellow accent */
+  --color-accent-warm: #FFD700;      /* Gold for special alerts */
 
-  --color-bg-dark: #030712;          /* Gray 950 — deepest black */
-  --color-bg-elevated: #0A0F1C;      /* Slightly lighter than base */
-  --color-surface: #111827;          /* Gray 900 — card bg */
-  --color-surface-light: #1F2937;    /* Gray 800 */
-  --color-surface-hover: #374151;    /* Gray 700 */
+  --color-bg-dark: #000000;          /* Pure black for OLED-ready contrast */
+  --color-bg-elevated: #050505;
+  --color-surface: #0a0a0a;
+  --color-surface-light: #121212;
+  --color-surface-hover: #1f1f1f;
 
-  --color-text-main: #F9FAFB;       /* Gray 50 */
-  --color-text-muted: #9CA3AF;      /* Gray 400 */
-  --color-text-dim: #6B7280;        /* Gray 500 */
+  --color-text-main: #F9FAFB;
+  --color-text-muted: #9CA3AF;
+  --color-text-dim: #6B7280;
 
   --color-border-subtle: rgba(255, 255, 255, 0.06);
   --color-border-hover: rgba(255, 255, 255, 0.12);
-  --color-border-glow: rgba(59, 130, 246, 0.25);
+  --color-border-glow: rgba(0, 255, 0, 0.3);
 
   --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
@@ -40,8 +40,8 @@
   }
 
   ::selection {
-    background: rgba(59, 130, 246, 0.25);
-    color: white;
+    background: rgba(0, 255, 0, 0.25);
+    color: black;
   }
 
   /* Custom scrollbar */
@@ -54,12 +54,12 @@
 /* ─── Component Layer ─── */
 @layer components {
 
-  /* Section label pill (Sheryians-style) */
+  /* Section label pill */
   .section-label {
     @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-[0.15em];
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05));
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    color: var(--color-accent);
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.15), rgba(0, 255, 0, 0.05));
+    border: 1px solid rgba(0, 255, 0, 0.2);
+    color: var(--color-primary);
   }
 
   /* Buttons */
@@ -68,14 +68,15 @@
   }
 
   .btn-primary {
-    @apply text-white;
-    background: linear-gradient(135deg, #3B82F6, #2563EB);
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25), inset 0 1px 0 rgba(255,255,255,0.1);
+    @apply text-black bg-[#00FF00];
+    background: linear-gradient(135deg, #00FF00, #00D200);
+    box-shadow: 0 4px 16px rgba(0, 255, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+    font-weight: 800;
   }
 
   .btn-primary:hover {
-    background: linear-gradient(135deg, #2563EB, #1D4ED8);
-    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+    background: linear-gradient(135deg, #00E600, #009900);
+    box-shadow: 0 8px 32px rgba(0, 255, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.25);
     transform: translateY(-2px);
   }
 
@@ -85,8 +86,8 @@
   }
 
   .btn-outline:hover {
-    border-color: rgba(59, 130, 246, 0.4);
-    background: rgba(59, 130, 246, 0.05);
+    border-color: rgba(0, 255, 0, 0.4);
+    background: rgba(0, 255, 0, 0.05);
     transform: translateY(-1px);
   }
 
@@ -98,41 +99,41 @@
     @apply text-white border-[var(--color-border-hover)] bg-[var(--color-surface-light)];
   }
 
-  /* Glass card — premium dark card */
+  /* Glass card */
   .glass-card {
     @apply bg-[var(--color-surface)] border border-[var(--color-border-subtle)] rounded-2xl p-6 transition-all duration-400 relative;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03);
   }
 
   .glass-card:hover {
-    border-color: rgba(59, 130, 246, 0.2);
+    border-color: rgba(0, 255, 0, 0.2);
     transform: translateY(-4px);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 255, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
-  /* Glow card — cards with green border glow */
+  /* Glow card */
   .glow-card {
     @apply bg-[var(--color-surface)] rounded-2xl p-8 transition-all duration-400 relative;
-    border: 1px solid rgba(59, 130, 246, 0.15);
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.05), inset 0 1px 0 rgba(255,255,255,0.03);
+    border: 1px solid rgba(0, 255, 0, 0.15);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.05), inset 0 1px 0 rgba(255,255,255,0.03);
   }
 
   .glow-card:hover {
-    border-color: rgba(59, 130, 246, 0.35);
-    box-shadow: 0 0 60px rgba(59, 130, 246, 0.1), 0 20px 40px rgba(0,0,0,0.3);
+    border-color: rgba(0, 255, 0, 0.35);
+    box-shadow: 0 0 60px rgba(0, 255, 0, 0.15), 0 20px 40px rgba(0,0,0,0.3);
     transform: translateY(-4px);
   }
 
   /* Text gradient */
   .text-gradient {
-    background: linear-gradient(135deg, #3B82F6, #60A5FA);
+    background: linear-gradient(135deg, #00FF00, #ADFF2F);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .text-gradient-hero {
-    background: linear-gradient(135deg, #ffffff 0%, #3B82F6 50%, #60A5FA 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #00FF00 50%, #ADFF2F 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

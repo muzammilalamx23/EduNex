@@ -14,13 +14,13 @@ const Footer = lazy(() => import('../components/Footer'));
 
 const FallbackLoader = () => (
     <div className="py-20 flex justify-center items-center">
-        <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
+        <div className="w-8 h-8 rounded-full border-2 border-[#00FF00] border-t-transparent animate-spin"></div>
     </div>
 );
 
 const LandingPage = () => {
     return (
-        <div className="min-h-screen flex flex-col bg-[var(--color-bg-dark)] text-white selection:bg-blue-500/25 relative">
+        <div className="min-h-screen flex flex-col bg-[var(--color-bg-dark)] text-white selection:bg-[#00FF00]/25 relative">
             <BackgroundAnimation />
             <Navbar />
             <Hero />
@@ -31,7 +31,6 @@ const LandingPage = () => {
                 <Metrics />
                 <TechStack />
                 <FAQ />
-                <BottomCTA />
                 <Footer />
             </Suspense>
         </div>

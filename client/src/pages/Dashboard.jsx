@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext';
 const SidebarLink = ({ icon: Icon, label, active = false, onClick }) => (
     <button
         onClick={onClick}
-        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${active ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'text-zinc-500 hover:text-white hover:bg-zinc-800/50'}`}
+        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${active ? 'bg-[#00FF00]/10 text-[#00FF00] border border-[#00FF00]/20' : 'text-zinc-500 hover:text-white hover:bg-zinc-800/50'}`}
     >
         <Icon size={20} />
         <span className="font-medium">{label}</span>
@@ -55,7 +55,7 @@ const ProfileSettings = ({ user, onUpdate }) => {
             </div>
 
             {message.text && (
-                <div className={`mb-6 p-4 rounded-xl text-sm ${message.type === 'success' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+                <div className={`mb-6 p-4 rounded-xl text-sm ${message.type === 'success' ? 'bg-blue-500/10 text-[#00FF00] border border-blue-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
                     {message.text}
                 </div>
             )}
@@ -68,7 +68,7 @@ const ProfileSettings = ({ user, onUpdate }) => {
                             type="text"
                             value={formData.fullName}
                             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                         />
                     </div>
                     <div className="space-y-2">
@@ -91,7 +91,7 @@ const ProfileSettings = ({ user, onUpdate }) => {
                             placeholder="Leave blank to keep current"
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                         />
                     </div>
                 </div>
@@ -106,7 +106,7 @@ const ProfileSettings = ({ user, onUpdate }) => {
                                 placeholder="linkedin.com/in/username"
                                 value={formData.linkedin}
                                 onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                             />
                         </div>
                     </div>
@@ -119,7 +119,7 @@ const ProfileSettings = ({ user, onUpdate }) => {
                                 placeholder="github.com/username"
                                 value={formData.github}
                                 onChange={(e) => setFormData({ ...formData, github: e.target.value })}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                             />
                         </div>
                     </div>
@@ -223,7 +223,7 @@ const Dashboard = () => {
             {/* Sidebar */}
             <aside className="w-64 border-r border-zinc-900 p-6 flex flex-col hidden lg:flex fixed h-full">
                 <Link to="/" className="flex items-center mb-10 px-2">
-                    <span className="text-2xl font-black tracking-tighter text-white">Edu<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-500">Nex</span></span>
+                    <span className="text-2xl font-black tracking-tighter text-white">Edu<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FF00] to-[#ADFF2F]">Nex</span></span>
                 </Link>
 
                 <nav className="space-y-2 flex-1">
@@ -259,11 +259,11 @@ const Dashboard = () => {
                                 {activeTab === 'overview' ? (
                                     <div className="flex flex-col gap-1">
                                         <div className="flex items-center gap-2">
-                                            Your current streak: <span className="text-cyan-400 font-bold">{userData?.streak || 0} Days 🔥</span>
+                                            Your current streak: <span className="text-[#00FF00] font-bold">{userData?.streak || 0} Days 🔥</span>
                                         </div>
                                         <div className="flex items-center gap-2 text-xs">
                                             {userData?.dailyLearningTime >= 30 ? (
-                                                <span className="text-blue-400 flex items-center gap-1 font-medium">
+                                                <span className="text-[#00FF00] flex items-center gap-1 font-medium">
                                                     <Zap size={12} /> Daily Goal Met! (+1 day added)
                                                 </span>
                                             ) : (
@@ -285,18 +285,18 @@ const Dashboard = () => {
                         {userData?.role === 'admin' && (
                             <Link
                                 to="/admin"
-                                className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-bold hover:bg-cyan-500/20 transition-all"
+                                className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-[#00FF00]/10 border border-[#00FF00]/20 text-[#00FF00] text-sm font-bold hover:bg-[#00FF00]/20 transition-all"
                             >
                                 <ShieldCheck size={18} />
                                 Admin Panel
                             </Link>
                         )}
                         <button className="p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-colors relative">
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-cyan-500 rounded-full"></span>
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-[#00FF00] rounded-full"></span>
                             <Zap size={20} />
                         </button>
                         <img
-                            src={`https://ui-avatars.com/api/?name=${userData?.fullName}&background=06b6d4&color=fff&rounded=true`}
+                            src={`https://ui-avatars.com/api/?name=${userData?.fullName}&background=00FF00&color=000&rounded=true`}
                             className="w-10 h-10 rounded-xl border border-zinc-800 cursor-pointer"
                             alt="Avatar"
                             onClick={() => setActiveTab('profile')}
@@ -308,7 +308,7 @@ const Dashboard = () => {
                     <>
                         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-10">
                             {/* Daily Goal Tracker */}
-                            <div className="glass-card bg-cyan-500/5 border-cyan-500/10 flex flex-col items-center justify-center py-6">
+                            <div className="glass-card bg-[#00FF00]/5 border-[#00FF00]/10 flex flex-col items-center justify-center py-6">
                                 <div className="relative w-24 h-24 mb-4">
                                     <svg className="w-full h-full -rotate-90">
                                         <circle
@@ -325,7 +325,7 @@ const Dashboard = () => {
                                             fill="transparent"
                                             strokeDasharray={251.2}
                                             strokeDashoffset={251.2 * (1 - Math.min((userData?.dailyLearningTime || 0) / 30, 1))}
-                                            className="text-cyan-500 transition-all duration-1000 ease-out"
+                                            className="text-[#00FF00] transition-all duration-1000 ease-out"
                                             strokeLinecap="round"
                                         />
                                     </svg>
@@ -334,11 +334,11 @@ const Dashboard = () => {
                                     </div>
                                 </div>
                                 <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1">Daily Goal</h3>
-                                <p className="text-sm font-bold text-cyan-400">{userData?.dailyLearningTime || 0}/30 mins</p>
+                                <p className="text-sm font-bold text-[#00FF00]">{userData?.dailyLearningTime || 0}/30 mins</p>
                             </div>
 
                             <div className="glass-card bg-white/5 border-white/5 flex items-center gap-4">
-                                <div className="p-3 bg-cyan-500/10 rounded-xl text-cyan-400">
+                                <div className="p-3 bg-[#00FF00]/10 rounded-xl text-[#00FF00]">
                                     <Trophy size={20} />
                                 </div>
                                 <div>
@@ -347,7 +347,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                             <div className="glass-card bg-white/5 border-white/5 flex items-center gap-4">
-                                <div className="p-3 bg-violet-500/10 rounded-xl text-violet-400">
+                                <div className="p-3 bg-[#ADFF2F]/10 rounded-xl text-violet-400">
                                     <BookOpen size={20} />
                                 </div>
                                 <div>
@@ -356,7 +356,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                             <div className="glass-card bg-white/5 border-white/5 flex items-center gap-4">
-                                <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
+                                <div className="p-3 bg-blue-500/10 rounded-xl text-[#00FF00]">
                                     <Clock size={20} />
                                 </div>
                                 <div>
@@ -371,7 +371,7 @@ const Dashboard = () => {
                             {userData?.enrolledCourses?.length > 0 && (
                                 <button
                                     onClick={() => setActiveTab('courses')}
-                                    className="text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1"
+                                    className="text-xs font-bold text-[#00FF00] hover:text-[#00E600] transition-colors flex items-center gap-1"
                                 >
                                     View All Courses <ArrowRight size={14} />
                                 </button>
@@ -384,7 +384,7 @@ const Dashboard = () => {
                                     <div
                                         key={course.courseId}
                                         onClick={() => navigate(`/course/${course.courseId}`)}
-                                        className="glass-card group cursor-pointer overflow-hidden border-zinc-800 hover:border-cyan-500/30 transition-all duration-500"
+                                        className="glass-card group cursor-pointer overflow-hidden border-zinc-800 hover:border-[#00FF00]/30 transition-all duration-500"
                                     >
                                         <div className="h-40 bg-zinc-900 mb-4 rounded-xl relative overflow-hidden">
                                             <img
@@ -401,11 +401,11 @@ const Dashboard = () => {
                                         <div className="flex justify-between items-center text-xs">
                                             <div className="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden mr-4 border border-white/5">
                                                 <div
-                                                    className="bg-gradient-to-r from-cyan-500 to-violet-500 h-full transition-all duration-1000 ease-out"
+                                                    className="bg-gradient-to-r from-[#00FF00] to-[#ADFF2F] h-full transition-all duration-1000 ease-out"
                                                     style={{ width: `${course.progress}%` }}
                                                 ></div>
                                             </div>
-                                            <span className="text-cyan-400 font-bold tabular-nums">{course.progress}%</span>
+                                            <span className="text-[#00FF00] font-bold tabular-nums">{course.progress}%</span>
                                         </div>
                                     </div>
                                 ))}
@@ -436,7 +436,7 @@ const Dashboard = () => {
                         {userData?.enrolledCourses?.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {userData.enrolledCourses.map((course) => (
-                                    <div key={course.courseId} className="glass-card group cursor-pointer overflow-hidden border-zinc-800 hover:border-cyan-500/30 transition-all duration-500">
+                                    <div key={course.courseId} className="glass-card group cursor-pointer overflow-hidden border-zinc-800 hover:border-[#00FF00]/30 transition-all duration-500">
                                         <div className="h-40 bg-zinc-900 mb-4 rounded-xl relative overflow-hidden">
                                             <img
                                                 src={course.thumbnail || "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&q=80"}
@@ -446,23 +446,23 @@ const Dashboard = () => {
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                                             <div className="absolute bottom-4 left-4 font-bold text-white drop-shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform flex items-center gap-2">
                                                 {course.title.split(':')[0]}
-                                                {course.progress === 100 && <FileCheck size={16} className="text-blue-400" />}
+                                                {course.progress === 100 && <FileCheck size={16} className="text-[#00FF00]" />}
                                             </div>
                                         </div>
                                         <h4 className="font-bold text-sm mb-3 text-zinc-300 line-clamp-1">{course.title}</h4>
                                         <div className="flex justify-between items-center text-xs mb-4">
                                             <div className="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden mr-4 border border-white/5">
                                                 <div
-                                                    className="bg-gradient-to-r from-cyan-500 to-violet-500 h-full transition-all duration-1000 ease-out"
+                                                    className="bg-gradient-to-r from-[#00FF00] to-[#ADFF2F] h-full transition-all duration-1000 ease-out"
                                                     style={{ width: `${course.progress}%` }}
                                                 ></div>
                                             </div>
-                                            <span className="text-cyan-400 font-bold tabular-nums">{course.progress}%</span>
+                                            <span className="text-[#00FF00] font-bold tabular-nums">{course.progress}%</span>
                                         </div>
                                         {course.progress === 100 ? (
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); toast.success('🎓 Certificate generation coming soon!'); }}
-                                                className="w-full py-2.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold transition-all flex items-center justify-center gap-2 hover:bg-blue-500 hover:text-white"
+                                                className="w-full py-2.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[#00FF00] text-xs font-bold transition-all flex items-center justify-center gap-2 hover:bg-blue-500 hover:text-white"
                                             >
                                                 <FileCheck size={14} />
                                                 Download Certificate
@@ -470,7 +470,7 @@ const Dashboard = () => {
                                         ) : (
                                             <button
                                                 onClick={() => navigate(`/course/${course.courseId}`)}
-                                                className="w-full py-2.5 rounded-lg bg-zinc-800 hover:bg-cyan-500 text-white text-xs font-bold transition-all flex items-center justify-center gap-2 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+                                                className="w-full py-2.5 rounded-lg bg-zinc-800 hover:bg-[#00FF00] text-white text-xs font-bold transition-all flex items-center justify-center gap-2 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]"
                                             >
                                                 Continue Learning
                                                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />

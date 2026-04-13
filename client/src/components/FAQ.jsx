@@ -26,7 +26,7 @@ const FAQ = () => {
 
     return (
         <section className="py-32 px-6 relative">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.04)_0%,transparent_50%)] pointer-events-none"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(0,255,0,0.04)_0%,transparent_50%)] pointer-events-none"></div>
             <div className="max-w-3xl mx-auto relative z-10">
                 <div className="text-center mb-16">
                     <motion.div
@@ -69,7 +69,7 @@ const FAQ = () => {
                             transition={{ delay: i * 0.05 }}
                             className={`rounded-2xl cursor-pointer transition-all duration-300 border p-6 
                                 ${openIndex === i
-                                    ? 'border-blue-500/30 bg-blue-500/[0.03]'
+                                    ? 'border-[#00FF00]/30 bg-[#00FF00]/[0.03]'
                                     : 'border-white/[0.06] bg-[var(--color-surface)] hover:border-white/10'
                                 }`}
                             onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
@@ -78,7 +78,7 @@ const FAQ = () => {
                                 <h4 className="text-lg font-bold text-white pr-8">{faq.q}</h4>
                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center border flex-shrink-0 transition-all duration-300 ${
                                     openIndex === i
-                                        ? 'border-blue-500/40 bg-blue-500/10 text-blue-400 rotate-180'
+                                        ? 'border-[#00FF00]/40 bg-[#00FF00]/10 text-[#00FF00] rotate-180'
                                         : 'border-white/10 text-zinc-500'
                                 }`}>
                                     <ChevronDown size={16} />

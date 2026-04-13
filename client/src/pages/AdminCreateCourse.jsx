@@ -24,7 +24,7 @@ const AdminCreateCourse = () => {
         thumbnail: '',
         tags: [],          // stored as string array, edited as comma-separated input
         lessons: [
-            { title: '', videoUrl: '', content: '', pdfUrl: '', duration: 0 }
+            { title: '', type: 'video', videoUrl: '', content: '', pdfUrl: '', duration: 0, section: '' }
         ]
     });
 
@@ -41,7 +41,7 @@ const AdminCreateCourse = () => {
     const addLesson = () => {
         setCourseData({
             ...courseData,
-            lessons: [...courseData.lessons, { title: '', videoUrl: '', content: '', pdfUrl: '', duration: 0 }]
+            lessons: [...courseData.lessons, { title: '', type: 'video', videoUrl: '', content: '', pdfUrl: '', duration: 0, section: '' }]
         });
     };
 
@@ -63,14 +63,15 @@ const AdminCreateCourse = () => {
         }
         const badLesson = courseData.lessons.findIndex(l => !l.title.trim());
         if (badLesson !== -1) {
-            return toast.error(`Lesson ${badLesson + 1} is missing a title.`);
+            return toast.error(`Item ${badLesson + 1} is missing a title.`);
         }
-        // Catch invalid YouTube URLs before the API round-trip
+
+        // Catch invalid YouTube URLs for video-type lessons before the API round-trip
         const badVideoLesson = courseData.lessons.findIndex(
-            l => l.videoUrl && !isValidYouTubeUrl(l.videoUrl)
+            l => l.type !== 'heading' && l.videoUrl && !isValidYouTubeUrl(l.videoUrl)
         );
         if (badVideoLesson !== -1) {
-            return toast.error(`Lesson ${badVideoLesson + 1}: Invalid YouTube URL. Use youtube.com/watch?v=... or youtu.be/...`);
+            return toast.error(`Lesson ${badVideoLesson + 1}: Invalid YouTube URL.`);
         }
 
         setLoading(true);
@@ -111,7 +112,7 @@ const AdminCreateCourse = () => {
                 <form onSubmit={handleSubmit} className="space-y-8">
                     {/* Basic Info */}
                     <div className="glass-card border-zinc-800 p-8 space-y-6">
-                        <div className="flex items-center gap-2 text-cyan-400 font-bold mb-2">
+                        <div className="flex items-center gap-2 text-[#00FF00] font-bold mb-2">
                             <Layout size={20} />
                             Course Basics
                         </div>
@@ -125,7 +126,7 @@ const AdminCreateCourse = () => {
                                     placeholder="e.g. Master React in 30 Days"
                                     value={courseData.title}
                                     onChange={(e) => setCourseData({ ...courseData, title: e.target.value })}
-                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -133,7 +134,7 @@ const AdminCreateCourse = () => {
                                 <select
                                     value={courseData.category}
                                     onChange={(e) => setCourseData({ ...courseData, category: e.target.value })}
-                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors appearance-none"
+                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors appearance-none"
                                 >
                                     {CATEGORIES.map(cat => (
                                         <option key={cat} value={cat}>{cat}</option>
@@ -150,7 +151,7 @@ const AdminCreateCourse = () => {
                                 placeholder="What will students learn in this course?"
                                 value={courseData.description}
                                 onChange={(e) => setCourseData({ ...courseData, description: e.target.value })}
-                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                             />
                         </div>
 
@@ -160,7 +161,7 @@ const AdminCreateCourse = () => {
                                 <select
                                     value={courseData.difficulty}
                                     onChange={(e) => setCourseData({ ...courseData, difficulty: e.target.value })}
-                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors appearance-none"
+                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors appearance-none"
                                 >
                                     <option value="Beginner">Beginner</option>
                                     <option value="Intermediate">Intermediate</option>
@@ -176,7 +177,7 @@ const AdminCreateCourse = () => {
                                         placeholder="https://images.unsplash.com/..."
                                         value={courseData.thumbnail}
                                         onChange={(e) => setCourseData({ ...courseData, thumbnail: e.target.value })}
-                                        className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                                        className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                                     />
                                 </div>
                                 {/* Live thumbnail preview */}
@@ -200,13 +201,13 @@ const AdminCreateCourse = () => {
                                 placeholder="javascript, async, promises, closures"
                                 value={tagsInput}
                                 onChange={(e) => setTagsInput(e.target.value)}
-                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-cyan-500 transition-colors"
+                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                             />
                             {/* Preview parsed tags */}
                             {tagsInput && (
                                 <div className="flex flex-wrap gap-2 mt-2">
                                     {tagsInput.split(',').map(t => t.trim()).filter(Boolean).map((tag, i) => (
-                                        <span key={i} className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-medium">
+                                        <span key={i} className="px-3 py-1 rounded-full bg-[#00FF00]/10 border border-[#00FF00]/20 text-[#00FF00] text-xs font-medium">
                                             #{tag.toLowerCase()}
                                         </span>
                                     ))}
@@ -218,7 +219,7 @@ const AdminCreateCourse = () => {
                     {/* Lesson Builder */}
                     <div className="space-y-6">
                         <div className="flex justify-between items-center">
-                            <div className="flex items-center gap-2 text-violet-400 font-bold">
+                            <div className="flex items-center gap-2 text-[#00FF00] font-bold">
                                 <Video size={20} />
                                 Curriculum Builder
                             </div>
@@ -231,7 +232,7 @@ const AdminCreateCourse = () => {
                                             lessons: [...courseData.lessons, { title: '', type: 'heading', section: '' }]
                                         });
                                     }}
-                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-cyan-400 hover:text-cyan-300 transition-colors"
+                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#00FF00] hover:text-[#00E600] transition-colors"
                                 >
                                     <Layout size={14} />
                                     Add Heading
@@ -263,7 +264,7 @@ const AdminCreateCourse = () => {
                                         <div className="md:col-span-11 space-y-4">
                                             {lesson.type === 'heading' ? (
                                                 <div className="space-y-4">
-                                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-cyan-500">
+                                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#00FF00]">
                                                         <Layout size={12} /> Curriculum Heading
                                                     </div>
                                                     <input
@@ -271,7 +272,7 @@ const AdminCreateCourse = () => {
                                                         placeholder="Section Heading Title (e.g. Phase 1: HTML Fundamentals)"
                                                         value={lesson.title}
                                                         onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
-                                                        className="w-full bg-cyan-500/5 border border-cyan-500/20 rounded-lg py-3 px-4 text-sm font-bold placeholder:font-normal focus:outline-none focus:border-cyan-500 transition-colors"
+                                                        className="w-full bg-[#00FF00]/5 border border-[#00FF00]/20 rounded-lg py-3 px-4 text-sm font-bold placeholder:font-normal focus:outline-none focus:border-[#00FF00] transition-colors"
                                                     />
                                                 </div>
                                             ) : (
@@ -283,13 +284,13 @@ const AdminCreateCourse = () => {
                                                             placeholder="Lesson Title"
                                                             value={lesson.title}
                                                             onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
-                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#00FF00]/60 transition-colors"
                                                         />
                                                         <input
                                                             placeholder="Section (e.g. HTML, CSS, Basics)"
                                                             value={lesson.section || ''}
                                                             onChange={(e) => handleLessonChange(index, 'section', e.target.value)}
-                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#00FF00]/60 transition-colors"
                                                         />
                                                     </div>
 
@@ -308,7 +309,7 @@ const AdminCreateCourse = () => {
                                                                             ? isValidYouTubeUrl(lesson.videoUrl)
                                                                                 ? 'border-green-500/60 focus:border-green-500'
                                                                                 : 'border-red-500/60 focus:border-red-500'
-                                                                            : 'border-zinc-800 focus:border-violet-500'
+                                                                            : 'border-zinc-800 focus:border-[#ADFF2F]'
                                                                     }`}
                                                                 />
                                                                 {/* Inline validation icon */}
@@ -350,7 +351,7 @@ const AdminCreateCourse = () => {
                                                         placeholder="PDF URL / Drive Link (Optional)"
                                                         value={lesson.pdfUrl || ''}
                                                         onChange={(e) => handleLessonChange(index, 'pdfUrl', e.target.value)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors"
                                                     />
                                                 </div>
                                             </div>
@@ -364,7 +365,7 @@ const AdminCreateCourse = () => {
                                                         placeholder="Reading Content / Text Notes (Optional) — supports multiple paragraphs"
                                                         value={lesson.content}
                                                         onChange={(e) => handleLessonChange(index, 'content', e.target.value)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors resize-none"
+                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors resize-none"
                                                     />
                                                 </div>
                                                 <div className="md:col-span-3 relative">
@@ -377,7 +378,7 @@ const AdminCreateCourse = () => {
                                                         placeholder="Mins"
                                                         value={lesson.duration}
                                                         onChange={(e) => handleLessonChange(index, 'duration', parseFloat(e.target.value) || 0)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors"
                                                     />
                                                 </div>
                                             </div>
@@ -408,7 +409,7 @@ const AdminCreateCourse = () => {
                         <button
                             disabled={loading}
                             type="submit"
-                            className="flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-black px-10 py-3 rounded-xl font-black transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100"
+                            className="flex items-center gap-2 bg-gradient-to-r from-[#00FF00] to-[#ADFF2F] hover:from-[#00FF00] hover:to-teal-400 text-black px-10 py-3 rounded-xl font-black transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100"
                         >
                             {loading ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                             Create Course

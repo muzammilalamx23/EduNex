@@ -2,15 +2,11 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const User = require('./models/User');
 
-const listUsers = async () => {
+const checkTestDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
         const users = await User.find({}, 'fullName email role');
-        console.log('--- Current Users in DB ---');
-        users.forEach(u => {
-            console.log(`- ${u._id} | ${u.fullName} (${u.email}) [Role: ${u.role || 'user'}]`);
-        });
-        console.log('---------------------------');
+        console.log(JSON.stringify(users, null, 2));
         process.exit();
     } catch (err) {
         console.error(err);
@@ -18,4 +14,4 @@ const listUsers = async () => {
     }
 };
 
-listUsers();
+checkTestDB();

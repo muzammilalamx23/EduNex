@@ -59,7 +59,7 @@ const Navbar = () => {
                                 key={link.name}
                                 to={link.href}
                                 onClick={() => setMobileOpen(false)}
-                                className="flex items-center gap-3 text-[var(--color-text-muted)] hover:text-blue-400 font-medium py-3 transition-colors"
+                                className="flex items-center gap-3 text-[var(--color-text-muted)] hover:text-[#00FF00] font-medium py-3 transition-colors"
                             >
                                 {link.icon}
                                 {link.name}
@@ -69,7 +69,7 @@ const Navbar = () => {
                             {user ? (
                                 <>
                                     <Link to="/dashboard" onClick={() => setMobileOpen(false)}
-                                        className="text-white font-medium py-3 hover:text-blue-400 transition-colors">
+                                        className="text-white font-medium py-3 hover:text-[#00FF00] transition-colors">
                                         Dashboard
                                     </Link>
                                     <button
@@ -97,11 +97,11 @@ const Navbar = () => {
                 transition={{ type: 'spring', stiffness: 100, damping: 20 }}
                 className="hidden md:flex fixed top-6 left-1/2 z-50 items-center p-2 rounded-2xl backdrop-blur-xl border shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
                 style={{
-                    background: 'rgba(3, 7, 18, 0.8)',
+                    background: 'rgba(0, 0, 0, 0.8)',
                     borderColor: 'rgba(255, 255, 255, 0.06)',
                 }}
             >
-                <Link to="/" className="mr-8 ml-4 flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg">
+                <Link to="/" className="mr-8 ml-4 flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00FF00] rounded-lg">
                     <span className="text-2xl font-bold tracking-tight text-white transition-all duration-300 group-hover:opacity-80 font-display">
                         Edu<span className="text-gradient">Nex</span>
                     </span>
@@ -121,7 +121,7 @@ const Navbar = () => {
                                 onMouseLeave={() => setHoveredIndex(null)}
                                 onFocus={() => setHoveredIndex(i)}
                                 onBlur={() => setHoveredIndex(null)}
-                                className={`relative flex flex-col items-center justify-center transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl ${isActive ? 'text-blue-400' : 'text-zinc-400 hover:text-white'}`}
+                                className={`relative flex flex-col items-center justify-center transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00FF00] rounded-2xl ${isActive ? 'text-[#00FF00]' : 'text-zinc-400 hover:text-white'}`}
                             >
                                 <motion.div
                                     animate={{
@@ -130,14 +130,14 @@ const Navbar = () => {
                                     }}
                                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                     className={`p-3 rounded-xl relative z-10 transition-colors ${
-                                        isHovered ? 'bg-blue-500/10 text-blue-400' 
-                                        : isActive ? 'bg-blue-500/5 text-blue-400'
+                                        isHovered ? 'bg-[#00FF00]/10 text-[#00FF00]' 
+                                        : isActive ? 'bg-[#00FF00]/5 text-[#00FF00]'
                                         : 'hover:bg-white/5'
                                     }`}
                                 >
                                     {link.icon}
                                     {isActive && (
-                                        <div className="absolute -bottom-1.5 left-1/2 w-1 h-1 bg-blue-500 rounded-full -translate-x-1/2" />
+                                        <div className="absolute -bottom-1.5 left-1/2 w-1 h-1 bg-[#00FF00] rounded-full -translate-x-1/2" />
                                     )}
                                 </motion.div>
 
@@ -165,7 +165,7 @@ const Navbar = () => {
                     {user ? (
                         <>
                             {user.role === 'admin' && (
-                                <Link to="/admin" className="px-3 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors">
+                                <Link to="/admin" className="px-3 text-sm font-medium text-[#00FF00] hover:text-[#00FF00] transition-colors">
                                     Admin Panel
                                 </Link>
                             )}
@@ -182,7 +182,7 @@ const Navbar = () => {
                         </>
                     ) : (
                         <>
-                            <Link to="/auth" className="px-4 text-sm font-medium text-zinc-300 hover:text-white transition-colors focus-visible:outline-none focus:ring-2 focus-visible:ring-blue-500 rounded-md">
+                            <Link to="/auth" className="px-4 text-sm font-medium text-zinc-300 hover:text-white transition-colors focus-visible:outline-none focus:ring-2 focus-visible:ring-[#00FF00] rounded-md">
                                 Sign In
                             </Link>
                             <Link to="/auth" className="btn btn-primary px-5 py-2 text-sm flex items-center gap-2">

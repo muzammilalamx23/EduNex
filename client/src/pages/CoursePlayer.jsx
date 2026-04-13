@@ -28,8 +28,8 @@ const CircularProgress = ({ value = 0, size = 40, stroke = 3 }) => {
             />
             <defs>
                 <linearGradient id="prog" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#06b6d4" />
-                    <stop offset="100%" stopColor="#8b5cf6" />
+                    <stop offset="0%" stopColor="#00FF00" />
+                    <stop offset="100%" stopColor="#ADFF2F" />
                 </linearGradient>
             </defs>
         </svg>
@@ -229,7 +229,7 @@ const CoursePlayer = () => {
     // ─── Loading spinner ──────────────────────────────────────────────────────
     if (loading) return (
         <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin" />
+            <div className="w-12 h-12 border-4 border-[#00FF00]/20 border-t-[#00FF00] rounded-full animate-spin" />
         </div>
     );
 
@@ -268,7 +268,7 @@ const CoursePlayer = () => {
                         </div>
                         <div>
                             <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Progress</p>
-                            <p className="text-xs font-bold text-cyan-400">{completedCount}/{totalLessons} lessons</p>
+                            <p className="text-xs font-bold text-[#00FF00]">{completedCount}/{totalLessons} lessons</p>
                         </div>
                     </div>
                     <button
@@ -294,7 +294,7 @@ const CoursePlayer = () => {
                                     <CheckCircle2 size={12} /> Completed
                                 </span>
                             ) : (
-                                <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+                                <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-[#00FF00]/10 border border-[#00FF00]/20 text-[#00FF00]">
                                     <Play size={12} fill="currentColor" /> In Progress
                                 </span>
                             )}
@@ -328,7 +328,7 @@ const CoursePlayer = () => {
                             ) : activeLesson?.pdfUrl ? (
                                 <div className="bg-zinc-900/30 border border-zinc-800 rounded-3xl p-4 shadow-2xl overflow-hidden">
                                     <div className="flex items-center justify-between mb-4 px-2 pt-1">
-                                        <div className="flex items-center gap-2 text-cyan-400 font-bold text-sm">
+                                        <div className="flex items-center gap-2 text-[#00FF00] font-bold text-sm">
                                             <FileText size={16} /> Reading Material
                                         </div>
                                         <a
@@ -349,7 +349,7 @@ const CoursePlayer = () => {
                             ) : activeLesson?.content ? (
                                 <div className="bg-zinc-900/30 border border-zinc-800 rounded-3xl p-8 md:p-12 shadow-2xl min-h-[300px]">
                                     <div className="flex items-center gap-3 mb-8">
-                                        <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+                                        <div className="w-10 h-10 rounded-xl bg-[#00FF00]/20 flex items-center justify-center text-[#00FF00]">
                                             <Layout size={20} />
                                         </div>
                                         <h3 className="text-xl font-bold">Lesson Notes</h3>
@@ -438,7 +438,7 @@ const CoursePlayer = () => {
                                         <button
                                             onClick={handleLessonComplete}
                                             disabled={!canComplete || isCompleting}
-                                            className="px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed bg-gradient-to-r from-cyan-500 to-violet-500 hover:from-cyan-400 hover:to-violet-400 text-white shadow-lg shadow-cyan-500/20"
+                                            className="px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed bg-gradient-to-r from-[#00FF00] to-[#ADFF2F] hover:from-[#00FF00] hover:to-teal-400 text-black shadow-lg shadow-[#00FF00]/20"
                                             aria-label="Complete lesson and go to next"
                                         >
                                             {isCompleting ? (
@@ -488,7 +488,7 @@ const CoursePlayer = () => {
                             <div className="p-5 border-b border-zinc-900">
                                 <div className="flex items-center justify-between mb-3">
                                     <h3 className="font-bold text-sm">Course Curriculum</h3>
-                                    <span className="text-[10px] font-black text-cyan-400 bg-cyan-500/10 px-2 py-1 rounded-full border border-cyan-500/20">
+                                    <span className="text-[10px] font-black text-[#00FF00] bg-[#00FF00]/10 px-2 py-1 rounded-full border border-[#00FF00]/20">
                                         {completedCount}/{totalLessons}
                                     </span>
                                 </div>
@@ -498,7 +498,7 @@ const CoursePlayer = () => {
                                         initial={{ width: 0 }}
                                         animate={{ width: `${progress}%` }}
                                         transition={{ duration: 0.6, ease: 'easeOut' }}
-                                        className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-violet-500"
+                                        className="h-full rounded-full bg-gradient-to-r from-[#00FF00] to-[#ADFF2F]"
                                     />
                                 </div>
                             </div>
@@ -528,7 +528,7 @@ const CoursePlayer = () => {
 
                                             {isHeadingType ? (
                                                 <div className="px-3 py-6 mt-4 mb-2">
-                                                    <h4 className="text-xs font-black text-cyan-400 uppercase tracking-widest border-l-2 border-cyan-500 pl-3">
+                                                    <h4 className="text-xs font-black text-[#00FF00] uppercase tracking-widest border-l-2 border-[#00FF00] pl-3">
                                                         {lesson.title}
                                                     </h4>
                                                 </div>
@@ -537,7 +537,7 @@ const CoursePlayer = () => {
                                                     onClick={() => switchLesson(lesson)}
                                                     className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all group text-left
                                                         ${isActive
-                                                            ? 'bg-cyan-500/10 border border-cyan-500/20'
+                                                            ? 'bg-[#00FF00]/10 border border-[#00FF00]/20'
                                                             : 'hover:bg-zinc-900/60 border border-transparent'
                                                         }`}
                                                 >
@@ -546,7 +546,7 @@ const CoursePlayer = () => {
                                                         ${isDone
                                                             ? 'bg-green-500/20 text-green-400'
                                                             : isActive
-                                                                ? 'bg-cyan-500 text-black'
+                                                                ? 'bg-[#00FF00] text-black'
                                                                 : 'bg-zinc-800 text-zinc-500 group-hover:bg-zinc-700'
                                                         }`}>
                                                         {isDone
@@ -586,7 +586,7 @@ const CoursePlayer = () => {
 
                             {/* Sidebar footer — course completion stat */}
                             {progress >= 100 && (
-                                <div className="p-4 border-t border-zinc-900 flex items-center gap-3 bg-gradient-to-r from-cyan-500/5 to-violet-500/5">
+                                <div className="p-4 border-t border-zinc-900 flex items-center gap-3 bg-gradient-to-r from-[#00FF00]/5 to-[#ADFF2F]/5">
                                     <Trophy size={20} className="text-amber-400" />
                                     <div>
                                         <p className="text-xs font-bold text-white">Course Complete!</p>

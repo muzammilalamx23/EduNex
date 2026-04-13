@@ -58,8 +58,8 @@ const Features = () => {
                         className="glow-card md:col-span-2 md:row-span-2 flex flex-col relative overflow-hidden group"
                     >
                         <div className="absolute -right-20 -top-20 w-60 h-60 rounded-full blur-3xl transition-all duration-700 group-hover:scale-150"
-                            style={{ background: 'radial-gradient(circle, rgba(59, 130, 246, 0.08), transparent)' }} />
-                        <Terminal size={36} className="text-blue-400 mb-6 relative z-10" />
+                            style={{ background: 'radial-gradient(circle, rgba(0, 255, 0, 0.08), transparent)' }} />
+                        <Terminal size={36} className="text-[#00FF00] mb-6 relative z-10" />
                         <h3 className="text-2xl font-bold text-white mb-3 relative z-10">Cloud IDE Built-In</h3>
                         <p className="text-[var(--color-text-muted)] mb-8 relative z-10 leading-relaxed">
                             Launch a full-stack development environment instantly. Pre-configured with Docker, Node, and Python.
@@ -67,10 +67,10 @@ const Features = () => {
 
                         {/* Terminal mockup */}
                         <div className="mt-auto bg-[var(--color-bg-dark)] border border-white/[0.06] rounded-xl p-5 font-mono text-sm relative z-10 shadow-lg">
-                            <span className="text-blue-400">$</span><span className="text-white"> edunex start cluster</span><br />
+                            <span className="text-[#00FF00]">$</span><span className="text-white"> edunex start cluster</span><br />
                             <span className="text-zinc-600 block mt-1.5">Initializing containers...</span>
-                            <span className="text-blue-400 block mt-1.5">✓ Instance ready at port 3000</span>
-                            <div className="absolute bottom-4 right-4 w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                            <span className="text-[#00FF00] block mt-1.5">✓ Instance ready at port 3000</span>
+                            <div className="absolute bottom-4 right-4 w-2 h-2 bg-[#00FF00] rounded-full animate-pulse"></div>
                         </div>
                     </motion.div>
 
@@ -83,8 +83,8 @@ const Features = () => {
                         transition={{ delay: 0.1 }}
                         className="glow-card md:col-span-1 md:row-span-1 flex flex-col justify-center items-center text-center group cursor-pointer"
                     >
-                        <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-blue-500/15 transition-all duration-300">
-                            <Cpu size={28} className="text-blue-400" />
+                        <div className="w-16 h-16 rounded-2xl bg-[#00FF00]/10 border border-[#00FF00]/20 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#00FF00]/15 transition-all duration-300">
+                            <Cpu size={28} className="text-[#00FF00]" />
                         </div>
                         <h4 className="text-lg font-bold text-white mb-1">AI Tutor</h4>
                         <p className="text-xs text-[var(--color-text-dim)]">Instant code review</p>
@@ -99,8 +99,8 @@ const Features = () => {
                         transition={{ delay: 0.2 }}
                         className="glow-card md:col-span-1 md:row-span-1 flex flex-col justify-center items-center text-center group cursor-pointer"
                     >
-                        <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-cyan-500/15 transition-all duration-300">
-                            <ShieldCheck size={28} className="text-cyan-400" />
+                        <div className="w-16 h-16 rounded-2xl bg-[#00FF00]/10 border border-[#00FF00]/20 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#00FF00]/15 transition-all duration-300">
+                            <ShieldCheck size={28} className="text-[#00FF00]" />
                         </div>
                         <h4 className="text-lg font-bold text-white mb-1">Verified Certs</h4>
                         <p className="text-xs text-[var(--color-text-dim)]">500+ hiring partners</p>
@@ -116,7 +116,7 @@ const Features = () => {
                         className="glow-card md:col-span-2 md:row-span-1 flex flex-row items-center gap-8 relative overflow-hidden group"
                     >
                         <div className="absolute -left-10 -bottom-10 w-40 h-40 rounded-full blur-3xl transition-all duration-700 group-hover:scale-150"
-                            style={{ background: 'radial-gradient(circle, rgba(6, 182, 212, 0.08), transparent)' }} />
+                            style={{ background: 'radial-gradient(circle, rgba(173, 255, 47, 0.08), transparent)' }} />
                         <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
                             <Workflow size={28} className="text-amber-400" />
                         </div>

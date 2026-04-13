@@ -1,16 +1,99 @@
-# React + Vite
+# EduNex: Advanced AI Learning Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+EduNex is a production-grade learning management system (LMS) designed for modern technological education. It features a high-performance React frontend, a secure Express backend, and an atomic learning progress engine.
 
-Currently, two official plugins are available:
+## 🚀 Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Cyber-Neon UI**: High-contrast, accessibility-focused design system.
+- **Persistent Progress**: Server-side tracking of lesson completion and learning position.
+- **Admin Command Center**: Complete dashboard for course management and analytics.
+- **Secure Auth**: JWT-based authentication with HttpOnly cookies.
+- **Production DevOps**: Multi-stage Docker optimization and GitHub Actions CI/CD.
 
-## React Compiler
+## 🛠️ Architecture Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend (Client)
+- **Framework**: React 19 + Vite 7
+- **Styling**: Tailwind CSS 4.0 (Vanilla CSS @theme)
+- **State**: React Context API (Auth) + React Router 7 (SPA Routing)
+- **Animations**: Framer Motion + Three.js Shaders
 
-## Expanding the ESLint configuration
+### Backend (Server)
+- **Framework**: Express.js (Node.js)
+- **Database**: MongoDB Atlas via Mongoose
+- **Security**: Helmet, Rate Limiting, Mongo Sanitize
+- **Logging**: Winston with MongoDB audit transport
+- **Design Pattern**: Controller-Route Separation (MVC)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 💻 Getting Started
+
+### 1. Prerequisites
+- Node.js (v20+)
+- MongoDB (Local or Atlas)
+- Docker (Optional)
+
+### 2. Installation
+```bash
+# Install root dependencies
+npm install
+
+# Install server and client dependencies
+npm run build
+```
+
+### 3. Environment Setup
+Create a `.env` file in the `server` directory (use `.env.example` as a template).
+
+```bash
+MONGO_URI=your_mongo_url
+JWT_SECRET=your_secret
+PORT=5000
+```
+
+### 4. Running Locally
+```bash
+# Run both frontend and backend concurrently
+npm run dev
+```
+
+---
+
+## 🐳 Docker Deployment
+
+For a production-ready environment, use the provided multi-stage Dockerfile:
+
+```bash
+# Build the image
+docker build -t edunex-platform .
+
+# Run the container
+docker run -p 5000:5000 --env-file server/.env edunex-platform
+```
+
+---
+
+## 🧪 Testing and CI/CD
+
+This project uses **GitHub Actions** for continuous integration. Every push to `main` triggers:
+1. Linting and Static Analysis
+2. Production Build Verification
+3. Docker Image Assembly
+
+---
+
+## 🔐 Security Standards
+
+- **HTTPOnly Cookies**: Tokens are never accessible via JavaScript (XSS Protection).
+- **Rate Limiting**: Brute-force protection on authentication endpoints.
+- **Sanitization**: Automatic NoSQL Injection shielding.
+- **Non-Root Runtime**: Docker containers run as a dedicated `edunex` user.
+
+---
+
+## 📜 Documentation
+
+- [API Specification](./server/routes/README.md)
+- [Design System Spec](./cyber_neon_green_spec.md)
+- [Engineering Audit](./engineering_audit.md)

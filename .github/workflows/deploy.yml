@@ -1,0 +1,61 @@
+name: EduNex Production CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install Client Deps
+        run: cd client && npm ci
+        
+      - name: Lint Client
+        run: cd client && npm run lint
+        
+      - name: Install Server Deps
+        run: cd server && npm ci
+        
+      # - name: Run Backend Tests
+      #   run: cd server && npm test
+
+  build-and-push:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Build Docker Image
+        run: |
+          docker build -t edunex-platform:latest .
+          
+      # Add Push to container registry (DockerHub/AWS ECR) here
+      # - name: Login to DockerHub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      # - name: Build and Push
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: ${{ secrets.DOCKERHUB_USERNAME }}/edunex:latest
+
+  # Auto-deploy to Render / Railway / AWS would go here

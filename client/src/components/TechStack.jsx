@@ -8,7 +8,7 @@ const TechStack = () => {
         <div className="py-24 relative overflow-hidden">
             {/* Background */}
             <div className="absolute inset-0 bg-[var(--color-surface)]"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.04)_0%,transparent_50%)] pointer-events-none"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,255,0,0.04)_0%,transparent_50%)] pointer-events-none"></div>
 
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 {/* Header */}

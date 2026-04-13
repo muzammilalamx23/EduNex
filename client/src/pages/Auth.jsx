@@ -132,6 +132,7 @@ const Auth = () => {
                                 onChange={handleChange}
                                 placeholder="••••••••"
                                 className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-10 pr-12 focus:outline-none focus:border-cyan-500 transition-colors text-sm"
+                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-10 pr-12 focus:outline-none focus:border-emerald-500 transition-colors text-sm"
                             />
                             <button
                                 type="button"
@@ -166,7 +167,7 @@ const Auth = () => {
                         <button
                             type="button"
                             onClick={() => setIsLogin((p) => !p)}
-                            className="text-cyan-400 font-semibold ml-1.5 hover:text-cyan-300 transition-colors"
+                            className="text-emerald-400 font-semibold ml-1.5 hover:text-emerald-300 transition-colors"
                         >
                             {isLogin ? 'Sign Up' : 'Login'}
                         </button>

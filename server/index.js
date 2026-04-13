@@ -23,7 +23,15 @@ const app = express();
 // ─── Security & Performance Middleware ────────────────────────────────────────
 // ─── Security & Performance Middleware ────────────────────────────────────────
 app.use(helmet({
-    contentSecurityPolicy: false, // Disable strict CSP for now to ensure site loads
+    contentSecurityPolicy: {
+        directives: {
+            ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+            "img-src": ["'self'", "data:", "https:", "https://i.pravatar.cc", "https://raw.githubusercontent.com", "https://upload.wikimedia.org"],
+            "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // unsafe-eval needed for some three.js features if any
+            "frame-src": ["'self'", "https://www.youtube.com", "https://youtube.com"],
+            "connect-src": ["'self'", "https:", "wss:", "http://localhost:5000", "ws://localhost:5000"],
+        },
+    },
     crossOriginEmbedderPolicy: false
 }));
 app.use(compression()); // Gzip/Brotli compression
@@ -83,13 +91,13 @@ app.use('/api/courses', require('./routes/courses'));
 app.use('/api/admin', require('./routes/admin'));
 
 // ─── Database Connection & Crash Handlers ─────────────────────────────────────
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, { family: 4 })
     .then(() => {
         logger.info('[DB] Successfully connected to MongoDB Atlas');
     })
     .catch((err) => {
         logger.error(`[DB] Critical: MongoDB connection failed: ${err.message}`);
-        process.exit(1);
+        // Removed process.exit(1) to allow server to start even if DB is unreachable
     });
 
 // Unhandled Rejections and Exceptions

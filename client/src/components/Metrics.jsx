@@ -51,8 +51,8 @@ const stats = [
 ];
 
 const colorMap = {
-    blue: { text: "text-blue-400", border: "border-blue-500/20", bg: "bg-blue-500/5", hoverBorder: "hover:border-blue-500/40" },
-    cyan: { text: "text-cyan-400", border: "border-cyan-500/20", bg: "bg-cyan-500/5", hoverBorder: "hover:border-cyan-500/40" },
+    blue: { text: "text-[#00FF00]", border: "border-[#00FF00]/20", bg: "bg-[#00FF00]/5", hoverBorder: "hover:border-[#00FF00]/40" },
+    cyan: { text: "text-[#ADFF2F]", border: "border-[#ADFF2F]/20", bg: "bg-[#ADFF2F]/5", hoverBorder: "hover:border-[#ADFF2F]/40" },
     amber: { text: "text-amber-400", border: "border-amber-500/20", bg: "bg-amber-500/5", hoverBorder: "hover:border-amber-500/40" },
 };
 
@@ -61,7 +61,7 @@ const Metrics = () => {
         <section className="py-28 relative overflow-hidden">
             {/* Light background contrast break (Sheryians pattern) */}
             <div className="absolute inset-0 bg-[var(--color-surface)]"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.05)_0%,transparent_60%)] pointer-events-none"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(0,255,0,0.05)_0%,transparent_60%)] pointer-events-none"></div>
 
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 <div className="grid md:grid-cols-2 gap-16 items-center">
