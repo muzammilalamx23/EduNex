@@ -1,11 +1,11 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 const BackgroundAnimation = () => {
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
             {/* Top-left blue glow */}
-            <motion.div
+            <m.div
                 animate={{
                     x: [0, 80, 0],
                     y: [0, -40, 0],
@@ -16,7 +16,7 @@ const BackgroundAnimation = () => {
                 style={{ background: 'radial-gradient(circle, rgba(0, 255, 0, 0.08) 0%, transparent 70%)' }}
             />
             {/* Right-center teal glow */}
-            <motion.div
+            <m.div
                 animate={{
                     x: [0, -60, 0],
                     y: [0, 80, 0],
@@ -27,7 +27,7 @@ const BackgroundAnimation = () => {
                 style={{ background: 'radial-gradient(circle, rgba(162, 255, 0, 0.06) 0%, transparent 70%)' }}
             />
             {/* Bottom green glow */}
-            <motion.div
+            <m.div
                 animate={{
                     x: [0, 40, -40, 0],
                     y: [0, -30, 0],

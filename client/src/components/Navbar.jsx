@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Menu, BookOpen, Zap, MonitorPlay, User, LogOut, X, ArrowRight } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -30,170 +30,132 @@ const Navbar = () => {
     return (
         <>
             {/* ── Mobile Navbar ────────────────────────────────── */}
-            <div className="md:hidden fixed top-0 w-full z-50 bg-[#030712]/90 backdrop-blur-xl border-b border-white/5 py-4 px-6 flex justify-between items-center">
+            <m.div className="md:hidden fixed top-0 w-full z-[100] bg-[#0D0D0D]/90 backdrop-blur-xl border-b border-white/5 py-4 px-6 flex justify-between items-center shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
                 <Link to="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
                     <span className="text-2xl font-bold tracking-tight text-white font-display">
-                        Edu<span className="text-gradient">Nex</span>
+                        Edu<span className="text-[#FF8C37]">Nex</span>
                     </span>
                 </Link>
                 <button
                     onClick={() => setMobileOpen((prev) => !prev)}
                     className="text-white p-1"
-                    aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
                 >
                     {mobileOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
-            </div>
+            </m.div>
 
             {/* ── Mobile Drawer ───────────────────────────────── */}
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
                 {mobileOpen && (
-                    <motion.div
+                    <m.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="md:hidden fixed top-[65px] left-0 right-0 z-40 bg-[#030712]/95 backdrop-blur-2xl border-b border-white/5 px-6 py-6 flex flex-col gap-2"
+                        transition={{ duration: 0.2 }}
+                        className="md:hidden fixed top-[65px] left-0 right-0 z-[90] bg-[#0D0D0D]/95 backdrop-blur-2xl border-b border-white/5 px-6 py-8 flex flex-col gap-2 shadow-2xl"
                     >
                         {links.map((link) => (
                             <Link
                                 key={link.name}
                                 to={link.href}
                                 onClick={() => setMobileOpen(false)}
-                                className="flex items-center gap-3 text-[var(--color-text-muted)] hover:text-[#00FF00] font-medium py-3 transition-colors"
+                                className="flex items-center gap-3 text-zinc-400 hover:text-white font-medium py-3 transition-colors px-4 rounded-xl hover:bg-white/5"
                             >
                                 {link.icon}
                                 {link.name}
                             </Link>
                         ))}
-                        <div className="border-t border-white/5 pt-4 flex flex-col gap-3 mt-2">
+                        <div className="border-t border-white/10 pt-4 flex flex-col gap-3 mt-2">
                             {user ? (
-                                <>
-                                    <Link to="/dashboard" onClick={() => setMobileOpen(false)}
-                                        className="text-white font-medium py-3 hover:text-[#00FF00] transition-colors">
-                                        Dashboard
-                                    </Link>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="flex items-center gap-2 text-[var(--color-text-muted)] font-medium py-3 hover:text-red-400 transition-colors"
-                                    >
-                                        <LogOut size={18} /> Logout
-                                    </button>
-                                </>
+                                <button onClick={handleLogout} className="flex items-center gap-2 text-red-500 font-medium py-3 px-4 rounded-xl hover:bg-red-500/5">
+                                    <LogOut size={18} /> Logout
+                                </button>
                             ) : (
-                                <Link to="/auth" onClick={() => setMobileOpen(false)}
-                                    className="btn btn-primary text-center py-3 rounded-xl font-bold text-white">
-                                    Get Started
+                                <Link to="/auth" onClick={() => setMobileOpen(false)} className="bg-[#22C55E] text-[#0D0D0D] text-center py-4 rounded-xl font-extrabold text-sm shadow-[0_10px_20px_rgba(34,197,94,0.2)]">
+                                    Join EduNex Free
                                 </Link>
                             )}
                         </div>
-                    </motion.div>
+                    </m.div>
                 )}
             </AnimatePresence>
 
-            {/* ── Desktop Dock Navbar ───────────────────────────── */}
-            <motion.nav
-                initial={{ y: -100, opacity: 0, x: '-50%' }}
-                animate={{ y: 0, opacity: 1, x: '-50%' }}
-                transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-                className="hidden md:flex fixed top-6 left-1/2 z-50 items-center p-2 rounded-2xl backdrop-blur-xl border shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
-                style={{
-                    background: 'rgba(0, 0, 0, 0.8)',
-                    borderColor: 'rgba(255, 255, 255, 0.06)',
-                }}
-            >
-                <Link to="/" className="mr-8 ml-4 flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00FF00] rounded-lg">
-                    <span className="text-2xl font-bold tracking-tight text-white transition-all duration-300 group-hover:opacity-80 font-display">
-                        Edu<span className="text-gradient">Nex</span>
-                    </span>
-                </Link>
+            {/* ── Desktop Permanent Static Dock ─────────────────── */}
+            <div className="hidden md:flex fixed top-8 left-0 w-full z-[100] justify-center pointer-events-none px-6">
+                <m.nav
+                    initial={{ y: -50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                    className="flex items-center p-2 rounded-2xl backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)] pointer-events-auto bg-[#0D0D0D]/80"
+                >
+                    <Link to="/" className="mr-8 ml-4 flex items-center group">
+                        <span className="text-xl font-black tracking-tighter text-white font-display flex items-center gap-1.5 translate-y-[-1px]">
+                            Edu<span className="text-[#FF8C37]">Nex</span>
+                        </span>
+                    </Link>
 
-                <div className="flex items-center gap-1">
-                    {links.map((link, i) => {
-                        const isHovered = hoveredIndex === i;
-                        const isNeighbor = hoveredIndex === i - 1 || hoveredIndex === i + 1;
-                        const isActive = location.pathname === link.href || (location.pathname + location.hash) === link.href;
+                    <div className="flex items-center gap-1.5">
+                        {links.map((link, i) => {
+                            const isHovered = hoveredIndex === i;
+                            const isActive = location.pathname === link.href || (location.pathname + location.hash) === link.href;
 
-                        return (
-                            <Link
-                                to={link.href}
-                                key={link.name}
-                                onMouseEnter={() => setHoveredIndex(i)}
-                                onMouseLeave={() => setHoveredIndex(null)}
-                                onFocus={() => setHoveredIndex(i)}
-                                onBlur={() => setHoveredIndex(null)}
-                                className={`relative flex flex-col items-center justify-center transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00FF00] rounded-2xl ${isActive ? 'text-[#00FF00]' : 'text-zinc-400 hover:text-white'}`}
-                            >
-                                <motion.div
-                                    animate={{
-                                        scale: isHovered ? 1.25 : isNeighbor ? 1.1 : 1,
-                                        y: isHovered ? 8 : isNeighbor ? 4 : 0,
-                                    }}
-                                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                                    className={`p-3 rounded-xl relative z-10 transition-colors ${
-                                        isHovered ? 'bg-[#00FF00]/10 text-[#00FF00]' 
-                                        : isActive ? 'bg-[#00FF00]/5 text-[#00FF00]'
-                                        : 'hover:bg-white/5'
-                                    }`}
+                            return (
+                                <Link
+                                    to={link.href}
+                                    key={link.name}
+                                    onMouseEnter={() => setHoveredIndex(i)}
+                                    onMouseLeave={() => setHoveredIndex(null)}
+                                    className={`relative flex items-center justify-center transition-all duration-300 px-3.5 py-2.5 rounded-xl group ${isActive ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
                                 >
-                                    {link.icon}
+                                    <div className={`p-1.5 rounded-lg transition-colors ${isActive ? 'bg-[#22C55E]/10 text-white' : isHovered ? 'bg-white/10' : ''}`}>
+                                        {React.cloneElement(link.icon, { size: 18 })}
+                                    </div>
+                                    <span className={`text-[13px] ml-2 font-bold transition-opacity tracking-tight ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                                        {link.name}
+                                    </span>
+                                    
                                     {isActive && (
-                                        <div className="absolute -bottom-1.5 left-1/2 w-1 h-1 bg-[#00FF00] rounded-full -translate-x-1/2" />
+                                        <m.div 
+                                            layoutId="nav-pill-active"
+                                            className="absolute bottom-1 left-3.5 right-3.5 h-[2px] bg-[#22C55E] rounded-full"
+                                        />
                                     )}
-                                </motion.div>
-
-                                <AnimatePresence>
-                                    {isHovered && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: -10, scale: 0.9 }}
-                                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                                            exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                                            className="absolute -bottom-12 px-3 py-1.5 bg-[var(--color-surface)] text-white text-xs font-semibold rounded-lg whitespace-nowrap shadow-lg border border-white/10 pointer-events-none z-50"
-                                        >
-                                            {link.name}
-                                            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[var(--color-surface)] border-t border-l border-white/10 rotate-45" />
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </Link>
-                        );
-                    })}
-                </div>
-
-                <div className="w-px h-10 bg-white/8 mx-5" />
-
-                <div className="flex items-center gap-3 pr-3">
-                    {user ? (
-                        <>
-                            {user.role === 'admin' && (
-                                <Link to="/admin" className="px-3 text-sm font-medium text-[#00FF00] hover:text-[#00FF00] transition-colors">
-                                    Admin Panel
                                 </Link>
-                            )}
-                            <Link to="/dashboard" className="px-3 text-sm font-medium text-zinc-300 hover:text-white transition-colors">
-                                Dashboard
-                            </Link>
-                            <button
-                                onClick={handleLogout}
-                                className="flex items-center gap-2 p-2 text-zinc-400 hover:text-red-400 rounded-lg transition-colors border border-transparent hover:border-red-500/20 hover:bg-red-500/10"
-                                aria-label="Logout"
-                            >
-                                <LogOut size={16} />
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <Link to="/auth" className="px-4 text-sm font-medium text-zinc-300 hover:text-white transition-colors focus-visible:outline-none focus:ring-2 focus-visible:ring-[#00FF00] rounded-md">
-                                Sign In
-                            </Link>
-                            <Link to="/auth" className="btn btn-primary px-5 py-2 text-sm flex items-center gap-2">
-                                Start Free <ArrowRight size={14} />
-                            </Link>
-                        </>
-                    )}
-                </div>
-            </motion.nav>
+                            );
+                        })}
+                    </div>
+
+                    <div className="w-[1px] h-8 bg-white/10 mx-6 opacity-50" />
+
+                    <div className="flex items-center gap-3.5 pr-2.5">
+                        {user ? (
+                            <div className="flex items-center gap-4">
+                                <Link to="/dashboard" className="text-[13px] font-bold text-zinc-300 hover:text-white transition-colors tracking-tight">
+                                    Dashboard
+                                </Link>
+                                <button 
+                                    onClick={handleLogout} 
+                                    className="p-2.5 rounded-xl bg-red-500/5 text-red-400/80 hover:bg-red-500/10 hover:text-red-500 transition-all border border-red-500/10"
+                                    title="Logout"
+                                >
+                                    <LogOut size={16} />
+                                </button>
+                            </div>
+                        ) : (
+                            <>
+                                <Link to="/auth" className="px-3 text-[13px] font-bold text-zinc-400 hover:text-white transition-colors tracking-tight">
+                                    Sign In
+                                </Link>
+                                <Link to="/auth" className="bg-[#22C55E] text-[#0D0D0D] px-6 py-2.5 rounded-[12px] font-black text-sm flex items-center gap-2 group shadow-[0_10px_20px_rgba(34,197,94,0.15)] hover:scale-[1.03] transition-transform">
+                                    Start Free <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+                                </Link>
+                            </>
+                        )}
+                    </div>
+                </m.nav>
+            </div>
         </>
     );
 };
 
-export default Navbar;
+export default Navbar;  

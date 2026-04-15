@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
+import HighConversionHero from '../components/HighConversionHero';
 import BackgroundAnimation from '../components/BackgroundAnimation';
 
 // Lazy load below-the-fold components
@@ -23,7 +23,7 @@ const LandingPage = () => {
         <div className="min-h-screen flex flex-col bg-[var(--color-bg-dark)] text-white selection:bg-[#00FF00]/25 relative">
             <BackgroundAnimation />
             <Navbar />
-            <Hero />
+            <HighConversionHero />
 
             <Suspense fallback={<FallbackLoader />}>
                 <Features />
