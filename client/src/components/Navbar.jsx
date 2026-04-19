@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
-import { Menu, BookOpen, Zap, MonitorPlay, User, LogOut, X, ArrowRight } from 'lucide-react';
+import { Menu, BookOpen, Zap, MonitorPlay, User, LogOut, X, ArrowRight, Map } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -14,7 +14,7 @@ const Navbar = () => {
     const baseLinks = [
         { name: 'Platform', icon: <MonitorPlay size={20} />, href: '/#platform' },
         { name: 'Courses', icon: <BookOpen size={20} />, href: '/courses' },
-        { name: 'Features', icon: <Zap size={20} />, href: '/#features' },
+        { name: 'Roadmap', icon: <Map size={20} />, href: '/roadmap' },
     ];
 
     const links = user?.role === 'admin'

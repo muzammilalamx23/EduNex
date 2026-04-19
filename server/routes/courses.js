@@ -9,6 +9,7 @@ const { VALID_CATEGORIES } = require('../utils/courseHelpers');
 const { isValidYouTubeUrl } = require('../utils/youtube');
 const { validationResult } = require('express-validator');
 const ApiResponse = require('../utils/ApiResponse');
+const communityRoutes = require('./community');
 
 // ─── Middleware: Validation Runner ───────────────────────────────────────────
 const validate = (req, res, next) => {
@@ -56,5 +57,7 @@ router.put('/:id', [auth, admin], validate, asyncHandler(courseController.update
 router.patch('/:id/publish', [auth, admin], asyncHandler(courseController.togglePublish));
 
 router.delete('/:id', [auth, admin], asyncHandler(courseController.deleteCourse));
+
+router.use('/:courseId/community', communityRoutes);
 
 module.exports = router;

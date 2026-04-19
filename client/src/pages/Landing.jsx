@@ -4,13 +4,12 @@ import HighConversionHero from '../components/HighConversionHero';
 import BackgroundAnimation from '../components/BackgroundAnimation';
 
 // Lazy load below-the-fold components
-const Features = lazy(() => import('../components/Features'));
+const Features     = lazy(() => import('../components/Features'));
 const LearningPaths = lazy(() => import('../components/LearningPaths'));
-const Metrics = lazy(() => import('../components/Metrics'));
-const FAQ = lazy(() => import('../components/FAQ'));
-const TechStack = lazy(() => import('../components/TechStack'));
-const BottomCTA = lazy(() => import('../components/BottomCTA'));
-const Footer = lazy(() => import('../components/Footer'));
+const Metrics      = lazy(() => import('../components/Metrics'));
+const FAQ          = lazy(() => import('../components/FAQ'));
+const TechStack    = lazy(() => import('../components/TechStack'));
+const Footer       = lazy(() => import('../components/Footer'));
 
 const FallbackLoader = () => (
     <div className="py-20 flex justify-center items-center">

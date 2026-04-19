@@ -43,6 +43,10 @@ app.use(cookieParser());
 // Sanitize user input against NoSQL Injection
 app.use(mongoSanitize());
 
+// Serve uploads statically
+const path = require('path');
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // (CORS moved below health check to avoid blocking static assets)
 
 

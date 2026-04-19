@@ -132,7 +132,6 @@ const Auth = () => {
                                 onChange={handleChange}
                                 placeholder="••••••••"
                                 className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-10 pr-12 focus:outline-none focus:border-cyan-500 transition-colors text-sm"
-                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-10 pr-12 focus:outline-none focus:border-emerald-500 transition-colors text-sm"
                             />
                             <button
                                 type="button"

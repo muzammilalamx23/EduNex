@@ -17,6 +17,8 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminCreateCourse = lazy(() => import('./pages/AdminCreateCourse'));
 const AdminEditCourse = lazy(() => import('./pages/AdminEditCourse'));
 const Playground = lazy(() => import('./pages/Playground'));
+const RoadmapPage = lazy(() => import('./pages/Roadmap'));
+const Community = lazy(() => import('./pages/Community'));
 
 const PageLoader = () => (
   <div className="min-h-screen bg-[#030712] flex items-center justify-center">
@@ -53,6 +55,8 @@ export default function App() {
               <Route path="/courses" element={<Courses />} />
               <Route path="/course-detail/:courseId" element={<CourseDetail />} />
               <Route path="/playground" element={<Playground />} />
+              <Route path="/roadmap" element={<RoadmapPage />} />
+              <Route path="/course-detail/:courseId/community" element={<Community />} />
 
               <Route path="/dashboard" element={
                 <ProtectedRoute>

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     ChevronLeft, Play, CheckCircle2, ChevronRight,
     Menu, X, FileText, Zap, Layout, Clock, Lock,
-    Trophy, BookOpen
+    Trophy, BookOpen, Users
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
@@ -271,6 +271,13 @@ const CoursePlayer = () => {
                             <p className="text-xs font-bold text-[#00FF00]">{completedCount}/{totalLessons} lessons</p>
                         </div>
                     </div>
+                    <button
+                        onClick={() => navigate(`/course-detail/${courseId}/community`)}
+                        className="flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-400 hover:text-white hover:bg-cyan-500/20 transition-all text-sm font-bold"
+                        aria-label="Course Community"
+                    >
+                        <Users size={16} /> <span className="hidden sm:inline">Community</span>
+                    </button>
                     <button
                         onClick={() => setSidebarOpen(s => !s)}
                         className="p-2 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-400 hover:text-white transition-all"

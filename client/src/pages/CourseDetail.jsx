@@ -18,7 +18,8 @@ import {
     Code2,
     Cpu,
     Video,
-    Bot
+    Bot,
+    MessageSquare
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
@@ -349,6 +350,14 @@ const CourseDetail = () => {
                                             <PlayCircle size={20} />
                                         </>
                                     )}
+                                </button>
+
+                                <button
+                                    onClick={() => navigate(`/course-detail/${course._id}/community`)}
+                                    className="w-full py-4 mt-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg bg-zinc-800/50 text-white hover:bg-cyan-500/10 hover:text-cyan-400 border border-zinc-700/50 hover:border-cyan-500/30"
+                                >
+                                    <MessageSquare size={20} />
+                                    Course Community
                                 </button>
 
                                 <p className="text-[10px] text-center text-zinc-500 mt-6 font-medium">
