@@ -59,22 +59,22 @@ const Auth = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[#09090b] text-white p-6 relative">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900 p-6 relative">
             <BackgroundAnimation />
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full max-w-md glass-card relative z-10 p-8 md:p-10 border-white/10"
+                className="w-full max-w-md edu-card relative z-10 p-8 md:p-10 border-gray-100"
             >
                 <div className="flex flex-col items-center mb-10">
                     <Link to="/" className="flex items-center mb-6">
-                        <span className="text-3xl font-black tracking-tighter text-white">
-                            Edu<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-500">Nex</span>
+                        <span className="text-3xl font-black tracking-tighter text-gray-900">
+                            Edu<span className="text-violet-600">Nex</span>
                         </span>
                     </Link>
-                    <h2 className="text-2xl font-bold">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
-                    <p className="text-zinc-400 text-sm mt-2 text-center">
+                    <h2 className="text-2xl font-bold text-gray-900">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
+                    <p className="text-gray-500 text-sm mt-2 text-center">
                         {isLogin ? 'Enter your credentials to access your dashboard' : 'Join thousands of developers mastering tech skills'}
                     </p>
                 </div>
@@ -82,9 +82,9 @@ const Auth = () => {
                 <form className="space-y-4" onSubmit={handleSubmit} noValidate>
                     {!isLogin && (
                         <div className="space-y-1.5">
-                            <label htmlFor="fullName" className="text-xs font-semibold uppercase tracking-wider text-zinc-500 ml-1">Full Name</label>
+                            <label htmlFor="fullName" className="text-xs font-semibold uppercase tracking-wider text-gray-500 ml-1">Full Name</label>
                             <div className="relative">
-                                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+                                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                                 <input
                                     id="fullName"
                                     type="text"
@@ -94,16 +94,16 @@ const Auth = () => {
                                     value={formData.fullName}
                                     onChange={handleChange}
                                     placeholder="John Doe"
-                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-cyan-500 transition-colors text-sm"
+                                    className="w-full bg-white border border-gray-200 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-violet-500 transition-colors text-sm text-gray-900"
                                 />
                             </div>
                         </div>
                     )}
 
                     <div className="space-y-1.5">
-                        <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-zinc-500 ml-1">Email Address</label>
+                        <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-gray-500 ml-1">Email Address</label>
                         <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                             <input
                                 id="email"
                                 type="email"
@@ -113,15 +113,15 @@ const Auth = () => {
                                 value={formData.email}
                                 onChange={handleChange}
                                 placeholder="name@example.com"
-                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-cyan-500 transition-colors text-sm"
+                                className="w-full bg-white border border-gray-200 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-violet-500 transition-colors text-sm text-gray-900"
                             />
                         </div>
                     </div>
 
                     <div className="space-y-1.5">
-                        <label htmlFor="password" className="text-xs font-semibold uppercase tracking-wider text-zinc-500 ml-1">Password</label>
+                        <label htmlFor="password" className="text-xs font-semibold uppercase tracking-wider text-gray-500 ml-1">Password</label>
                         <div className="relative">
-                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                             <input
                                 id="password"
                                 type={showPassword ? 'text' : 'password'}
@@ -131,12 +131,12 @@ const Auth = () => {
                                 value={formData.password}
                                 onChange={handleChange}
                                 placeholder="••••••••"
-                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-10 pr-12 focus:outline-none focus:border-cyan-500 transition-colors text-sm"
+                                className="w-full bg-white border border-gray-200 rounded-xl py-3 pl-10 pr-12 focus:outline-none focus:border-violet-500 transition-colors text-sm text-gray-900"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword((p) => !p)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                             >
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -160,13 +160,13 @@ const Auth = () => {
                     </button>
                 </form>
 
-                <div className="mt-8 pt-6 border-t border-zinc-800 text-center">
-                    <p className="text-zinc-500 text-sm">
+                <div className="mt-8 pt-6 border-t border-gray-100 text-center">
+                    <p className="text-gray-500 text-sm">
                         {isLogin ? "Don't have an account?" : 'Already have an account?'}
                         <button
                             type="button"
                             onClick={() => setIsLogin((p) => !p)}
-                            className="text-emerald-400 font-semibold ml-1.5 hover:text-emerald-300 transition-colors"
+                            className="text-violet-600 font-semibold ml-1.5 hover:text-violet-700 transition-colors"
                         >
                             {isLogin ? 'Sign Up' : 'Login'}
                         </button>

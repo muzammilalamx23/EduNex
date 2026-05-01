@@ -25,8 +25,8 @@ const FAQ = () => {
     const [openIndex, setOpenIndex] = useState(0);
 
     return (
-        <section className="py-32 px-6 relative">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(0,255,0,0.04)_0%,transparent_50%)] pointer-events-none"></div>
+        <section className="py-28 px-6 bg-white relative">
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-violet-100 to-transparent" />
             <div className="max-w-3xl mx-auto relative z-10">
                 <div className="text-center mb-16">
                     <motion.div
@@ -44,7 +44,8 @@ const FAQ = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-5xl font-bold text-white mb-5"
+                        className="text-4xl md:text-5xl font-black text-gray-900 mb-5"
+                        style={{ fontFamily: 'var(--font-display)' }}
                     >
                         Frequently Asked <span className="text-gradient">Questions</span>
                     </motion.h2>
@@ -53,7 +54,7 @@ const FAQ = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="text-[var(--color-text-muted)] text-lg"
+                        className="text-gray-500 text-lg"
                     >
                         Everything you need to know about the product and billing.
                     </motion.p>
@@ -69,17 +70,17 @@ const FAQ = () => {
                             transition={{ delay: i * 0.05 }}
                             className={`rounded-2xl cursor-pointer transition-all duration-300 border p-6 
                                 ${openIndex === i
-                                    ? 'border-[#00FF00]/30 bg-[#00FF00]/[0.03]'
-                                    : 'border-white/[0.06] bg-[var(--color-surface)] hover:border-white/10'
+                                    ? 'border-violet-200 bg-violet-50/50'
+                                    : 'border-gray-100 bg-white shadow-sm hover:border-violet-100'
                                 }`}
                             onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
                         >
                             <div className="flex justify-between items-center">
-                                <h4 className="text-lg font-bold text-white pr-8">{faq.q}</h4>
+                                <h4 className="text-base font-bold text-gray-900 pr-8">{faq.q}</h4>
                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center border flex-shrink-0 transition-all duration-300 ${
                                     openIndex === i
-                                        ? 'border-[#00FF00]/40 bg-[#00FF00]/10 text-[#00FF00] rotate-180'
-                                        : 'border-white/10 text-zinc-500'
+                                        ? 'border-violet-300 bg-violet-100 text-violet-600 rotate-180'
+                                        : 'border-gray-200 text-gray-400'
                                 }`}>
                                     <ChevronDown size={16} />
                                 </div>
@@ -90,7 +91,7 @@ const FAQ = () => {
                                         initial={{ height: 0, opacity: 0, marginTop: 0 }}
                                         animate={{ height: "auto", opacity: 1, marginTop: 16 }}
                                         exit={{ height: 0, opacity: 0, marginTop: 0 }}
-                                        className="overflow-hidden text-[var(--color-text-muted)] leading-relaxed text-[0.95rem]"
+                                        className="overflow-hidden text-gray-500 leading-relaxed text-[0.95rem]"
                                     >
                                         {faq.a}
                                     </motion.div>

@@ -1,166 +1,154 @@
 import React from 'react';
-import { m } from 'framer-motion';
-import { Diamond, ArrowRight, MousePointer2, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Star, Users, BookOpen, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+const avatars = [1, 2, 3, 4].map(i => `https://i.pravatar.cc/80?img=${i * 9}`);
+
 const HighConversionHero = () => {
-    // Animation Variants
-    const containerVariants = {
+    const container = {
         hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1,
-                delayChildren: 0.2
-            }
-        }
+        visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
     };
-
-    const itemVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: { ease: [0.25, 1, 0.5, 1], duration: 0.8 }
-        }
-    };
-
-    const badgeVariants = {
-        hidden: { opacity: 0, scale: 0.8 },
-        visible: {
-            opacity: 1,
-            scale: 1,
-            transition: { type: "spring", stiffness: 200, damping: 15 }
-        }
+    const item = {
+        hidden: { opacity: 0, y: 28 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
     };
 
     return (
-        <header className="relative w-full min-h-screen flex flex-col items-center px-6 pt-44 pb-24 overflow-hidden bg-[#0D0D0D]">
-            {/* Background Radial Gradient */}
-            <div className="absolute inset-0 z-0 select-none pointer-events-none">
-                <div 
-                    className="absolute inset-0"
-                    style={{
-                        background: 'radial-gradient(circle at 50% 30%, #2B1A0F 0%, #150E0A 40%, #0D0D0D 85%)',
-                        opacity: 1
-                    }}
-                />
-                
-                {/* Subtle Grain Texture Overlay */}
-                <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
+        <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white pt-24 pb-16 px-6">
 
-                {/* Animated Glow Elements */}
-                <m.div 
-                    animate={{ 
-                        scale: [1, 1.2, 1],
-                        opacity: [0.1, 0.25, 0.1]
+            {/* ── Decorative Blobs ─────────────────────── */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                {/* Main purple blob top-left */}
+                <div
+                    className="absolute -top-40 -left-40 w-[600px] h-[600px] animate-blob"
+                    style={{
+                        background: 'radial-gradient(circle, rgba(167,139,250,0.22) 0%, rgba(124,58,237,0.08) 60%, transparent 80%)',
                     }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-[#FF8C37]/20 blur-[130px] rounded-full"
                 />
-                <m.div 
-                    animate={{ 
-                        scale: [1, 1.1, 1],
-                        opacity: [0.1, 0.2, 0.1]
+                {/* Soft blue blob bottom-right */}
+                <div
+                    className="absolute -bottom-32 -right-32 w-[500px] h-[500px] animate-blob"
+                    style={{
+                        animationDelay: '4s',
+                        background: 'radial-gradient(circle, rgba(196,181,253,0.2) 0%, rgba(139,92,246,0.06) 60%, transparent 80%)',
                     }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#22C55E]/10 blur-[130px] rounded-full"
+                />
+                {/* Grid pattern */}
+                <div
+                    className="absolute inset-0 opacity-[0.025]"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%237C3AED' fill-opacity='1'%3E%3Ccircle cx='30' cy='30' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                    }}
                 />
             </div>
 
-            <m.div 
-                variants={containerVariants}
+            <motion.div
+                variants={container}
                 initial="hidden"
                 animate="visible"
-                className="relative z-10 max-w-6xl mx-auto flex flex-col items-center text-center w-full"
+                className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center"
             >
-                {/* Badge component */}
-                <m.div 
-                    variants={badgeVariants}
-                    className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full border border-[#22C55E]/40 bg-[#22C55E]/10 backdrop-blur-xl mb-10 shadow-[0_0_30px_rgba(34,197,94,0.15)] ring-1 ring-white/10"
-                >
-                    <Diamond size={16} className="text-[#22C55E] fill-[#22C55E]" />
-                    <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#22C55E]">New Era of Learning</span>
-                    <Sparkles size={16} className="text-[#FF8C37]" />
-                </m.div>
-
-                {/* Main Heading */}
-                <m.h1 
-                    variants={itemVariants}
-                    className="text-[clamp(2.5rem,8vw,5.5rem)] font-bold tracking-tight leading-[1.1] text-white mb-8 max-w-[14ch]"
-                >
-                    Build Skills that <span className="text-[#FF8C37] relative">
-                        Drive Growth
-                        <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 358 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <m.path 
-                                initial={{ pathLength: 0 }}
-                                animate={{ pathLength: 1 }}
-                                transition={{ duration: 1, delay: 1 }}
-                                d="M3 9C118.833 4.33333 351.4 -3.8 355 9" 
-                                stroke="#FF8C37" 
-                                strokeWidth="5" 
-                                strokeLinecap="round"
-                            />
-                        </svg>
+                {/* Badge */}
+                <motion.div variants={item} className="mb-7">
+                    <span className="section-label">
+                        ✦ &nbsp;AI-Powered Learning Platform
                     </span>
-                </m.h1>
+                </motion.div>
+
+                {/* Headline */}
+                <motion.h1
+                    variants={item}
+                    className="text-[clamp(2.6rem,7vw,5rem)] font-black leading-[1.08] tracking-tight text-gray-900 mb-6 max-w-[18ch]"
+                    style={{ fontFamily: 'var(--font-display)' }}
+                >
+                    Empowering learners{' '}
+                    <span className="relative inline-block">
+                        <span className="text-gradient">to shape</span>
+                    </span>{' '}
+                    the future
+                    <span className="inline-flex ml-3 align-middle gap-1 text-2xl leading-none">🎓💡</span>
+                </motion.h1>
 
                 {/* Subtext */}
-                <m.p 
-                    variants={itemVariants} 
-                    className="text-lg md:text-xl text-zinc-400 max-w-2xl mb-12 leading-relaxed"
+                <motion.p
+                    variants={item}
+                    className="text-lg md:text-xl text-gray-500 max-w-2xl mb-10 leading-relaxed font-normal"
                 >
-                    Unlock your full potential with interactive lessons, industry-standard projects, and an AI-powered curriculum designed to bridge the skill gap.
-                </m.p>
+                    We're redefining education with technology, creativity, and community —
+                    helping learners around the world reach their full potential.
+                </motion.p>
 
-                {/* CTA Group */}
-                <m.div 
-                    variants={itemVariants}
-                    className="flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto"
-                >
+                {/* CTA Buttons */}
+                <motion.div variants={item} className="flex flex-col sm:flex-row items-center gap-4 mb-14">
                     <Link
                         to="/courses"
-                        className="group relative inline-flex items-center justify-center px-10 py-5 rounded-[12px] bg-[#22C55E] text-[#0D0D0D] font-bold text-lg border border-black/10 transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(34,197,94,0.4)] w-full sm:w-auto overflow-hidden"
+                        className="btn btn-primary px-8 py-4 text-base rounded-2xl flex items-center gap-2 group shadow-[0_8px_32px_rgba(124,58,237,0.3)]"
                     >
-                        <span className="relative z-10 flex items-center gap-2">
-                            Start Learning Free
-                            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                        </span>
-                        {/* Internal Shine Effect */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                        Start Learning Now
+                        <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
                     </Link>
-
-                    <button
-                        className="group inline-flex items-center justify-center px-10 py-5 rounded-[12px] bg-[#1A1A1A]/60 border border-white/10 text-white font-bold text-lg backdrop-blur-md transition-all duration-300 hover:bg-[#1A1A1A]/80 hover:border-white/20 hover:scale-[1.03] w-full sm:w-auto"
+                    <Link
+                        to="/auth"
+                        className="btn btn-outline px-8 py-4 text-base rounded-2xl flex items-center gap-2 font-semibold"
                     >
-                        <span className="flex items-center gap-2">
-                            <MousePointer2 size={20} className="text-zinc-400 group-hover:text-white transition-colors" />
-                            Book a Demo
-                        </span>
-                    </button>
-                </m.div>
+                        Explore Courses
+                    </Link>
+                </motion.div>
 
-                {/* Social Proof / Stats */}
-                <m.div 
-                    variants={itemVariants}
-                    className="mt-20 pt-10 border-t border-white/5 w-full flex flex-wrap justify-center gap-x-12 gap-y-6"
+                {/* Social proof row */}
+                <motion.div
+                    variants={item}
+                    className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10"
                 >
+                    {/* Avatars + Stars */}
+                    <div className="flex items-center gap-3">
+                        <div className="flex -space-x-2.5">
+                            {avatars.map((src, i) => (
+                                <img
+                                    key={i}
+                                    src={src}
+                                    alt="Student"
+                                    width={36}
+                                    height={36}
+                                    className="w-9 h-9 rounded-full border-2 border-white object-cover shadow-sm"
+                                    loading="lazy"
+                                />
+                            ))}
+                        </div>
+                        <div className="text-left">
+                            <div className="flex gap-0.5 text-amber-400 mb-0.5">
+                                {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="currentColor" />)}
+                            </div>
+                            <p className="text-xs font-semibold text-gray-600">50k+ happy learners</p>
+                        </div>
+                    </div>
+
+                    <div className="w-px h-8 bg-gray-200 hidden sm:block" />
+
+                    {/* Quick stats */}
                     {[
-                        { label: 'Active Students', value: '50k+' },
-                        { label: 'Courses', value: '450+' },
-                        { label: 'Success Rate', value: '98%' },
-                    ].map((stat, i) => (
-                        <div key={i} className="flex flex-col items-center sm:items-start">
-                            <span className="text-2xl font-bold text-white">{stat.value}</span>
-                            <span className="text-xs uppercase tracking-widest text-zinc-500 font-medium">{stat.label}</span>
+                        { icon: <BookOpen size={15} />, val: '450+', label: 'Courses' },
+                        { icon: <Users size={15} />, val: '1,200+', label: 'Instructors' },
+                        { icon: <Award size={15} />, val: '98%', label: 'Success Rate' },
+                    ].map((s, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-full bg-violet-50 flex items-center justify-center text-violet-600">
+                                {s.icon}
+                            </div>
+                            <div className="text-left">
+                                <div className="text-sm font-bold text-gray-900 leading-none">{s.val}</div>
+                                <div className="text-xs text-gray-500 mt-0.5">{s.label}</div>
+                            </div>
                         </div>
                     ))}
-                </m.div>
-            </m.div>
+                </motion.div>
+            </motion.div>
 
-            {/* Ambient Background Blur for Footer connection */}
-            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#0D0D0D] to-transparent z-20" />
-        </header>
+            {/* Bottom fade into next section */}
+            <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-gray-50 to-transparent pointer-events-none" />
+        </section>
     );
 };
 

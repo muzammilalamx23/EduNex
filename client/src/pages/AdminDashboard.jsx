@@ -85,25 +85,25 @@ const AdminDashboard = () => {
     );
 
     if (loading) return (
-        <div className="min-h-screen bg-[var(--color-bg-dark)] flex items-center justify-center p-6">
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
             <div className="w-full max-w-7xl">
-                <div className="h-10 w-48 bg-[var(--color-surface-light)] rounded animate-pulse mb-12"></div>
+                <div className="h-10 w-48 bg-white rounded animate-pulse mb-12"></div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-                     {[1,2,3,4].map(i => <div key={i} className="h-28 bg-[var(--color-surface-light)] rounded-2xl animate-pulse"></div>)}
+                     {[1,2,3,4].map(i => <div key={i} className="h-28 bg-white rounded-2xl animate-pulse"></div>)}
                 </div>
-                <div className="h-96 w-full bg-[var(--color-surface-light)] rounded-2xl animate-pulse"></div>
+                <div className="h-96 w-full bg-white rounded-2xl animate-pulse"></div>
             </div>
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-[var(--color-bg-dark)] text-white relative">
+        <div className="min-h-screen bg-gray-50 text-gray-900 relative">
             <Navbar />
             <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
                 <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                     <div>
-                        <h1 className="text-4xl font-semibold mb-4 text-white">Admin Console</h1>
-                        <p className="text-zinc-400">Manage platform users and course content.</p>
+                        <h1 className="text-4xl font-semibold mb-4 text-gray-900">Admin Console</h1>
+                        <p className="text-gray-500">Manage platform users and course content.</p>
                     </div>
                     {activeTab === 'courses' && (
                         <Link
@@ -131,30 +131,30 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Tabs */}
-                <div className="flex gap-4 mb-8 border-b border-zinc-800">
+                <div className="flex gap-4 mb-8 border-b border-gray-200">
                     <button
                         onClick={() => { setActiveTab('courses'); setSearchTerm(""); }}
-                        className={`pb-4 px-2 font-bold text-sm transition-all border-b-2 ${activeTab === 'courses' ? 'text-cyan-400 border-cyan-400' : 'text-zinc-500 border-transparent hover:text-zinc-300'}`}
+                        className={`pb-4 px-2 font-bold text-sm transition-all border-b-2 ${activeTab === 'courses' ? 'text-cyan-400 border-cyan-400' : 'text-gray-400 border-transparent hover:text-gray-700'}`}
                     >
                         Course Management
                     </button>
                     <button
                         onClick={() => { setActiveTab('users'); setSearchTerm(""); }}
-                        className={`pb-4 px-2 font-bold text-sm transition-all border-b-2 ${activeTab === 'users' ? 'text-cyan-400 border-cyan-400' : 'text-zinc-500 border-transparent hover:text-zinc-300'}`}
+                        className={`pb-4 px-2 font-bold text-sm transition-all border-b-2 ${activeTab === 'users' ? 'text-cyan-400 border-cyan-400' : 'text-gray-400 border-transparent hover:text-gray-700'}`}
                     >
                         User Directory
                     </button>
                 </div>
 
                 {/* Management Section */}
-                <div className="glass-card overflow-hidden p-0">
-                    <div className="p-6 border-b border-[var(--color-border-subtle)] flex flex-col md:flex-row justify-between items-center gap-4">
-                        <h2 className="text-xl font-bold flex items-center gap-2 text-white">
+                <div className="edu-card overflow-hidden p-0">
+                    <div className="p-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <h2 className="text-xl font-bold flex items-center gap-2 text-gray-900">
                             {activeTab === 'courses' ? <BookOpen size={20} className="text-violet-400" /> : <Users size={20} className="text-cyan-400" />}
                             {activeTab === 'courses' ? 'Platform Courses' : 'User Management'}
                         </h2>
                         <div className="relative w-full md:w-64">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                             <label htmlFor="admin-search" className="sr-only">Search</label>
                             <input
                                 id="admin-search"
@@ -162,7 +162,7 @@ const AdminDashboard = () => {
                                 placeholder={`Search ${activeTab}...`}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-[var(--color-bg-dark)] border border-[var(--color-border-subtle)] rounded-xl py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                                className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
                             />
                         </div>
                     </div>
@@ -176,7 +176,7 @@ const AdminDashboard = () => {
                                     className="w-full text-left"
                                 >
                                     <thead>
-                                        <tr className="text-xs font-semibold text-zinc-400 uppercase tracking-widest bg-[var(--color-surface-light)]/20">
+                                        <tr className="text-xs font-semibold text-gray-500 uppercase tracking-widest bg-white/20">
                                             <th className="px-6 py-4">Course Info</th>
                                             <th className="px-6 py-4">Lessons</th>
                                             <th className="px-6 py-4">Difficulty</th>
@@ -186,17 +186,17 @@ const AdminDashboard = () => {
                                     </thead>
                                     <tbody className="divide-y divide-[var(--color-border-subtle)]">
                                         {filteredCourses.map((course) => (
-                                            <tr key={course._id} className="hover:bg-[var(--color-surface-light)] transition-colors group">
+                                            <tr key={course._id} className="hover:bg-white transition-colors group">
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-3">
-                                                        <img src={course.thumbnail} alt={course.title} className="w-12 h-8 rounded object-cover border border-zinc-800" />
+                                                        <img src={course.thumbnail} alt={course.title} className="w-12 h-8 rounded object-cover border border-gray-200" />
                                                         <div>
-                                                            <p className="font-bold text-sm text-white">{course.title}</p>
-                                                            <p className="text-xs text-zinc-500">{course.category}</p>
+                                                            <p className="font-bold text-sm text-gray-900">{course.title}</p>
+                                                            <p className="text-xs text-gray-400">{course.category}</p>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 text-sm text-zinc-400">
+                                                <td className="px-6 py-4 text-sm text-gray-500">
                                                     {course.lessons?.length || 0} Lessons
                                                 </td>
                                                 <td className="px-6 py-4">
@@ -223,14 +223,14 @@ const AdminDashboard = () => {
                                                     <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                         <button
                                                             onClick={() => navigate(`/admin/edit-course/${course._id}`)}
-                                                            className="p-2 text-zinc-400 hover:text-indigo-400 bg-zinc-800/50 rounded-lg hover:bg-zinc-800 transition-colors"
+                                                            className="p-2 text-gray-500 hover:text-indigo-400 bg-gray-100 rounded-lg hover:bg-gray-100 transition-colors"
                                                             title="Edit"
                                                         >
                                                             <Edit size={16} />
                                                         </button>
                                                         <button
                                                             onClick={() => triggerDelete(course._id)}
-                                                            className="p-2 text-zinc-400 hover:text-red-400 bg-zinc-800/50 rounded-lg hover:bg-zinc-800 transition-colors"
+                                                            className="p-2 text-gray-500 hover:text-red-400 bg-gray-100 rounded-lg hover:bg-gray-100 transition-colors"
                                                             title="Delete"
                                                         >
                                                             <Trash2 size={16} />
@@ -248,7 +248,7 @@ const AdminDashboard = () => {
                                     className="w-full text-left"
                                 >
                                     <thead>
-                                        <tr className="text-xs font-semibold text-zinc-400 uppercase tracking-widest bg-[var(--color-surface-light)]/20">
+                                        <tr className="text-xs font-semibold text-gray-500 uppercase tracking-widest bg-white/20">
                                             <th className="px-6 py-4">User</th>
                                             <th className="px-6 py-4">Activity Stats</th>
                                             <th className="px-6 py-4">Progress</th>
@@ -258,15 +258,15 @@ const AdminDashboard = () => {
                                     </thead>
                                     <tbody className="divide-y divide-[var(--color-border-subtle)]">
                                         {filteredUsers.map((user) => (
-                                            <tr key={user._id} className="hover:bg-[var(--color-surface-light)] transition-colors group">
+                                            <tr key={user._id} className="hover:bg-white transition-colors group">
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-400">
+                                                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
                                                             <UserIcon size={16} />
                                                         </div>
                                                         <div>
-                                                            <p className="font-bold text-sm text-white">{user.fullName}</p>
-                                                            <p className="text-xs text-zinc-500">{user.email}</p>
+                                                            <p className="font-bold text-sm text-gray-900">{user.fullName}</p>
+                                                            <p className="text-xs text-gray-400">{user.email}</p>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -277,17 +277,17 @@ const AdminDashboard = () => {
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <div className="text-xs text-zinc-400 mb-1">{user.enrolledCourses?.length || 0} Enrolled</div>
-                                                    <div className="w-24 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                                                    <div className="text-xs text-gray-500 mb-1">{user.enrolledCourses?.length || 0} Enrolled</div>
+                                                    <div className="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                                         <div className="h-full bg-indigo-500" style={{ width: `${Math.min(100, (user.enrolledCourses?.length || 0) * 10)}%` }} />
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <span className={`text-xs font-bold uppercase px-2 py-0.5 rounded ${user.role === 'admin' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'bg-[var(--color-surface-light)] text-zinc-400 border border-[var(--color-border-subtle)]'}`}>
+                                                    <span className={`text-xs font-bold uppercase px-2 py-0.5 rounded ${user.role === 'admin' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'bg-white text-gray-500 border border-gray-200'}`}>
                                                         {user.role}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-4 text-right text-xs text-zinc-500">
+                                                <td className="px-6 py-4 text-right text-xs text-gray-400">
                                                     {new Date(user.createdAt).toLocaleDateString()}
                                                 </td>
                                             </tr>
@@ -313,7 +313,7 @@ const AdminDashboard = () => {
                             initial={{ scale: 0.95, opacity: 0, y: 10 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.95, opacity: 0, y: 10 }}
-                            className="bg-[var(--color-surface)] border border-[var(--color-border-subtle)] rounded-2xl p-6 max-w-sm w-full shadow-2xl relative overflow-hidden"
+                            className="bg-[var(--color-surface)] border border-gray-200 rounded-2xl p-6 max-w-sm w-full shadow-2xl relative overflow-hidden"
                         >
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-rose-500"></div>
                             <div className="flex items-center gap-4 mb-4">
@@ -321,20 +321,20 @@ const AdminDashboard = () => {
                                     <Trash2 size={24} />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-white">Delete Course?</h3>
-                                    <p className="text-zinc-400 text-sm mt-1">This action cannot be undone.</p>
+                                    <h3 className="text-xl font-bold text-gray-900">Delete Course?</h3>
+                                    <p className="text-gray-500 text-sm mt-1">This action cannot be undone.</p>
                                 </div>
                             </div>
                             <div className="flex gap-3 mt-8">
                                 <button 
                                     onClick={() => setDeleteModal({ isOpen: false, courseId: null })}
-                                    className="flex-1 py-2.5 rounded-xl font-medium bg-[var(--color-surface-light)] text-white hover:bg-[var(--color-border-hover)] transition-colors border border-[var(--color-border-subtle)]"
+                                    className="flex-1 py-2.5 rounded-xl font-medium bg-white text-gray-900 hover:bg-[var(--color-border-hover)] transition-colors border border-gray-200"
                                 >
                                     Cancel
                                 </button>
                                 <button 
                                     onClick={confirmDelete}
-                                    className="flex-1 py-2.5 rounded-xl font-medium bg-red-500 text-white hover:bg-red-600 transition-colors shadow-sm"
+                                    className="flex-1 py-2.5 rounded-xl font-medium bg-red-500 text-gray-900 hover:bg-red-600 transition-colors shadow-sm"
                                 >
                                     Yes, Delete
                                 </button>
@@ -356,12 +356,12 @@ const StatCard = ({ icon: Icon, label, value, color }) => {
     };
 
     return (
-        <div className="glass-card p-6 flex items-center gap-5">
+        <div className="edu-card p-6 flex items-center gap-5">
             <div className={`p-4 rounded-2xl border ${colors[color]}`}>
                 <Icon size={24} />
             </div>
             <div>
-                <p className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{label}</p>
+                <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider">{label}</p>
                 <p className="text-3xl font-black">{value}</p>
             </div>
         </div>

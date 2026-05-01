@@ -150,17 +150,17 @@ const Community = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
-                <Loader2 className="animate-spin text-cyan-500" size={48} />
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <Loader2 className="animate-spin text-violet-600" size={48} />
             </div>
         );
     }
 
     if (!course) {
         return (
-            <div className="min-h-screen bg-[#09090b] flex flex-col items-center justify-center p-6 text-center text-white">
+            <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6 text-center text-gray-900">
                 <h1 className="text-2xl font-bold mb-4">Course not found</h1>
-                <Link to="/courses" className="px-6 py-2 bg-cyan-500 text-black font-bold rounded-xl">Back to Courses</Link>
+                <Link to="/courses" className="px-6 py-2 bg-violet-600 text-white font-bold rounded-xl">Back to Courses</Link>
             </div>
         );
     }
@@ -172,47 +172,47 @@ const Community = () => {
     const hasAccess = isLoggedIn && isEnrolled;
 
     return (
-        <div className="min-h-screen bg-[#09090b] text-white flex flex-col relative overflow-hidden">
+        <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col relative overflow-hidden">
             <BackgroundAnimation />
             <Navbar />
 
             <div className="flex-grow flex flex-col max-w-6xl w-full mx-auto pt-24 pb-8 px-4 sm:px-6 relative z-10 h-screen max-h-screen">
                 
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-zinc-900/60 backdrop-blur-xl border border-white/10 rounded-3xl p-6 mb-4 mt-8 flex-shrink-0">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white border border-gray-200 shadow-sm rounded-3xl p-6 mb-4 mt-8 flex-shrink-0">
                     <div>
                         <button
                             onClick={() => navigate(`/course-detail/${courseId}`)}
-                            className="flex items-center gap-2 text-zinc-500 hover:text-cyan-400 transition-colors mb-2 group text-sm"
+                            className="flex items-center gap-2 text-gray-400 hover:text-violet-600 transition-colors mb-2 group text-sm"
                         >
                             <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                             <span>Course Detail</span>
                         </button>
-                        <h1 className="text-2xl font-black text-white flex items-center gap-3">
-                            <MessageSquare className="text-cyan-500" />
+                        <h1 className="text-2xl font-black text-gray-900 flex items-center gap-3">
+                            <MessageSquare className="text-violet-600" />
                             {course.title} Community
                         </h1>
                     </div>
-                    <div className="flex items-center gap-2 mt-4 sm:mt-0 text-sm font-medium bg-cyan-500/10 text-cyan-400 px-4 py-2 rounded-xl border border-cyan-500/20">
+                    <div className="flex items-center gap-2 mt-4 sm:mt-0 text-sm font-medium bg-violet-600/10 text-violet-600 px-4 py-2 rounded-xl border border-violet-100">
                         <Users size={16} /> Active Discussion
                     </div>
                 </div>
 
                 {/* Main Content Area */}
-                <div className="flex-grow relative h-full flex flex-col rounded-3xl border border-white/5 bg-black/40 backdrop-blur-md overflow-hidden">
+                <div className="flex-grow relative h-full flex flex-col rounded-3xl bg-white border border-gray-200 shadow-md backdrop-blur-md overflow-hidden">
                     
                     {!hasAccess && (
-                        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-6 text-center">
+                        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-gray-50/80 backdrop-blur-sm p-6 text-center">
                             <motion.div 
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                className="bg-zinc-900 border border-white/10 p-8 rounded-3xl max-w-md w-full shadow-2xl"
+                                className="bg-white border border-gray-200 p-8 rounded-3xl max-w-md w-full shadow-2xl"
                             >
                                 <div className="w-16 h-16 bg-blue-500/20 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
                                     <Lock size={32} />
                                 </div>
                                 <h2 className="text-2xl font-black mb-2">Restricted Access</h2>
-                                <p className="text-zinc-400 mb-8">
+                                <p className="text-gray-500 mb-8">
                                     {!isLoggedIn 
                                         ? "This is a premium community. You must be logged in to join the discussion." 
                                         : "You must be enrolled in this course to access its private community."}
@@ -220,14 +220,14 @@ const Community = () => {
                                 {!isLoggedIn ? (
                                     <button 
                                         onClick={() => navigate('/auth')}
-                                        className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-bold rounded-xl transition-all"
+                                        className="w-full py-3 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl transition-all"
                                     >
                                         Log In / Sign Up
                                     </button>
                                 ) : (
                                     <button 
                                         onClick={() => navigate(`/course-detail/${courseId}`)}
-                                        className="w-full py-3 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-xl transition-all"
+                                        className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all"
                                     >
                                         View Course Overview
                                     </button>
@@ -237,10 +237,10 @@ const Community = () => {
                     )}
 
                     {/* Messages Feed */}
-                    <div className="flex-grow overflow-y-auto p-4 sm:p-6 space-y-6 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
+                    <div className="flex-grow overflow-y-auto p-4 sm:p-6 space-y-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
                         <AnimatePresence>
                             {hasAccess && messages.length === 0 && (
-                                <div className="h-full flex items-center justify-center text-zinc-500">
+                                <div className="h-full flex items-center justify-center text-gray-400">
                                     <p>No messages yet. Be the first to start the conversation!</p>
                                 </div>
                             )}
@@ -259,7 +259,7 @@ const Community = () => {
                                         className={`flex flex-col ${isMine ? 'items-end' : 'items-start'}`}
                                     >
                                         <div className="flex items-center gap-2 mb-1">
-                                            <span className="text-xs font-bold text-zinc-400">
+                                            <span className="text-xs font-bold text-gray-500">
                                                 {msg.sender?.fullName || 'User'}
                                             </span>
                                             <span className="text-[10px] text-zinc-600">
@@ -268,7 +268,7 @@ const Community = () => {
                                         </div>
 
                                         <div className={`relative max-w-[85%] sm:max-w-[70%] group rounded-2xl px-5 py-3 ${
-                                            isMine ? 'bg-cyan-500 text-black ml-auto rounded-tr-none' : 'bg-zinc-800 text-white rounded-tl-none'
+                                            isMine ? 'bg-violet-600 text-white ml-auto rounded-tr-none' : 'bg-gray-100 text-gray-900 rounded-tl-none'
                                         }`}>
                                             {isPending && (
                                                 <div className="absolute -top-3 right-0 bg-yellow-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full z-10 shadow-lg">
@@ -287,8 +287,8 @@ const Community = () => {
                                             {/* Admin Controls Overlay */}
                                             {isAdmin && isPending && (
                                                 <div className="mt-3 flex gap-2">
-                                                    <button onClick={() => handleModerate(msg._id, 'approve')} className="flex items-center gap-1 bg-green-500 text-white text-xs px-2 py-1 rounded hover:bg-green-600"><CheckCircle size={14}/> Approve</button>
-                                                    <button onClick={() => handleModerate(msg._id, 'reject')} className="flex items-center gap-1 bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600"><XCircle size={14}/> Reject</button>
+                                                    <button onClick={() => handleModerate(msg._id, 'approve')} className="flex items-center gap-1 bg-green-500 text-gray-900 text-xs px-2 py-1 rounded hover:bg-green-600"><CheckCircle size={14}/> Approve</button>
+                                                    <button onClick={() => handleModerate(msg._id, 'reject')} className="flex items-center gap-1 bg-red-500 text-gray-900 text-xs px-2 py-1 rounded hover:bg-red-600"><XCircle size={14}/> Reject</button>
                                                 </div>
                                             )}
 
@@ -311,11 +311,11 @@ const Community = () => {
                     </div>
 
                     {/* Input Area */}
-                    <div className={`p-4 sm:p-6 bg-zinc-900/80 border-t border-white/5 ${!hasAccess ? 'pointer-events-none opacity-50' : ''}`}>
+                    <div className={`p-4 sm:p-6 bg-gray-50 border-t border-gray-200 ${!hasAccess ? 'pointer-events-none opacity-50' : ''}`}>
                         <form onSubmit={handleSendMessage} className="flex items-end gap-3">
                             
-                            <div className="flex-grow relative bg-black/50 border border-white/10 rounded-2xl flex items-end min-h-[56px] px-2 py-2 transition-all focus-within:border-cyan-500/50 focus-within:ring-1 focus-within:ring-cyan-500/50">
-                                <label className="cursor-pointer p-2 text-zinc-400 hover:text-cyan-400 transition-colors flex-shrink-0">
+                            <div className="flex-grow relative bg-black/50 border border-gray-200 rounded-2xl flex items-end min-h-[56px] px-2 py-2 transition-all focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500">
+                                <label className="cursor-pointer p-2 text-gray-500 hover:text-violet-600 transition-colors flex-shrink-0">
                                     <input 
                                         type="file" 
                                         accept="image/jpeg, image/png, image/webp"
@@ -334,16 +334,16 @@ const Community = () => {
                                 
                                 <div className="flex-grow flex flex-col justify-center">
                                     {selectedImage && (
-                                        <div className="flex items-center gap-2 mb-1 px-3 py-1 bg-cyan-500/10 text-cyan-400 text-xs rounded-lg w-max">
+                                        <div className="flex items-center gap-2 mb-1 px-3 py-1 bg-violet-600/10 text-violet-600 text-xs rounded-lg w-max">
                                             <ImageIcon size={12} /> {selectedImage.name}
-                                            <button type="button" onClick={() => setSelectedImage(null)} className="hover:text-white"><XCircle size={14}/></button>
+                                            <button type="button" onClick={() => setSelectedImage(null)} className="hover:text-gray-900"><XCircle size={14}/></button>
                                         </div>
                                     )}
                                     <textarea
                                         value={newMessage}
                                         onChange={(e) => setNewMessage(e.target.value)}
                                         placeholder="Type your message..."
-                                        className="w-full bg-transparent border-none text-sm text-white placeholder:text-zinc-600 px-2 py-1 max-h-32 resize-none focus:outline-none focus:ring-0"
+                                        className="w-full bg-transparent border-none text-sm text-gray-900 placeholder:text-gray-400 px-2 py-1 max-h-32 resize-none focus:outline-none focus:ring-0"
                                         rows={Math.min(4, Math.max(1, newMessage.split('\n').length))}
                                         onKeyDown={(e) => {
                                             if (e.key === 'Enter' && !e.shiftKey) {
@@ -358,7 +358,7 @@ const Community = () => {
                             <button
                                 type="submit"
                                 disabled={(!newMessage.trim() && !selectedImage) || uploading}
-                                className="bg-cyan-500 hover:bg-cyan-400 disabled:opacity-50 disabled:hover:bg-cyan-500 text-black p-4 rounded-2xl transition-colors flex-shrink-0"
+                                className="bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:hover:bg-violet-600 text-white p-4 rounded-2xl transition-colors flex-shrink-0"
                             >
                                 {uploading ? <Loader2 size={24} className="animate-spin" /> : <Send size={24} />}
                             </button>

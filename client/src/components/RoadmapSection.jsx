@@ -20,7 +20,7 @@ const ROADMAPS = {
         description:
             'Master HTML, CSS, JavaScript and modern frameworks like React to create stunning web experiences that delight users.',
         icon: Monitor,
-        accentColor: '#00FF00',
+        accentColor: '#7C3AED',
         accentMuted: 'rgba(0,255,0,0.12)',
         stages: [
             {
@@ -128,7 +128,7 @@ const ROADMAPS = {
         description:
             'Learn server-side programming, databases, APIs, and cloud services to build scalable backend systems.',
         icon: Server,
-        accentColor: '#ADFF2F',
+        accentColor: '#2563EB',
         accentMuted: 'rgba(173,255,47,0.1)',
         stages: [
             {
@@ -236,7 +236,7 @@ const ROADMAPS = {
         description:
             'Combine frontend and backend skills to build complete web applications from database to user interface.',
         icon: Layers,
-        accentColor: '#FFD700',
+        accentColor: '#D97706',
         accentMuted: 'rgba(255,215,0,0.1)',
         stages: [
             {
@@ -563,7 +563,7 @@ const ROADMAPS = {
         description:
             'Design, train, and deploy machine learning models at scale for production environments and real-world applications.',
         icon: FlaskConical,
-        accentColor: '#A78BFA',
+        accentColor: '#4F46E5',
         accentMuted: 'rgba(167,139,250,0.1)',
         duration: '7–10 months',
         phases: 8,
@@ -704,8 +704,8 @@ const StageItem = ({ stage, index, accent }) => {
         <div
             className="rounded-2xl border transition-all duration-300"
             style={{
-                background: open ? 'rgba(255,255,255,0.02)' : 'var(--color-surface)',
-                borderColor: open ? `${accent}40` : 'var(--color-border-subtle)',
+                background: open ? 'rgba(0,0,0,0.02)' : '#ffffff',
+                borderColor: open ? `${accent}40` : '#e5e7eb',
                 boxShadow: open ? `0 0 24px ${accent}12` : 'none',
             }}
         >
@@ -719,15 +719,15 @@ const StageItem = ({ stage, index, accent }) => {
                 <div className="flex items-center gap-4">
                     <span
                         className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300"
-                        style={{ background: open ? `${accent}20` : 'var(--color-surface-light)', border: `1px solid ${accent}30` }}
+                        style={{ background: open ? `${accent}20` : '#f9fafb', border: `1px solid ${accent}30` }}
                     >
                         <Icon size={18} style={{ color: accent }} />
                     </span>
-                    <span className="font-semibold text-white text-sm md:text-base">{stage.title}</span>
+                    <span className="font-semibold text-gray-900 text-sm md:text-base">{stage.title}</span>
                 </div>
                 <ChevronDown
                     size={18}
-                    className="flex-shrink-0 text-[var(--color-text-dim)] transition-transform duration-300"
+                    className="flex-shrink-0 text-[#6b7280] transition-transform duration-300"
                     style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', color: open ? accent : undefined }}
                 />
             </button>
@@ -751,7 +751,7 @@ const StageItem = ({ stage, index, accent }) => {
                                     className="px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all duration-200"
                                     style={{
                                         background: tab === 'topics' ? `${accent}20` : 'transparent',
-                                        color: tab === 'topics' ? accent : 'var(--color-text-dim)',
+                                        color: tab === 'topics' ? accent : '#6b7280',
                                         border: `1px solid ${tab === 'topics' ? `${accent}40` : 'transparent'}`,
                                     }}
                                 >
@@ -762,7 +762,7 @@ const StageItem = ({ stage, index, accent }) => {
                                     className="px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all duration-200"
                                     style={{
                                         background: tab === 'resources' ? `${accent}20` : 'transparent',
-                                        color: tab === 'resources' ? accent : 'var(--color-text-dim)',
+                                        color: tab === 'resources' ? accent : '#6b7280',
                                         border: `1px solid ${tab === 'resources' ? `${accent}40` : 'transparent'}`,
                                     }}
                                 >
@@ -776,7 +776,7 @@ const StageItem = ({ stage, index, accent }) => {
                             {tab === 'topics' && (
                                 <ul className="grid sm:grid-cols-2 gap-2">
                                     {stage.topics.map((topic, i) => (
-                                        <li key={i} className="flex items-start gap-2.5 text-sm text-[var(--color-text-muted)]">
+                                        <li key={i} className="flex items-start gap-2.5 text-sm text-[#4b5563]">
                                             <CheckCircle2
                                                 size={15}
                                                 className="mt-0.5 flex-shrink-0"
@@ -799,21 +799,21 @@ const StageItem = ({ stage, index, accent }) => {
                                             rel="noopener noreferrer"
                                             className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group/res"
                                             style={{
-                                                background: 'var(--color-surface-light)',
-                                                border: '1px solid var(--color-border-subtle)',
+                                                background: '#f9fafb',
+                                                border: '1px solid #e5e7eb',
                                             }}
                                             onMouseEnter={e => { e.currentTarget.style.borderColor = `${accent}40`; e.currentTarget.style.background = `${accent}08`; }}
-                                            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--color-border-subtle)'; e.currentTarget.style.background = 'var(--color-surface-light)'; }}
+                                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.background = '#f9fafb'; }}
                                         >
                                             {res.type === 'youtube' ? (
                                                 <Youtube size={15} className="flex-shrink-0" style={{ color: '#FF0000' }} />
                                             ) : (
                                                 <Globe size={15} className="flex-shrink-0" style={{ color: accent }} />
                                             )}
-                                            <span className="text-sm text-[var(--color-text-muted)] group-hover/res:text-white transition-colors flex-1">
+                                            <span className="text-sm text-[#4b5563] group-hover/res:text-gray-900 transition-colors flex-1">
                                                 {res.label}
                                             </span>
-                                            <ExternalLink size={12} className="flex-shrink-0 text-[var(--color-text-dim)] group-hover/res:text-white transition-colors" />
+                                            <ExternalLink size={12} className="flex-shrink-0 text-[#6b7280] group-hover/res:text-gray-900 transition-colors" />
                                         </a>
                                     ))}
 
@@ -823,8 +823,8 @@ const StageItem = ({ stage, index, accent }) => {
                                         style={{ background: `${accent}0A`, border: `1px dashed ${accent}30` }}
                                     >
                                         <div>
-                                            <p className="text-sm font-semibold text-white mb-0.5">Learn on EduNex</p>
-                                            <p className="text-xs text-[var(--color-text-dim)]">Browse structured courses on this topic</p>
+                                            <p className="text-sm font-semibold text-gray-900 mb-0.5">Learn on EduNex</p>
+                                            <p className="text-xs text-[#6b7280]">Browse structured courses on this topic</p>
                                         </div>
                                         <Link
                                             to="/courses"
@@ -860,7 +860,7 @@ const OverviewCard = ({ roadmap, onClick, index }) => {
             tabIndex={0}
             onKeyDown={e => e.key === 'Enter' && onClick()}
             aria-label={`Open ${roadmap.label} roadmap`}
-            className="glow-card group cursor-pointer flex flex-col relative overflow-hidden"
+            className="edu-card group cursor-pointer flex flex-col relative overflow-hidden"
             style={{ outline: 'none' }}
         >
             {/* Glow orb */}
@@ -877,24 +877,24 @@ const OverviewCard = ({ roadmap, onClick, index }) => {
                 <Icon size={26} style={{ color: roadmap.accentColor }} />
             </div>
 
-            <h3 className="text-xl font-bold text-white mb-1">{roadmap.label}</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-1">{roadmap.label}</h3>
             <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: roadmap.accentColor }}>
                 {roadmap.tagline}
             </p>
-            <p className="text-sm text-[var(--color-text-muted)] leading-relaxed flex-1">
+            <p className="text-sm text-[#4b5563] leading-relaxed flex-1">
                 {roadmap.description}
             </p>
 
             {/* Duration & phases badges */}
             <div className="mt-5 flex items-center gap-3">
                 {roadmap.duration && (
-                    <span className="flex items-center gap-1.5 text-[11px] font-semibold text-[var(--color-text-muted)]">
+                    <span className="flex items-center gap-1.5 text-[11px] font-semibold text-[#4b5563]">
                         <Clock size={12} style={{ color: roadmap.accentColor }} />
                         {roadmap.duration}
                     </span>
                 )}
                 {roadmap.phases && (
-                    <span className="flex items-center gap-1.5 text-[11px] font-semibold text-[var(--color-text-muted)]">
+                    <span className="flex items-center gap-1.5 text-[11px] font-semibold text-[#4b5563]">
                         <Flag size={12} style={{ color: roadmap.accentColor }} />
                         {roadmap.phases} Phases
                     </span>
@@ -977,8 +977,8 @@ const RoadmapDetail = ({ roadmap, onBack }) => {
                         >
                             <Map size={12} /> Learning Roadmap
                         </span>
-                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">{roadmap.label}</h2>
-                        <p className="text-[var(--color-text-muted)] max-w-xl">{roadmap.description}</p>
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{roadmap.label}</h2>
+                        <p className="text-[#4b5563] max-w-xl">{roadmap.description}</p>
                     </div>
                 </div>
             </div>
@@ -1037,7 +1037,7 @@ const RoadmapSection = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-5xl font-bold text-white mb-4"
+                        className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
                     >
                         Structured Learning <br />
                         <span className="text-gradient">Paths to Your Dream Role</span>
@@ -1047,7 +1047,7 @@ const RoadmapSection = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="text-[var(--color-text-muted)] text-lg max-w-2xl mx-auto"
+                        className="text-[#4b5563] text-lg max-w-2xl mx-auto"
                     >
                         Click any role below to explore a stage-by-stage learning roadmap — from zero to interview-ready.
                     </motion.p>

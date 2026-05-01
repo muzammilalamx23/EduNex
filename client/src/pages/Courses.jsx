@@ -27,7 +27,7 @@ const CourseCard = ({ title, instructor, lessons, rating, difficulty, thumbnail,
             style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}
         >
             {/* Thumbnail */}
-            <div className="h-48 bg-[var(--color-surface-light)] relative overflow-hidden">
+            <div className="h-48 bg-white relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-surface)] via-transparent to-transparent z-10"></div>
                 <img
                     src={thumbnail || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'}
@@ -35,21 +35,21 @@ const CourseCard = ({ title, instructor, lessons, rating, difficulty, thumbnail,
                     className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700 ease-out"
                 />
                 {/* Difficulty badge */}
-                <div className={`absolute top-4 left-4 z-20 px-3 py-1.5 rounded-lg backdrop-blur-md border text-xs font-bold tracking-wide ${difficultyColors[difficulty] || 'bg-white/10 text-white border-white/10'}`}>
+                <div className={`absolute top-4 left-4 z-20 px-3 py-1.5 rounded-lg backdrop-blur-md border text-xs font-bold tracking-wide ${difficultyColors[difficulty] || 'bg-white/10 text-gray-900 border-white/10'}`}>
                     {difficulty}
                 </div>
             </div>
 
             {/* Content */}
             <div className="p-6 flex-1 flex flex-col">
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-1">
+                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-violet-600 transition-colors line-clamp-1">
                     {title}
                 </h3>
                 <p className="text-[var(--color-text-dim)] text-sm mb-5">
-                    Instructor: <span className="text-white font-medium">{instructor || 'Platform Admin'}</span>
+                    Instructor: <span className="text-gray-900 font-medium">{instructor || 'Platform Admin'}</span>
                 </p>
 
-                <div className="flex items-center gap-4 text-xs text-zinc-500 mt-auto">
+                <div className="flex items-center gap-4 text-xs text-gray-400 mt-auto">
                     <div className="flex items-center gap-1.5">
                         <BookOpen size={14} className="text-zinc-600" />
                         {lessons?.length || 0} Lessons
@@ -66,7 +66,7 @@ const CourseCard = ({ title, instructor, lessons, rating, difficulty, thumbnail,
                         e.stopPropagation();
                         navigate(`/course-detail/${id}`);
                     }}
-                    className="w-full mt-6 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 border border-white/[0.06] bg-white/[0.02] text-white group-hover:bg-blue-500 group-hover:border-blue-500 group-hover:shadow-[0_4px_16px_rgba(16,185,129,0.25)]"
+                    className="w-full mt-6 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 border border-gray-200 bg-gray-50 text-gray-900 group-hover:bg-violet-600 group-hover:text-white group-hover:border-violet-600 group-hover:shadow-[0_4px_16px_rgba(124,58,237,0.25)]"
                 >
                     Explore Course
                     <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -129,7 +129,7 @@ const Courses = () => {
 
 
     return (
-        <div className="min-h-screen bg-[var(--color-bg-dark)] text-white relative">
+        <div className="min-h-screen bg-gray-50 text-gray-900 relative">
             <BackgroundAnimation />
             <Navbar />
 
@@ -149,7 +149,7 @@ const Courses = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-6xl font-bold mb-5 text-white"
+                        className="text-4xl md:text-6xl font-bold mb-5 text-gray-900"
                     >
                         Curated <span className="text-gradient">Learning</span> Experience
                     </motion.h1>
@@ -180,7 +180,7 @@ const Courses = () => {
                             placeholder="Search courses..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="bg-[var(--color-surface)] border border-white/[0.06] rounded-xl py-3.5 pl-12 pr-6 w-full focus:outline-none focus:border-blue-500/50 transition-all text-sm text-white placeholder:text-zinc-600"
+                            className="bg-[var(--color-surface)] border border-white/[0.06] rounded-xl py-3.5 pl-12 pr-6 w-full focus:outline-none focus:border-blue-500/50 transition-all text-sm text-gray-900 placeholder:text-zinc-600"
                         />
                     </div>
 
@@ -193,8 +193,8 @@ const Courses = () => {
                                 onClick={() => setLevelFilter(level)}
                                 className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 border ${
                                     levelFilter === level
-                                        ? 'bg-blue-500/10 border-blue-500/30 text-blue-400'
-                                        : 'bg-transparent border-white/[0.06] text-zinc-400 hover:border-white/10 hover:text-white'
+                                        ? 'bg-violet-100 border-violet-300 text-violet-600'
+                                        : 'bg-transparent border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-900'
                                 }`}
                             >
                                 {level}
@@ -208,11 +208,11 @@ const Courses = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[1, 2, 3, 4, 5, 6].map((i) => (
                             <div key={i} className="rounded-2xl border border-white/[0.06] bg-[var(--color-surface)] overflow-hidden">
-                                <div className="h-48 bg-[var(--color-surface-light)] animate-pulse"></div>
+                                <div className="h-48 bg-white animate-pulse"></div>
                                 <div className="p-6 flex flex-col gap-4">
-                                    <div className="h-6 w-3/4 bg-[var(--color-surface-light)] rounded-lg animate-pulse"></div>
-                                    <div className="h-4 w-1/2 bg-[var(--color-surface-light)] rounded-lg animate-pulse"></div>
-                                    <div className="mt-auto h-12 w-full bg-[var(--color-surface-light)] rounded-xl animate-pulse"></div>
+                                    <div className="h-6 w-3/4 bg-white rounded-lg animate-pulse"></div>
+                                    <div className="h-4 w-1/2 bg-white rounded-lg animate-pulse"></div>
+                                    <div className="mt-auto h-12 w-full bg-white rounded-xl animate-pulse"></div>
                                 </div>
                             </div>
                         ))}
@@ -238,7 +238,7 @@ const Courses = () => {
                         className="text-center py-20 rounded-3xl border border-white/[0.06] bg-[var(--color-surface)]"
                     >
                         <BookOpen className="mx-auto text-zinc-700 mb-4" size={48} />
-                        <h3 className="text-xl font-semibold text-white mb-2">No courses match your criteria</h3>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">No courses match your criteria</h3>
                         <p className="text-[var(--color-text-dim)] text-sm mb-6">Try adjusting your search or filters</p>
                         <button
                             onClick={() => { setSearchTerm(''); setLevelFilter('All'); }}
@@ -254,7 +254,7 @@ const Courses = () => {
                     <div className="flex justify-center mt-12">
                         <button
                             onClick={() => setPage(p => p + 1)}
-                            className="px-8 py-3 rounded-xl bg-zinc-900 border border-white/[0.06] text-white font-semibold hover:border-blue-500/40 hover:text-blue-400 transition-all"
+                            className="px-8 py-3 rounded-xl bg-white border border-gray-200 text-gray-900 font-semibold hover:border-violet-300 hover:text-violet-600 transition-all"
                         >
                             Load More Courses
                         </button>
@@ -262,7 +262,7 @@ const Courses = () => {
                 )}
                 {loading && courses.length > 0 && (
                     <div className="flex justify-center mt-8">
-                        <div className="w-8 h-8 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+                        <div className="w-8 h-8 border-2 border-violet-500/20 border-t-violet-600 rounded-full animate-spin" />
                     </div>
                 )}
             </main>

@@ -93,12 +93,12 @@ const AdminCreateCourse = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#09090b] text-white">
+        <div className="min-h-screen bg-gray-50 text-gray-900">
             <Navbar />
             <main className="pt-32 pb-20 px-6 max-w-5xl mx-auto">
                 <button
                     onClick={() => navigate('/admin')}
-                    className="flex items-center gap-2 text-zinc-500 hover:text-white mb-8 transition-colors"
+                    className="flex items-center gap-2 text-gray-400 hover:text-gray-900 mb-8 transition-colors"
                 >
                     <ArrowLeft size={20} />
                     Back to Dashboard
@@ -106,35 +106,35 @@ const AdminCreateCourse = () => {
 
                 <header className="mb-12">
                     <h1 className="text-4xl font-black mb-4">Create New <span className="text-gradient">Course</span></h1>
-                    <p className="text-zinc-400">Add a new course to the platform with lessons and content.</p>
+                    <p className="text-gray-500">Add a new course to the platform with lessons and content.</p>
                 </header>
 
                 <form onSubmit={handleSubmit} className="space-y-8">
                     {/* Basic Info */}
-                    <div className="glass-card border-zinc-800 p-8 space-y-6">
-                        <div className="flex items-center gap-2 text-[#00FF00] font-bold mb-2">
+                    <div className="edu-card border-gray-200 p-8 space-y-6">
+                        <div className="flex items-center gap-2 text-violet-600 font-bold mb-2">
                             <Layout size={20} />
                             Course Basics
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Course Title</label>
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Course Title</label>
                                 <input
                                     required
                                     type="text"
                                     placeholder="e.g. Master React in 30 Days"
                                     value={courseData.title}
                                     onChange={(e) => setCourseData({ ...courseData, title: e.target.value })}
-                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
+                                    className="w-full bg-black/40 border border-gray-200 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Category</label>
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Category</label>
                                 <select
                                     value={courseData.category}
                                     onChange={(e) => setCourseData({ ...courseData, category: e.target.value })}
-                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors appearance-none"
+                                    className="w-full bg-black/40 border border-gray-200 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors appearance-none"
                                 >
                                     {CATEGORIES.map(cat => (
                                         <option key={cat} value={cat}>{cat}</option>
@@ -144,24 +144,24 @@ const AdminCreateCourse = () => {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Description</label>
+                            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Description</label>
                             <textarea
                                 required
                                 rows={4}
                                 placeholder="What will students learn in this course?"
                                 value={courseData.description}
                                 onChange={(e) => setCourseData({ ...courseData, description: e.target.value })}
-                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
+                                className="w-full bg-black/40 border border-gray-200 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                             />
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Difficulty</label>
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Difficulty</label>
                                 <select
                                     value={courseData.difficulty}
                                     onChange={(e) => setCourseData({ ...courseData, difficulty: e.target.value })}
-                                    className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors appearance-none"
+                                    className="w-full bg-black/40 border border-gray-200 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors appearance-none"
                                 >
                                     <option value="Beginner">Beginner</option>
                                     <option value="Intermediate">Intermediate</option>
@@ -169,15 +169,15 @@ const AdminCreateCourse = () => {
                                 </select>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Thumbnail URL</label>
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Thumbnail URL</label>
                                 <div className="relative">
-                                    <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+                                    <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                                     <input
                                         type="url"
                                         placeholder="https://images.unsplash.com/..."
                                         value={courseData.thumbnail}
                                         onChange={(e) => setCourseData({ ...courseData, thumbnail: e.target.value })}
-                                        className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-[#00FF00] transition-colors"
+                                        className="w-full bg-black/40 border border-gray-200 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                                     />
                                 </div>
                                 {/* Live thumbnail preview */}
@@ -185,7 +185,7 @@ const AdminCreateCourse = () => {
                                     <img
                                         src={courseData.thumbnail}
                                         alt="Thumbnail preview"
-                                        className="mt-2 w-full h-36 object-cover rounded-xl border border-zinc-800"
+                                        className="mt-2 w-full h-36 object-cover rounded-xl border border-gray-200"
                                         onError={(e) => { e.target.style.display = 'none'; }}
                                         onLoad={(e) => { e.target.style.display = 'block'; }}
                                     />
@@ -195,19 +195,19 @@ const AdminCreateCourse = () => {
 
                         {/* Tags */}
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Tags <span className="normal-case font-normal text-zinc-600">(comma-separated, e.g. async, closures, flexbox)</span></label>
+                            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Tags <span className="normal-case font-normal text-zinc-600">(comma-separated, e.g. async, closures, flexbox)</span></label>
                             <input
                                 type="text"
                                 placeholder="javascript, async, promises, closures"
                                 value={tagsInput}
                                 onChange={(e) => setTagsInput(e.target.value)}
-                                className="w-full bg-black/40 border border-zinc-800 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
+                                className="w-full bg-black/40 border border-gray-200 rounded-xl py-3 px-4 focus:outline-none focus:border-[#00FF00] transition-colors"
                             />
                             {/* Preview parsed tags */}
                             {tagsInput && (
                                 <div className="flex flex-wrap gap-2 mt-2">
                                     {tagsInput.split(',').map(t => t.trim()).filter(Boolean).map((tag, i) => (
-                                        <span key={i} className="px-3 py-1 rounded-full bg-[#00FF00]/10 border border-[#00FF00]/20 text-[#00FF00] text-xs font-medium">
+                                        <span key={i} className="px-3 py-1 rounded-full bg-violet-100 border border-violet-200 text-violet-600 text-xs font-medium">
                                             #{tag.toLowerCase()}
                                         </span>
                                     ))}
@@ -219,7 +219,7 @@ const AdminCreateCourse = () => {
                     {/* Lesson Builder */}
                     <div className="space-y-6">
                         <div className="flex justify-between items-center">
-                            <div className="flex items-center gap-2 text-[#00FF00] font-bold">
+                            <div className="flex items-center gap-2 text-violet-600 font-bold">
                                 <Video size={20} />
                                 Curriculum Builder
                             </div>
@@ -232,7 +232,7 @@ const AdminCreateCourse = () => {
                                             lessons: [...courseData.lessons, { title: '', type: 'heading', section: '' }]
                                         });
                                     }}
-                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#00FF00] hover:text-[#00E600] transition-colors"
+                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-violet-600 hover:text-[#00E600] transition-colors"
                                 >
                                     <Layout size={14} />
                                     Add Heading
@@ -240,7 +240,7 @@ const AdminCreateCourse = () => {
                                 <button
                                     type="button"
                                     onClick={addLesson}
-                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-lg transition-colors border border-zinc-700"
+                                    className="flex items-center gap-2 text-xs font-black uppercase tracking-widest bg-gray-100 hover:bg-zinc-700 px-4 py-2 rounded-lg transition-colors border border-zinc-700"
                                 >
                                     <Plus size={14} />
                                     Add Lesson
@@ -254,9 +254,9 @@ const AdminCreateCourse = () => {
                                     key={index}
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="glass-card border-zinc-800 bg-zinc-900/10 p-6 relative group"
+                                    className="edu-card border-gray-200 bg-white/10 p-6 relative group"
                                 >
-                                    <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-zinc-800 rounded-full flex items-center justify-center text-[10px] font-black border border-zinc-700">
+                                    <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-[10px] font-black border border-zinc-700">
                                         {index + 1}
                                     </div>
 
@@ -264,7 +264,7 @@ const AdminCreateCourse = () => {
                                         <div className="md:col-span-11 space-y-4">
                                             {lesson.type === 'heading' ? (
                                                 <div className="space-y-4">
-                                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#00FF00]">
+                                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-violet-600">
                                                         <Layout size={12} /> Curriculum Heading
                                                     </div>
                                                     <input
@@ -272,7 +272,7 @@ const AdminCreateCourse = () => {
                                                         placeholder="Section Heading Title (e.g. Phase 1: HTML Fundamentals)"
                                                         value={lesson.title}
                                                         onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
-                                                        className="w-full bg-[#00FF00]/5 border border-[#00FF00]/20 rounded-lg py-3 px-4 text-sm font-bold placeholder:font-normal focus:outline-none focus:border-[#00FF00] transition-colors"
+                                                        className="w-full bg-violet-600/5 border border-violet-200 rounded-lg py-3 px-4 text-sm font-bold placeholder:font-normal focus:outline-none focus:border-[#00FF00] transition-colors"
                                                     />
                                                 </div>
                                             ) : (
@@ -284,13 +284,13 @@ const AdminCreateCourse = () => {
                                                             placeholder="Lesson Title"
                                                             value={lesson.title}
                                                             onChange={(e) => handleLessonChange(index, 'title', e.target.value)}
-                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#00FF00]/60 transition-colors"
+                                                            className="w-full bg-black/20 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#00FF00]/60 transition-colors"
                                                         />
                                                         <input
                                                             placeholder="Section (e.g. HTML, CSS, Basics)"
                                                             value={lesson.section || ''}
                                                             onChange={(e) => handleLessonChange(index, 'section', e.target.value)}
-                                                            className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#00FF00]/60 transition-colors"
+                                                            className="w-full bg-black/20 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#00FF00]/60 transition-colors"
                                                         />
                                                     </div>
 
@@ -309,7 +309,7 @@ const AdminCreateCourse = () => {
                                                                             ? isValidYouTubeUrl(lesson.videoUrl)
                                                                                 ? 'border-green-500/60 focus:border-green-500'
                                                                                 : 'border-red-500/60 focus:border-red-500'
-                                                                            : 'border-zinc-800 focus:border-[#ADFF2F]'
+                                                                            : 'border-gray-200 focus:border-[#ADFF2F]'
                                                                     }`}
                                                                 />
                                                                 {/* Inline validation icon */}
@@ -333,7 +333,7 @@ const AdminCreateCourse = () => {
                                                                 />
                                                                 <div className="min-w-0">
                                                                     <p className="text-[10px] text-green-400 font-bold uppercase tracking-widest">YouTube detected</p>
-                                                                    <p className="text-[10px] text-zinc-500 font-mono truncate">ID: {vid}</p>
+                                                                    <p className="text-[10px] text-gray-400 font-mono truncate">ID: {vid}</p>
                                                                 </div>
                                                             </div>
                                                         ) : null;
@@ -351,7 +351,7 @@ const AdminCreateCourse = () => {
                                                         placeholder="PDF URL / Drive Link (Optional)"
                                                         value={lesson.pdfUrl || ''}
                                                         onChange={(e) => handleLessonChange(index, 'pdfUrl', e.target.value)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors"
+                                                        className="w-full bg-black/20 border border-gray-200 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors"
                                                     />
                                                 </div>
                                             </div>
@@ -365,7 +365,7 @@ const AdminCreateCourse = () => {
                                                         placeholder="Reading Content / Text Notes (Optional) — supports multiple paragraphs"
                                                         value={lesson.content}
                                                         onChange={(e) => handleLessonChange(index, 'content', e.target.value)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors resize-none"
+                                                        className="w-full bg-black/20 border border-gray-200 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors resize-none"
                                                     />
                                                 </div>
                                                 <div className="md:col-span-3 relative">
@@ -378,7 +378,7 @@ const AdminCreateCourse = () => {
                                                         placeholder="Mins"
                                                         value={lesson.duration}
                                                         onChange={(e) => handleLessonChange(index, 'duration', parseFloat(e.target.value) || 0)}
-                                                        className="w-full bg-black/20 border border-zinc-800 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors"
+                                                        className="w-full bg-black/20 border border-gray-200 rounded-lg py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[#ADFF2F] transition-colors"
                                                     />
                                                 </div>
                                             </div>
@@ -404,14 +404,14 @@ const AdminCreateCourse = () => {
                         <button
                             type="button"
                             onClick={() => navigate('/admin')}
-                            className="px-8 py-3 rounded-xl font-bold border border-zinc-800 hover:bg-zinc-900 transition-colors"
+                            className="px-8 py-3 rounded-xl font-bold border border-gray-200 hover:bg-white transition-colors"
                         >
                             Cancel
                         </button>
                         <button
                             disabled={loading}
                             type="submit"
-                            className="flex items-center gap-2 bg-gradient-to-r from-[#00FF00] to-[#ADFF2F] hover:from-[#00FF00] hover:to-teal-400 text-black px-10 py-3 rounded-xl font-black transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100"
+                            className="flex items-center gap-2 bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-500 hover:to-teal-400 text-black px-10 py-3 rounded-xl font-black transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100"
                         >
                             {loading ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                             Create Course

@@ -264,7 +264,7 @@ export default function Playground() {
   };
 
   return (
-    <div className="h-screen w-screen bg-[#030712] text-white overflow-hidden flex flex-col font-body relative">
+    <div className="h-screen w-screen bg-[#030712] text-gray-900 overflow-hidden flex flex-col font-body relative">
       
       {/* Floating XP Animation when they score points */}
       <AnimatePresence>
@@ -287,16 +287,16 @@ export default function Playground() {
       {/* ─── HEADER (GAMIFICATION FOCUS) ─── */}
       <header className="h-16 border-b border-white/[0.06] bg-[#0A0F1C] flex items-center justify-between px-4 shrink-0 shadow-lg z-20">
         <div className="flex items-center gap-6">
-          <button onClick={() => navigate(-1)} className="text-zinc-400 hover:text-white transition-colors p-2 bg-white/[0.02] rounded-lg">
+          <button onClick={() => navigate(-1)} className="text-gray-500 hover:text-gray-900 transition-colors p-2 bg-white/[0.02] rounded-lg">
             <ArrowLeft size={18} />
           </button>
           
           <div className="hidden md:flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
-              <Target size={18} className="text-white" />
+              <Target size={18} className="text-gray-900" />
             </div>
             <div>
-              <h1 className="font-bold text-[13px] leading-tight text-white mb-0.5">EduNex Arcade</h1>
+              <h1 className="font-bold text-[13px] leading-tight text-gray-900 mb-0.5">EduNex Arcade</h1>
               <p className="text-[9px] text-blue-400 uppercase tracking-widest font-black">HTML Mastery (10 Levels)</p>
             </div>
           </div>
@@ -323,14 +323,14 @@ export default function Playground() {
         <div className="flex items-center gap-3">
           <button 
             onClick={handleReset}
-            className="flex items-center gap-2 text-xs font-bold px-4 py-2.5 bg-white/[0.03] text-zinc-300 border border-white/[0.06] rounded-xl hover:bg-white/[0.06] hover:text-white transition-all"
+            className="flex items-center gap-2 text-xs font-bold px-4 py-2.5 bg-white/[0.03] text-gray-700 border border-white/[0.06] rounded-xl hover:bg-white/[0.06] hover:text-gray-900 transition-all"
           >
              <RefreshCw size={14} /> Restart
           </button>
           <button 
             onClick={handleReviewCode}
             disabled={progress > MISSIONS.length}
-            className="flex items-center gap-2 text-xs font-bold px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] disabled:opacity-50 disabled:pointer-events-none"
+            className="flex items-center gap-2 text-xs font-bold px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 text-gray-900 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] disabled:opacity-50 disabled:pointer-events-none"
           >
              <Sparkles size={14} /> Submit Code
           </button>
@@ -347,10 +347,10 @@ export default function Playground() {
           <div className="p-5 border-b border-light/[0.06] bg-[#0A0F1C]">
             <div className="flex justify-between items-end mb-3">
               <div>
-                <h3 className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1.5">
+                <h3 className="text-gray-400 text-[10px] uppercase tracking-widest font-bold mb-1.5">
                   Phase {Math.min(progress, RegExp(MISSIONS.length).source)}
                 </h3>
-                <h2 className="text-white text-[15px] font-black flex items-center gap-2">
+                <h2 className="text-gray-900 text-[15px] font-black flex items-center gap-2">
                   {currentMission ? currentMission.title : "Challenge Completed!"} 
                   {currentMission && (
                     <div className="px-2 py-0.5 rounded-md bg-green-500/20 text-green-400 text-[10px] uppercase tracking-wider font-bold">
@@ -377,26 +377,26 @@ export default function Playground() {
             </div>
 
             {/* Quick overview text */}
-            <p className="text-xs text-zinc-400 italic">
+            <p className="text-xs text-gray-500 italic">
                {currentMission ? currentMission.description : "All levels conquered!"}
             </p>
           </div>
           
           {/* AI Chat Area */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-6 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-zinc-800 [&::-webkit-scrollbar-track]:bg-transparent">
+          <div className="flex-1 overflow-y-auto p-5 space-y-6 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-track]:bg-transparent">
             {chatMessages.map((msg, i) => (
               <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                <div className={`w-8 h-8 rounded-xl shrink-0 flex items-center justify-center shadow-lg ${msg.role === 'assistant' ? 'bg-gradient-to-br from-blue-600 to-blue-500 text-white' : 'bg-zinc-800 text-zinc-400 border border-zinc-700'}`}>
+                <div className={`w-8 h-8 rounded-xl shrink-0 flex items-center justify-center shadow-lg ${msg.role === 'assistant' ? 'bg-gradient-to-br from-blue-600 to-blue-500 text-gray-900' : 'bg-gray-100 text-gray-500 border border-zinc-700'}`}>
                    {msg.role === 'assistant' ? <Bot size={16} /> : <User size={16} />}
                 </div>
-                <div className={`p-4 rounded-2xl text-[13px] max-w-[85%] leading-relaxed shadow-sm whitespace-pre-wrap ${msg.role === 'assistant' ? 'bg-[#030712] text-zinc-300 border border-white/[0.08] rounded-tl-none font-medium' : 'bg-blue-600/20 text-blue-100 border border-blue-500/30 rounded-tr-none'}`}>
+                <div className={`p-4 rounded-2xl text-[13px] max-w-[85%] leading-relaxed shadow-sm whitespace-pre-wrap ${msg.role === 'assistant' ? 'bg-[#030712] text-gray-700 border border-white/[0.08] rounded-tl-none font-medium' : 'bg-blue-600/20 text-blue-100 border border-blue-500/30 rounded-tr-none'}`}>
                   {msg.text}
                 </div>
               </div>
             ))}
             {isTyping && (
                 <div className="flex gap-3">
-                  <div className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-500 text-white">
+                  <div className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-500 text-gray-900">
                     <Bot size={16} />
                   </div>
                   <div className="p-4 rounded-2xl bg-[#030712] border border-white/[0.08] rounded-tl-none flex items-center gap-1.5">
@@ -416,12 +416,12 @@ export default function Playground() {
                 onChange={(e) => setChatInput(e.target.value)}
                 disabled={isTyping}
                 placeholder="Message your AI Coach..."
-                className="w-full bg-[#030712] border border-white/[0.08] rounded-xl py-3 pl-4 pr-12 text-sm text-white focus:outline-none focus:border-blue-500/50 transition-colors placeholder:text-zinc-600"
+                className="w-full bg-[#030712] border border-white/[0.08] rounded-xl py-3 pl-4 pr-12 text-sm text-gray-900 focus:outline-none focus:border-blue-500/50 transition-colors placeholder:text-zinc-600"
               />
               <button 
                 type="submit"
                 disabled={isTyping || !chatInput.trim()}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white disabled:bg-transparent disabled:text-zinc-600 transition-colors flex items-center justify-center"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-gray-900 disabled:bg-transparent disabled:text-zinc-600 transition-colors flex items-center justify-center"
               >
                 <Send size={14} />
               </button>
@@ -434,13 +434,13 @@ export default function Playground() {
           <div className="flex bg-[#0A0F1C] border-b border-white/[0.06]">
             <button 
               onClick={() => setActiveTab('html')}
-              className={`flex-1 py-3.5 text-xs font-bold tracking-wider flex items-center justify-center gap-2 border-b-2 transition-colors ${activeTab === 'html' ? 'border-orange-500 text-orange-500 bg-orange-500/5' : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.02]'}`}
+              className={`flex-1 py-3.5 text-xs font-bold tracking-wider flex items-center justify-center gap-2 border-b-2 transition-colors ${activeTab === 'html' ? 'border-orange-500 text-orange-500 bg-orange-500/5' : 'border-transparent text-gray-400 hover:text-gray-700 hover:bg-white/[0.02]'}`}
             >
               <Layout size={14} className={activeTab === 'html' ? 'text-orange-500' : ''} /> index.html
             </button>
             <button 
                onClick={() => setActiveTab('css')}
-               className={`flex-1 py-3.5 text-xs font-bold tracking-wider flex items-center justify-center gap-2 border-b-2 transition-colors ${activeTab === 'css' ? 'border-blue-500 text-blue-500 bg-blue-500/5' : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.02]'}`}
+               className={`flex-1 py-3.5 text-xs font-bold tracking-wider flex items-center justify-center gap-2 border-b-2 transition-colors ${activeTab === 'css' ? 'border-blue-500 text-blue-500 bg-blue-500/5' : 'border-transparent text-gray-400 hover:text-gray-700 hover:bg-white/[0.02]'}`}
             >
               <Layers size={14} className={activeTab === 'css' ? 'text-blue-500' : ''}/> styles.css
             </button>
@@ -493,7 +493,7 @@ export default function Playground() {
                   <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                   <div className="w-3 h-3 rounded-full bg-green-400"></div>
                 </div>
-                <div className="bg-white flex-1 h-8 rounded-md border border-[#e5e5e5] flex items-center px-3 gap-2 text-zinc-400 shadow-sm">
+                <div className="bg-white flex-1 h-8 rounded-md border border-[#e5e5e5] flex items-center px-3 gap-2 text-gray-500 shadow-sm">
                   <Globe size={14} />
                   <span className="text-[11px] font-medium tracking-wide">localhost:3000/preview</span>
                 </div>

@@ -94,7 +94,7 @@ const CourseDetail = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <Loader2 className="animate-spin text-cyan-500" size={48} />
             </div>
         );
@@ -102,8 +102,8 @@ const CourseDetail = () => {
 
     if (!course) {
         return (
-            <div className="min-h-screen bg-[#09090b] flex flex-col items-center justify-center p-6 text-center">
-                <h1 className="text-2xl font-bold text-white mb-4">Course not found</h1>
+            <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6 text-center">
+                <h1 className="text-2xl font-bold text-gray-900 mb-4">Course not found</h1>
                 <button
                     onClick={() => navigate('/courses')}
                     className="px-6 py-2 bg-cyan-500 text-black font-bold rounded-xl"
@@ -118,7 +118,7 @@ const CourseDetail = () => {
     const isJs = course.title.toLowerCase().includes('javascript') || course.title.toLowerCase().includes('js');
 
     return (
-        <div className="min-h-screen bg-[#09090b] text-white selection:bg-cyan-500/30 relative overflow-x-hidden">
+        <div className="min-h-screen bg-gray-50 text-gray-900 selection:bg-cyan-500/30 relative overflow-x-hidden">
             <BackgroundAnimation />
             <Navbar />
 
@@ -126,7 +126,7 @@ const CourseDetail = () => {
                 {/* Back Button */}
                 <button
                     onClick={() => navigate('/courses')}
-                    className="flex items-center gap-2 text-zinc-500 hover:text-cyan-400 transition-colors mb-8 group"
+                    className="flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors mb-8 group"
                 >
                     <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                     <span className="font-medium">Back to Explorer</span>
@@ -145,20 +145,20 @@ const CourseDetail = () => {
                             <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
                                 {course.title}
                             </h1>
-                            <p className="text-zinc-400 text-xl leading-relaxed mb-8 max-w-3xl">
+                            <p className="text-gray-500 text-xl leading-relaxed mb-8 max-w-3xl">
                                 {course.description}
                             </p>
 
                             <div className="flex flex-wrap gap-6 mb-12">
-                                <div className="flex items-center gap-2 text-zinc-300">
+                                <div className="flex items-center gap-2 text-gray-700">
                                     <Clock size={20} className="text-cyan-500" />
                                     <span className="font-medium">{course.duration}</span>
                                 </div>
-                                <div className="flex items-center gap-2 text-zinc-300">
+                                <div className="flex items-center gap-2 text-gray-700">
                                     <Star size={20} className="text-yellow-500" fill="currentColor" />
                                     <span className="font-medium">{course.rating} Rating</span>
                                 </div>
-                                <div className="flex items-center gap-2 text-zinc-300">
+                                <div className="flex items-center gap-2 text-gray-700">
                                     <Users size={20} className="text-violet-500" />
                                     <span className="font-medium">2.4k Students</span>
                                 </div>
@@ -166,7 +166,7 @@ const CourseDetail = () => {
 
                             {/* Curriculum Section */}
                             <div className="mb-16">
-                                <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-white">
+                                <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
                                     <BookOpen className="text-cyan-500" />
                                     Course Curriculum
                                 </h2>
@@ -185,21 +185,21 @@ const CourseDetail = () => {
                                                 )}
                                                 {isHeadingType ? (
                                                     <div className="pt-8 pb-4">
-                                                        <h3 className="text-xl font-black text-white border-l-4 border-cyan-500 pl-4 uppercase tracking-tight">
+                                                        <h3 className="text-xl font-black text-gray-900 border-l-4 border-cyan-500 pl-4 uppercase tracking-tight">
                                                             {lesson.title}
                                                         </h3>
                                                     </div>
                                                 ) : (
                                                     <div
-                                                        className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-zinc-700 transition-all flex items-center justify-between group"
+                                                        className="p-6 rounded-2xl bg-white border border-gray-200 hover:border-zinc-700 transition-all flex items-center justify-between group"
                                                     >
                                                         <div className="flex items-center gap-4">
-                                                            <div className="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-zinc-500 font-bold border border-zinc-700 group-hover:bg-cyan-500/10 group-hover:text-cyan-400 group-hover:border-cyan-500/30 transition-all">
+                                                            <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 font-bold border border-zinc-700 group-hover:bg-cyan-500/10 group-hover:text-cyan-400 group-hover:border-cyan-500/30 transition-all">
                                                                 {idx + 1}
                                                             </div>
                                                             <div>
-                                                                <h3 className="font-bold text-white group-hover:text-cyan-400 transition-colors uppercase text-sm tracking-tight">{lesson.title}</h3>
-                                                                <p className="text-xs text-zinc-500 flex items-center gap-3 mt-1">
+                                                                <h3 className="font-bold text-gray-900 group-hover:text-cyan-400 transition-colors uppercase text-sm tracking-tight">{lesson.title}</h3>
+                                                                <p className="text-xs text-gray-400 flex items-center gap-3 mt-1">
                                                                     <span className="flex items-center gap-1"><Video size={12} /> Video</span>
                                                                     {lesson.duration > 0 && (
                                                                         <span className="flex items-center gap-1"><Clock size={12} /> {lesson.duration}m</span>
@@ -234,7 +234,7 @@ const CourseDetail = () => {
                                                     </div>
                                                     <div>
                                                         <h4 className="font-bold mb-1">Semantic Architecture</h4>
-                                                        <p className="text-sm text-zinc-400">Structure web content for accessibility and SEO perfection.</p>
+                                                        <p className="text-sm text-gray-500">Structure web content for accessibility and SEO perfection.</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex gap-4">
@@ -243,7 +243,7 @@ const CourseDetail = () => {
                                                     </div>
                                                     <div>
                                                         <h4 className="font-bold mb-1">Modern Layouts</h4>
-                                                        <p className="text-sm text-zinc-400">Deep dive into CSS Grid, Flexbox, and responsive workflows.</p>
+                                                        <p className="text-sm text-gray-500">Deep dive into CSS Grid, Flexbox, and responsive workflows.</p>
                                                     </div>
                                                 </div>
                                             </>
@@ -256,7 +256,7 @@ const CourseDetail = () => {
                                                     </div>
                                                     <div>
                                                         <h4 className="font-bold mb-1">Core Logic</h4>
-                                                        <p className="text-sm text-zinc-400">Master asynchronous patterns, closures, and the event loop.</p>
+                                                        <p className="text-sm text-gray-500">Master asynchronous patterns, closures, and the event loop.</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex gap-4">
@@ -265,7 +265,7 @@ const CourseDetail = () => {
                                                     </div>
                                                     <div>
                                                         <h4 className="font-bold mb-1">DOM Manipulation</h4>
-                                                        <p className="text-sm text-zinc-400">Create interactive cinematic experiences with pure vanilla JS.</p>
+                                                        <p className="text-sm text-gray-500">Create interactive cinematic experiences with pure vanilla JS.</p>
                                                     </div>
                                                 </div>
                                             </>
@@ -277,12 +277,12 @@ const CourseDetail = () => {
                                             <div className="flex items-center gap-2 mb-2">
                                                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase tracking-wider">New Feature</span>
                                             </div>
-                                            <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-1">
+                                            <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-1">
                                                 <Bot className="text-blue-500" size={24} /> AI Interactive Playground
                                             </h3>
-                                            <p className="text-sm text-zinc-400">Practice what you learn with a real-time AI Coach guiding you step-by-step.</p>
+                                            <p className="text-sm text-gray-500">Practice what you learn with a real-time AI Coach guiding you step-by-step.</p>
                                         </div>
-                                        <div className="md:shrink-0 w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(59,130,246,0.5)]">
+                                        <div className="md:shrink-0 w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-gray-900 group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(59,130,246,0.5)]">
                                             <ArrowRight size={20} />
                                         </div>
                                     </div>
@@ -297,7 +297,7 @@ const CourseDetail = () => {
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className="glass-card bg-zinc-900/40 border-zinc-800 p-8 rounded-3xl overflow-hidden relative"
+                                className="edu-card bg-white/40 border-gray-200 p-8 rounded-3xl overflow-hidden relative"
                             >
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-[80px] -z-10"></div>
 
@@ -308,22 +308,22 @@ const CourseDetail = () => {
                                 />
 
                                 <div className="flex items-center justify-between mb-8">
-                                    <span className="text-3xl font-black text-white">FREE <span className="text-xs text-zinc-500 line-through font-normal ml-2">$99.00</span></span>
+                                    <span className="text-3xl font-black text-gray-900">FREE <span className="text-xs text-gray-400 line-through font-normal ml-2">$99.00</span></span>
                                     <div className="px-3 py-1 bg-blue-500/10 text-blue-500 text-[10px] font-bold rounded-lg border border-blue-500/20">
                                         100% OFF
                                     </div>
                                 </div>
 
                                 <div className="space-y-4 mb-8">
-                                    <div className="flex items-center gap-3 text-sm text-zinc-400">
+                                    <div className="flex items-center gap-3 text-sm text-gray-500">
                                         <CheckCircle2 size={16} className="text-cyan-500" />
                                         Full lifetime access
                                     </div>
-                                    <div className="flex items-center gap-3 text-sm text-zinc-400">
+                                    <div className="flex items-center gap-3 text-sm text-gray-500">
                                         <CheckCircle2 size={16} className="text-cyan-500" />
                                         Certificate of completion
                                     </div>
-                                    <div className="flex items-center gap-3 text-sm text-zinc-400">
+                                    <div className="flex items-center gap-3 text-sm text-gray-500">
                                         <CheckCircle2 size={16} className="text-cyan-500" />
                                         Hands-on projects
                                     </div>
@@ -333,8 +333,8 @@ const CourseDetail = () => {
                                     onClick={isEnrolled ? () => navigate(`/course/${course._id}`) : handleEnroll}
                                     disabled={isEnrolling}
                                     className={`w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg ${isEnrolled
-                                        ? 'bg-blue-500 text-white shadow-blue-500/20'
-                                        : 'bg-white text-black hover:bg-cyan-500 hover:text-white shadow-white/10'
+                                        ? 'bg-blue-500 text-gray-900 shadow-blue-500/20'
+                                        : 'bg-white text-black hover:bg-cyan-500 hover:text-gray-900 shadow-white/10'
                                         }`}
                                 >
                                     {isEnrolling ? (
@@ -354,13 +354,13 @@ const CourseDetail = () => {
 
                                 <button
                                     onClick={() => navigate(`/course-detail/${course._id}/community`)}
-                                    className="w-full py-4 mt-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg bg-zinc-800/50 text-white hover:bg-cyan-500/10 hover:text-cyan-400 border border-zinc-700/50 hover:border-cyan-500/30"
+                                    className="w-full py-4 mt-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg bg-gray-100 text-gray-900 hover:bg-cyan-500/10 hover:text-cyan-400 border border-zinc-700/50 hover:border-cyan-500/30"
                                 >
                                     <MessageSquare size={20} />
                                     Course Community
                                 </button>
 
-                                <p className="text-[10px] text-center text-zinc-500 mt-6 font-medium">
+                                <p className="text-[10px] text-center text-gray-400 mt-6 font-medium">
                                     Join 120+ students starting today. Secure your spot now.
                                 </p>
                             </motion.div>

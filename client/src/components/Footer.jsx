@@ -1,88 +1,92 @@
 import React from 'react';
-import { ArrowRight, Github, Twitter, Linkedin } from 'lucide-react';
+import { ArrowRight, Github, Twitter, Linkedin, GraduationCap, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
-        <footer className="bg-[var(--color-bg-dark)] pt-24 pb-10 px-6 border-t border-white/[0.04] relative">
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#00FF00]/20 to-transparent"></div>
-            
-            <div className="max-w-7xl mx-auto">
+        <footer className="bg-white border-t border-gray-200 pt-20 pb-10 px-6 relative overflow-hidden">
+            {/* Purple glow top */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-violet-500/20 to-transparent" />
+            <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full bg-violet-600/5 blur-3xl pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto relative z-10">
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-12 mb-16">
+
                     {/* Brand */}
                     <div className="col-span-2">
-                        <Link to="/" className="flex items-center mb-6">
-                            <span className="text-2xl font-bold tracking-tight text-white font-display">
-                                Edu<span className="text-gradient">Nex</span>
+                        <Link to="/" className="flex items-center gap-2.5 mb-5">
+                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-violet-700 flex items-center justify-center shadow-lg">
+                                <GraduationCap size={18} className="text-gray-900" />
+                            </div>
+                            <span className="text-2xl font-bold tracking-tight text-gray-900" style={{ fontFamily: 'var(--font-display)' }}>
+                                Edu<span className="text-violet-600">Nex</span>
                             </span>
                         </Link>
-                        <p className="text-sm text-[var(--color-text-muted)] leading-relaxed max-w-xs mb-8">
-                            Accelerating the careers of tomorrow's technological architects through AI-powered learning.
+                        <p className="text-sm text-gray-500 leading-relaxed max-w-xs mb-8">
+                            Accelerating the careers of tomorrow's technological architects through AI-powered, community-driven learning.
                         </p>
                         {/* Social icons */}
                         <div className="flex gap-3">
                             {[
-                                { icon: <Github size={18} />, href: "#" },
-                                { icon: <Twitter size={18} />, href: "#" },
-                                { icon: <Linkedin size={18} />, href: "#" },
-                            ].map((social, i) => (
-                                <a key={i} href={social.href}
-                                    className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-zinc-400 hover:text-[#00FF00] hover:border-[#00FF00]/30 hover:bg-[#00FF00]/5 transition-all duration-300">
-                                    {social.icon}
+                                { icon: <Github size={16} />, href: '#' },
+                                { icon: <Twitter size={16} />, href: '#' },
+                                { icon: <Linkedin size={16} />, href: '#' },
+                            ].map((s, i) => (
+                                <a
+                                    key={i}
+                                    href={s.href}
+                                    className="w-9 h-9 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-violet-600 hover:border-violet-200 hover:bg-violet-50 transition-all duration-300"
+                                >
+                                    {s.icon}
                                 </a>
                             ))}
                         </div>
                     </div>
 
-                    {/* Links columns */}
+                    {/* Product Links */}
                     <div>
-                        <h4 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">Product</h4>
-                        <ul className="space-y-3 text-sm text-[var(--color-text-muted)]">
-                            <li><Link to="/courses" className="hover:text-[#00FF00] transition-colors">Courses</Link></li>
-                            <li><a href="#" className="hover:text-[#00FF00] transition-colors">Playgrounds</a></li>
-                            <li><a href="#" className="hover:text-[#00FF00] transition-colors">AI Tutor</a></li>
-                            <li><a href="#" className="hover:text-[#00FF00] transition-colors">Certifications</a></li>
+                        <h4 className="text-gray-900 font-bold mb-5 text-sm uppercase tracking-wider">Product</h4>
+                        <ul className="space-y-3 text-sm text-gray-500">
+                            {['Courses', 'Playground', 'AI Tutor', 'Certifications', 'Roadmap'].map(l => (
+                                <li key={l}><Link to={l === 'Courses' ? '/courses' : l === 'Roadmap' ? '/roadmap' : '#'} className="hover:text-violet-600 transition-colors">{l}</Link></li>
+                            ))}
                         </ul>
                     </div>
 
+                    {/* Company Links */}
                     <div>
-                        <h4 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">Company</h4>
-                        <ul className="space-y-3 text-sm text-[var(--color-text-muted)]">
-                            <li><a href="#" className="hover:text-[#00FF00] transition-colors">About</a></li>
-                            <li><a href="#" className="hover:text-[#00FF00] transition-colors">Careers</a></li>
-                            <li><a href="#" className="hover:text-[#00FF00] transition-colors">Blog</a></li>
-                            <li><a href="#" className="hover:text-[#00FF00] transition-colors">Privacy</a></li>
+                        <h4 className="text-gray-900 font-bold mb-5 text-sm uppercase tracking-wider">Company</h4>
+                        <ul className="space-y-3 text-sm text-gray-500">
+                            {['About', 'Careers', 'Blog', 'Privacy', 'Terms'].map(l => (
+                                <li key={l}><a href="#" className="hover:text-violet-600 transition-colors">{l}</a></li>
+                            ))}
                         </ul>
                     </div>
 
                     {/* Newsletter */}
                     <div>
-                        <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-                            <h4 className="text-white font-semibold mb-2 text-sm">Stay Updated</h4>
-                            <p className="text-xs text-[var(--color-text-dim)] mb-4">Get the latest releases instantly.</p>
-                            <div className="flex">
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    className="bg-[var(--color-bg-dark)] border border-white/[0.08] rounded-l-xl px-3 py-2.5 w-full text-sm text-white focus:outline-none focus:border-[#00FF00]/50 transition-colors placeholder:text-zinc-600"
-                                />
-                                <button className="bg-[#00FF00] hover:bg-[#00FF00] text-white px-4 py-2.5 rounded-r-xl transition-colors flex-shrink-0">
-                                    <ArrowRight size={14} />
-                                </button>
-                            </div>
+                        <h4 className="text-gray-900 font-bold mb-3 text-sm">Stay Updated</h4>
+                        <p className="text-xs text-gray-500 mb-4">Get the latest courses and updates directly in your inbox.</p>
+                        <div className="flex rounded-xl overflow-hidden border border-gray-200 bg-gray-50 focus-within:border-violet-500 transition-colors">
+                            <input
+                                type="email"
+                                placeholder="Your email"
+                                className="bg-transparent px-3 py-2.5 w-full text-sm text-gray-900 focus:outline-none placeholder:text-gray-400"
+                            />
+                            <button className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2.5 transition-colors flex-shrink-0">
+                                <ArrowRight size={14} />
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 {/* Bottom bar */}
-                <div className="border-t border-white/[0.04] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-xs text-[var(--color-text-dim)]">
-                        © {new Date().getFullYear()} EduNex. All rights reserved.
-                    </p>
-                    <div className="flex gap-6 text-xs text-[var(--color-text-dim)]">
-                        <a href="#" className="hover:text-white transition-colors">Terms</a>
-                        <a href="#" className="hover:text-white transition-colors">Privacy</a>
-                        <a href="#" className="hover:text-white transition-colors">Cookies</a>
+                <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p className="text-xs text-gray-500">© {new Date().getFullYear()} EduNex. All rights reserved.</p>
+                    <div className="flex gap-6 text-xs text-gray-500">
+                        {['Terms', 'Privacy', 'Cookies'].map(l => (
+                            <a key={l} href="#" className="hover:text-gray-900 transition-colors">{l}</a>
+                        ))}
                     </div>
                 </div>
             </div>

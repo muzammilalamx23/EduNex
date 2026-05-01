@@ -19,7 +19,7 @@ const CircularProgress = ({ value = 0, size = 40, stroke = 3 }) => {
     return (
         <svg width={size} height={size} className="-rotate-90">
             <circle cx={size / 2} cy={size / 2} r={r} fill="none"
-                stroke="rgba(255,255,255,0.08)" strokeWidth={stroke} />
+                stroke="rgba(0,0,0,0.08)" strokeWidth={stroke} />
             <circle cx={size / 2} cy={size / 2} r={r} fill="none"
                 stroke="url(#prog)" strokeWidth={stroke}
                 strokeDasharray={circ} strokeDashoffset={offset}
@@ -28,8 +28,8 @@ const CircularProgress = ({ value = 0, size = 40, stroke = 3 }) => {
             />
             <defs>
                 <linearGradient id="prog" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#00FF00" />
-                    <stop offset="100%" stopColor="#ADFF2F" />
+                    <stop offset="0%" stopColor="#7C3AED" />
+                    <stop offset="100%" stopColor="#4F46E5" />
                 </linearGradient>
             </defs>
         </svg>
@@ -228,8 +228,8 @@ const CoursePlayer = () => {
 
     // ─── Loading spinner ──────────────────────────────────────────────────────
     if (loading) return (
-        <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-[#00FF00]/20 border-t-[#00FF00] rounded-full animate-spin" />
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-violet-200 border-t-[#7C3AED] rounded-full animate-spin" />
         </div>
     );
 
@@ -237,21 +237,21 @@ const CoursePlayer = () => {
     const totalLessons = course?.lessons?.length || 0;
 
     return (
-        <div className="min-h-screen bg-[#09090b] text-white flex flex-col h-screen overflow-hidden">
+        <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col h-screen overflow-hidden">
 
             {/* ── Header ── */}
-            <header className="h-16 border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-xl flex items-center justify-between px-6 z-50 shrink-0">
+            <header className="h-16 border-b border-gray-200 bg-white/90 backdrop-blur-xl flex items-center justify-between px-6 z-50 shrink-0">
                 <div className="flex items-center gap-4">
                     <button
                         onClick={() => navigate('/dashboard')}
-                        className="p-2 hover:bg-zinc-800 rounded-full transition-colors text-zinc-400 hover:text-white"
+                        className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 hover:text-gray-900"
                         aria-label="Back to dashboard"
                     >
                         <ChevronLeft size={22} />
                     </button>
                     <div className="hidden sm:block">
                         <h1 className="font-bold text-sm line-clamp-1">{course?.title}</h1>
-                        <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-semibold line-clamp-1">
+                        <p className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold line-clamp-1">
                             {activeLesson?.title}
                         </p>
                     </div>
@@ -262,25 +262,25 @@ const CoursePlayer = () => {
                     <div className="hidden md:flex items-center gap-3">
                         <div className="relative">
                             <CircularProgress value={progress} size={42} stroke={3} />
-                            <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black text-white">
+                            <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black text-gray-900">
                                 {progress}%
                             </span>
                         </div>
                         <div>
-                            <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Progress</p>
-                            <p className="text-xs font-bold text-[#00FF00]">{completedCount}/{totalLessons} lessons</p>
+                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Progress</p>
+                            <p className="text-xs font-bold text-violet-600">{completedCount}/{totalLessons} lessons</p>
                         </div>
                     </div>
                     <button
                         onClick={() => navigate(`/course-detail/${courseId}/community`)}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-400 hover:text-white hover:bg-cyan-500/20 transition-all text-sm font-bold"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-400 hover:text-gray-900 hover:bg-cyan-500/20 transition-all text-sm font-bold"
                         aria-label="Course Community"
                     >
                         <Users size={16} /> <span className="hidden sm:inline">Community</span>
                     </button>
                     <button
                         onClick={() => setSidebarOpen(s => !s)}
-                        className="p-2 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-400 hover:text-white transition-all"
+                        className="p-2 bg-white border border-gray-200 rounded-xl text-gray-500 hover:text-gray-900 transition-all"
                         aria-label="Toggle curriculum"
                     >
                         {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
@@ -301,12 +301,12 @@ const CoursePlayer = () => {
                                     <CheckCircle2 size={12} /> Completed
                                 </span>
                             ) : (
-                                <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-[#00FF00]/10 border border-[#00FF00]/20 text-[#00FF00]">
+                                <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-violet-100 border border-violet-200 text-violet-600">
                                     <Play size={12} fill="currentColor" /> In Progress
                                 </span>
                             )}
                             {activeLesson?.duration > 0 && (
-                                <span className="flex items-center gap-1 text-zinc-500 text-xs">
+                                <span className="flex items-center gap-1 text-gray-400 text-xs">
                                     <Clock size={12} /> {activeLesson.duration} min
                                 </span>
                             )}
@@ -333,16 +333,16 @@ const CoursePlayer = () => {
                                     autoplay={false}
                                 />
                             ) : activeLesson?.pdfUrl ? (
-                                <div className="bg-zinc-900/30 border border-zinc-800 rounded-3xl p-4 shadow-2xl overflow-hidden">
+                                <div className="bg-white/30 border border-gray-200 rounded-3xl p-4 shadow-2xl overflow-hidden">
                                     <div className="flex items-center justify-between mb-4 px-2 pt-1">
-                                        <div className="flex items-center gap-2 text-[#00FF00] font-bold text-sm">
+                                        <div className="flex items-center gap-2 text-violet-600 font-bold text-sm">
                                             <FileText size={16} /> Reading Material
                                         </div>
                                         <a
                                             href={activeLesson.pdfUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-xs bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-lg transition-colors border border-zinc-700 font-bold uppercase tracking-widest"
+                                            className="text-xs bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors border border-gray-300 font-bold uppercase tracking-widest"
                                         >
                                             Open Full Screen
                                         </a>
@@ -354,34 +354,34 @@ const CoursePlayer = () => {
                                     />
                                 </div>
                             ) : activeLesson?.content ? (
-                                <div className="bg-zinc-900/30 border border-zinc-800 rounded-3xl p-8 md:p-12 shadow-2xl min-h-[300px]">
+                                <div className="bg-white/30 border border-gray-200 rounded-3xl p-8 md:p-12 shadow-2xl min-h-[300px]">
                                     <div className="flex items-center gap-3 mb-8">
-                                        <div className="w-10 h-10 rounded-xl bg-[#00FF00]/20 flex items-center justify-center text-[#00FF00]">
+                                        <div className="w-10 h-10 rounded-xl bg-violet-600/20 flex items-center justify-center text-violet-600">
                                             <Layout size={20} />
                                         </div>
                                         <h3 className="text-xl font-bold">Lesson Notes</h3>
                                     </div>
-                                    <div className="text-zinc-300 leading-relaxed space-y-4 whitespace-pre-wrap font-medium text-base max-w-5xl">
+                                    <div className="text-gray-700 leading-relaxed space-y-4 whitespace-pre-wrap font-medium text-base max-w-5xl">
                                         {activeLesson.content}
                                     </div>
                                 </div>
                             ) : (
-                                <div className="aspect-video bg-zinc-900 rounded-3xl flex flex-col items-center justify-center border border-zinc-800">
+                                <div className="aspect-video bg-white rounded-3xl flex flex-col items-center justify-center border border-gray-200">
                                     <Play size={48} className="text-zinc-700 mb-4" />
-                                    <p className="text-zinc-500 text-sm">No content available for this lesson.</p>
+                                    <p className="text-gray-400 text-sm">No content available for this lesson.</p>
                                 </div>
                             )}
 
                             {/* Supplementary notes when video + notes both exist */}
                             {activeLesson?.videoId && (activeLesson?.content || activeLesson?.pdfUrl) && (
-                                <div className="bg-zinc-900/20 border border-zinc-800/50 rounded-3xl p-8">
+                                <div className="bg-gray-50 border border-gray-100 rounded-3xl p-8">
                                     <h4 className="text-base font-bold mb-6 flex items-center gap-2">
                                         <Zap size={16} className="text-amber-400" />
                                         Lesson Resources
                                     </h4>
                                     <div className="space-y-4">
                                         {activeLesson.content && (
-                                            <div className="text-zinc-400 leading-relaxed whitespace-pre-wrap text-sm">
+                                            <div className="text-gray-500 leading-relaxed whitespace-pre-wrap text-sm">
                                                 {activeLesson.content}
                                             </div>
                                         )}
@@ -390,16 +390,16 @@ const CoursePlayer = () => {
                                                 href={activeLesson.pdfUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex items-center gap-4 p-4 rounded-2xl bg-black/40 border border-zinc-800 hover:border-zinc-700 transition-colors group"
+                                                className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-200 hover:border-violet-300 transition-colors group"
                                             >
                                                 <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400 shrink-0">
                                                     <FileText size={20} />
                                                 </div>
                                                 <div className="flex-1">
                                                     <p className="text-sm font-bold">Study Material.pdf</p>
-                                                    <p className="text-xs text-zinc-500">Open & download PDF reference</p>
+                                                    <p className="text-xs text-gray-400">Open & download PDF reference</p>
                                                 </div>
-                                                <ChevronRight size={16} className="text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+                                                <ChevronRight size={16} className="text-zinc-600 group-hover:text-gray-500 transition-colors" />
                                             </a>
                                         )}
                                     </div>
@@ -410,9 +410,9 @@ const CoursePlayer = () => {
                         {/* ── Lesson info + navigation ── */}
                         <div>
                             <h2 className="text-2xl md:text-3xl font-bold mb-2">{activeLesson?.title}</h2>
-                            <p className="text-zinc-500 leading-relaxed max-w-5xl text-sm">{course?.description}</p>
+                            <p className="text-gray-400 leading-relaxed max-w-5xl text-sm">{course?.description}</p>
 
-                        <div className="mt-6 pt-6 border-t border-zinc-900 space-y-4">
+                        <div className="mt-6 pt-6 border-t border-gray-200 space-y-4">
                                 {/* Manual unlock button — visible only when video not yet timed out */}
                                 {activeLesson?.videoId && !canComplete && !activeLessonDone && (
                                     <motion.button
@@ -422,7 +422,7 @@ const CoursePlayer = () => {
                                             setCanComplete(true);
                                             videoWatchedRef.current = true;
                                         }}
-                                        className="w-full px-6 py-3 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-400 hover:text-white text-sm font-bold transition-all flex items-center justify-center gap-2"
+                                        className="w-full px-6 py-3 rounded-xl bg-white border border-gray-300 hover:border-zinc-500 text-gray-500 hover:text-gray-900 text-sm font-bold transition-all flex items-center justify-center gap-2"
                                     >
                                         <Play size={16} />
                                         I've Watched This — Unlock Completion
@@ -434,7 +434,7 @@ const CoursePlayer = () => {
                                     <button
                                         onClick={handlePreviousLesson}
                                         disabled={isFirstLesson}
-                                        className="px-6 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-bold text-zinc-400 hover:text-white transition-all flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+                                        className="px-6 py-3 rounded-xl bg-white border border-gray-200 text-sm font-bold text-gray-500 hover:text-gray-900 transition-all flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
                                         aria-label="Previous lesson"
                                     >
                                         <ChevronLeft size={18} />
@@ -445,7 +445,7 @@ const CoursePlayer = () => {
                                         <button
                                             onClick={handleLessonComplete}
                                             disabled={!canComplete || isCompleting}
-                                            className="px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed bg-gradient-to-r from-[#00FF00] to-[#ADFF2F] hover:from-[#00FF00] hover:to-teal-400 text-black shadow-lg shadow-[#00FF00]/20"
+                                            className="px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-500 hover:to-teal-400 text-black shadow-lg shadow-[#7C3AED]/20"
                                             aria-label="Complete lesson and go to next"
                                         >
                                             {isCompleting ? (
@@ -489,23 +489,23 @@ const CoursePlayer = () => {
                             animate={{ x: 0 }}
                             exit={{ x: 320 }}
                             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                            className="w-80 border-l border-zinc-900 bg-zinc-950 flex flex-col h-full z-40 fixed right-0 top-16 lg:relative lg:top-0"
+                            className="w-80 border-l border-gray-200 bg-white flex flex-col h-full z-40 fixed right-0 top-16 lg:relative lg:top-0"
                         >
                             {/* Sidebar header */}
-                            <div className="p-5 border-b border-zinc-900">
+                            <div className="p-5 border-b border-gray-200">
                                 <div className="flex items-center justify-between mb-3">
                                     <h3 className="font-bold text-sm">Course Curriculum</h3>
-                                    <span className="text-[10px] font-black text-[#00FF00] bg-[#00FF00]/10 px-2 py-1 rounded-full border border-[#00FF00]/20">
+                                    <span className="text-[10px] font-black text-violet-600 bg-violet-100 px-2 py-1 rounded-full border border-violet-200">
                                         {completedCount}/{totalLessons}
                                     </span>
                                 </div>
                                 {/* Linear progress bar */}
-                                <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                                <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                     <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: `${progress}%` }}
                                         transition={{ duration: 0.6, ease: 'easeOut' }}
-                                        className="h-full rounded-full bg-gradient-to-r from-[#00FF00] to-[#ADFF2F]"
+                                        className="h-full rounded-full bg-gradient-to-r from-violet-500 to-indigo-500"
                                     />
                                 </div>
                             </div>
@@ -525,17 +525,17 @@ const CoursePlayer = () => {
                                         <React.Fragment key={lesson._id || idx}>
                                             {showSectionHeader && lesson.section && (
                                                 <div className="px-3 py-4 mt-2 flex items-center gap-2">
-                                                    <div className="h-px bg-zinc-900 flex-1"></div>
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 whitespace-nowrap">
+                                                    <div className="h-px bg-gray-200 flex-1"></div>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 whitespace-nowrap">
                                                         {lesson.section}
                                                     </span>
-                                                    <div className="h-px bg-zinc-900 flex-1"></div>
+                                                    <div className="h-px bg-gray-200 flex-1"></div>
                                                 </div>
                                             )}
 
                                             {isHeadingType ? (
                                                 <div className="px-3 py-6 mt-4 mb-2">
-                                                    <h4 className="text-xs font-black text-[#00FF00] uppercase tracking-widest border-l-2 border-[#00FF00] pl-3">
+                                                    <h4 className="text-xs font-black text-violet-600 uppercase tracking-widest border-l-2 border-[#7C3AED] pl-3">
                                                         {lesson.title}
                                                     </h4>
                                                 </div>
@@ -544,8 +544,8 @@ const CoursePlayer = () => {
                                                     onClick={() => switchLesson(lesson)}
                                                     className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all group text-left
                                                         ${isActive
-                                                            ? 'bg-[#00FF00]/10 border border-[#00FF00]/20'
-                                                            : 'hover:bg-zinc-900/60 border border-transparent'
+                                                            ? 'bg-violet-100 border border-violet-200'
+                                                            : 'hover:bg-white/60 border border-transparent'
                                                         }`}
                                                 >
                                                     {/* Status icon */}
@@ -553,8 +553,8 @@ const CoursePlayer = () => {
                                                         ${isDone
                                                             ? 'bg-green-500/20 text-green-400'
                                                             : isActive
-                                                                ? 'bg-[#00FF00] text-black'
-                                                                : 'bg-zinc-800 text-zinc-500 group-hover:bg-zinc-700'
+                                                                ? 'bg-violet-600 text-black'
+                                                                : 'bg-gray-100 text-gray-400 group-hover:bg-gray-200'
                                                         }`}>
                                                         {isDone
                                                             ? <CheckCircle2 size={14} />
@@ -567,7 +567,7 @@ const CoursePlayer = () => {
                                                     {/* Lesson info */}
                                                     <div className="flex-1 min-w-0">
                                                         <p className={`text-xs font-semibold line-clamp-2 leading-snug
-                                                            ${isDone ? 'text-green-400/80' : isActive ? 'text-white' : 'text-zinc-400'}`}>
+                                                            ${isDone ? 'text-green-400/80' : isActive ? 'text-gray-900' : 'text-gray-500'}`}>
                                                             {lesson.title}
                                                         </p>
                                                         <div className="flex items-center gap-2 mt-0.5">
@@ -593,11 +593,11 @@ const CoursePlayer = () => {
 
                             {/* Sidebar footer — course completion stat */}
                             {progress >= 100 && (
-                                <div className="p-4 border-t border-zinc-900 flex items-center gap-3 bg-gradient-to-r from-[#00FF00]/5 to-[#ADFF2F]/5">
+                                <div className="p-4 border-t border-gray-200 flex items-center gap-3 bg-gradient-to-r from-violet-500/5 to-indigo-500/5">
                                     <Trophy size={20} className="text-amber-400" />
                                     <div>
-                                        <p className="text-xs font-bold text-white">Course Complete!</p>
-                                        <p className="text-[10px] text-zinc-500">All lessons finished</p>
+                                        <p className="text-xs font-bold text-gray-900">Course Complete!</p>
+                                        <p className="text-[10px] text-gray-400">All lessons finished</p>
                                     </div>
                                 </div>
                             )}

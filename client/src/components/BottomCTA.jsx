@@ -16,14 +16,14 @@ const BottomCTA = () => {
                 className="max-w-4xl mx-auto text-center relative z-10 w-full"
             >
                 {/* Outer glow border */}
-                <div className="rounded-3xl p-[1px] bg-gradient-to-b from-[#00FF00]/20 via-transparent to-transparent">
+                <div className="rounded-3xl p-[1px] bg-gradient-to-b from-violet-500/20 via-transparent to-transparent">
                     <div className="rounded-3xl bg-[var(--color-surface)] p-12 md:p-20 flex flex-col items-center shadow-[0_0_80px_rgba(0, 255, 0, 0.06)]">
                         {/* Icon */}
-                        <div className="w-20 h-20 rounded-2xl bg-[#00FF00]/10 border border-[#00FF00]/20 flex items-center justify-center mb-8">
-                            <Rocket size={36} className="text-[#00FF00]" />
+                        <div className="w-20 h-20 rounded-2xl bg-violet-100 border border-violet-200 flex items-center justify-center mb-8">
+                            <Rocket size={36} className="text-violet-600" />
                         </div>
 
-                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                             Ready to Build <br />
                             <span className="text-gradient">Your Future?</span>
                         </h2>
