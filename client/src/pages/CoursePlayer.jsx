@@ -273,7 +273,7 @@ const CoursePlayer = () => {
                     </div>
                     <button
                         onClick={() => navigate(`/course-detail/${courseId}/community`)}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-400 hover:text-gray-900 hover:bg-cyan-500/20 transition-all text-sm font-bold"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-violet-50 border border-violet-100 rounded-xl text-violet-600 hover:text-gray-900 hover:bg-violet-100 transition-all text-sm font-bold"
                         aria-label="Course Community"
                     >
                         <Users size={16} /> <span className="hidden sm:inline">Community</span>
@@ -399,7 +399,7 @@ const CoursePlayer = () => {
                                                     <p className="text-sm font-bold">Study Material.pdf</p>
                                                     <p className="text-xs text-gray-400">Open & download PDF reference</p>
                                                 </div>
-                                                <ChevronRight size={16} className="text-zinc-600 group-hover:text-gray-500 transition-colors" />
+                                                <ChevronRight size={16} className="text-gray-400 group-hover:text-gray-500 transition-colors" />
                                             </a>
                                         )}
                                     </div>
@@ -445,7 +445,7 @@ const CoursePlayer = () => {
                                         <button
                                             onClick={handleLessonComplete}
                                             disabled={!canComplete || isCompleting}
-                                            className="px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-500 hover:to-teal-400 text-black shadow-lg shadow-[#7C3AED]/20"
+                                            className="px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-500 hover:to-teal-400 text-white shadow-lg shadow-[#7C3AED]/20"
                                             aria-label="Complete lesson and go to next"
                                         >
                                             {isCompleting ? (
@@ -553,7 +553,7 @@ const CoursePlayer = () => {
                                                         ${isDone
                                                             ? 'bg-green-500/20 text-green-400'
                                                             : isActive
-                                                                ? 'bg-violet-600 text-black'
+                                                                ? 'bg-violet-600 text-white'
                                                                 : 'bg-gray-100 text-gray-400 group-hover:bg-gray-200'
                                                         }`}>
                                                         {isDone
@@ -572,7 +572,7 @@ const CoursePlayer = () => {
                                                         </p>
                                                         <div className="flex items-center gap-2 mt-0.5">
                                                             {lesson.duration > 0 && (
-                                                                <span className="text-[10px] text-zinc-600">{lesson.duration} min</span>
+                                                                <span className="text-[10px] text-gray-400">{lesson.duration} min</span>
                                                             )}
                                                             {isResume && !isDone && (
                                                                 <span className="text-[10px] text-amber-400 font-bold">Resume</span>
@@ -582,7 +582,7 @@ const CoursePlayer = () => {
 
                                                     {/* Active pulse */}
                                                     {isActive && (
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shrink-0" />
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse shrink-0" />
                                                     )}
                                                 </button>
                                             )}

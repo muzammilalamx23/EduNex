@@ -21,8 +21,8 @@ const RoadmapPage = lazy(() => import('./pages/Roadmap'));
 const Community = lazy(() => import('./pages/Community'));
 
 const PageLoader = () => (
-  <div className="min-h-screen bg-[#030712] flex items-center justify-center">
-    <Loader2 className="animate-spin text-blue-500" size={40} />
+  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <Loader2 className="animate-spin text-violet-600" size={40} />
   </div>
 );
 
@@ -35,15 +35,16 @@ export default function App() {
             position="top-right"
             toastOptions={{
               style: {
-                background: '#111827',
-                color: '#f9fafb',
-                border: '1px solid rgba(255,255,255,0.06)',
+                background: '#ffffff',
+                color: '#111827',
+                border: '1px solid #e5e7eb',
                 borderRadius: '14px',
                 fontSize: '14px',
                 fontFamily: "'Inter', system-ui, sans-serif",
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
               },
-              success: { iconTheme: { primary: '#3B82F6', secondary: '#111827' } },
-              error: { iconTheme: { primary: '#ef4444', secondary: '#111827' } },
+              success: { iconTheme: { primary: '#7C3AED', secondary: '#ffffff' } },
+              error: { iconTheme: { primary: '#ef4444', secondary: '#ffffff' } },
               duration: 4000,
             }}
           />

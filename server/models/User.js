@@ -89,6 +89,15 @@ const UserSchema = new mongoose.Schema({
         default: '',
         trim: true,
     },
+    activityLog: {
+        type: [
+            {
+                date: String,
+                minutes: Number
+            }
+        ],
+        default: []
+    },
     role: {
         type: String,
         enum: ['user', 'admin'],

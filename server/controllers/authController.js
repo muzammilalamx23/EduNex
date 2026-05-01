@@ -272,6 +272,19 @@ exports.updateTime = async (req, res) => {
     user.learningTime += minutes;
     user.dailyLearningTime += minutes;
 
+    // Track historical activity
+    const todayStr = today.toISOString().split('T')[0];
+    const logIndex = user.activityLog.findIndex(log => log.date === todayStr);
+    if (logIndex !== -1) {
+        user.activityLog[logIndex].minutes += minutes;
+    } else {
+        user.activityLog.push({ date: todayStr, minutes });
+    }
+    // Keep only last 14 days to prevent array getting too large
+    if (user.activityLog.length > 14) {
+        user.activityLog = user.activityLog.slice(-14);
+    }
+
     const STREAK_THRESHOLD = 30; 
     if (user.dailyLearningTime >= STREAK_THRESHOLD) {
         const lastUpdate = user.lastStreakUpdate ? new Date(user.lastStreakUpdate) : null;

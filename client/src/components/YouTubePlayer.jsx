@@ -28,7 +28,7 @@ const YouTubePlayer = ({ videoId, title = 'Video lesson', autoplay = false, clas
 
     return (
         <div
-            className={`relative w-full aspect-video bg-white rounded-3xl overflow-hidden shadow-2xl border border-white/5 group ${className}`}
+            className={`relative w-full aspect-video bg-white rounded-3xl overflow-hidden shadow-2xl border border-gray-200 group ${className}`}
         >
             {!playing ? (
                 /* ── Thumbnail / Poster ─────────────────────────────────────── */
@@ -50,8 +50,8 @@ const YouTubePlayer = ({ videoId, title = 'Video lesson', autoplay = false, clas
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
                     {/* Play button */}
-                    <div className="relative z-10 w-20 h-20 rounded-full bg-red-600 hover:bg-red-500 flex items-center justify-center shadow-2xl transition-all duration-200 group-hover:scale-110 group-hover:shadow-red-500/40">
-                        <Play size={32} className="text-gray-900 ml-1" fill="currentColor" />
+                    <div className="relative z-10 w-20 h-20 rounded-full bg-violet-600 hover:bg-violet-500 flex items-center justify-center shadow-2xl transition-all duration-200 group-hover:scale-110 group-hover:shadow-violet-500/40">
+                        <Play size={32} className="text-white ml-1" fill="currentColor" />
                     </div>
                 </button>
             ) : (
