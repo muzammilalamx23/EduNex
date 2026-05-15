@@ -17,6 +17,7 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminCreateCourse = lazy(() => import('./pages/AdminCreateCourse'));
 const AdminEditCourse = lazy(() => import('./pages/AdminEditCourse'));
 const Playground = lazy(() => import('./pages/Playground'));
+const EnginePlayground = lazy(() => import('./pages/EnginePlayground'));
 const RoadmapPage = lazy(() => import('./pages/Roadmap'));
 const Community = lazy(() => import('./pages/Community'));
 
@@ -26,69 +27,84 @@ const PageLoader = () => (
   </div>
 );
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 export default function App() {
   return (
-    <AuthProvider>
-      <LazyMotion features={domAnimation} strict>
-        <Router>
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              style: {
-                background: '#ffffff',
-                color: '#111827',
-                border: '1px solid #e5e7eb',
-                borderRadius: '14px',
-                fontSize: '14px',
-                fontFamily: "'Inter', system-ui, sans-serif",
-                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-              },
-              success: { iconTheme: { primary: '#7C3AED', secondary: '#ffffff' } },
-              error: { iconTheme: { primary: '#ef4444', secondary: '#ffffff' } },
-              duration: 4000,
-            }}
-          />
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <LazyMotion features={domAnimation} strict>
+          <Router>
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                style: {
+                  background: '#ffffff',
+                  color: '#111827',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '14px',
+                  fontSize: '14px',
+                  fontFamily: "'Inter', system-ui, sans-serif",
+                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                },
+                success: { iconTheme: { primary: '#7C3AED', secondary: '#ffffff' } },
+                error: { iconTheme: { primary: '#ef4444', secondary: '#ffffff' } },
+                duration: 4000,
+              }}
+            />
 
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/courses" element={<Courses />} />
-              <Route path="/course-detail/:courseId" element={<CourseDetail />} />
-              <Route path="/playground" element={<Playground />} />
-              <Route path="/roadmap" element={<RoadmapPage />} />
-              <Route path="/course-detail/:courseId/community" element={<Community />} />
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/courses" element={<Courses />} />
+                <Route path="/course-detail/:courseId" element={<CourseDetail />} />
+                <Route path="/playground" element={<Playground />} />
+                <Route path="/engine" element={<EnginePlayground />} />
+                <Route path="/roadmap" element={<RoadmapPage />} />
+                <Route path="/course-detail/:courseId/community" element={<Community />} />
 
-              <Route path="/dashboard" element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/course/:courseId" element={
-                <ProtectedRoute>
-                  <CoursePlayer />
-                </ProtectedRoute>
-              } />
+                <Route path="/dashboard" element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/course/:courseId" element={
+                  <ProtectedRoute>
+                    <CoursePlayer />
+                  </ProtectedRoute>
+                } />
 
-              <Route path="/admin" element={
-                <ProtectedRoute requireAdmin>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/create-course" element={
-                <ProtectedRoute requireAdmin>
-                  <AdminCreateCourse />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/edit-course/:courseId" element={
-                <ProtectedRoute requireAdmin>
-                  <AdminEditCourse />
-                </ProtectedRoute>
-              } />
-            </Routes>
-          </Suspense>
-        </Router>
-      </LazyMotion>
-    </AuthProvider>
+                <Route path="/admin" element={
+                  <ProtectedRoute requireAdmin>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/create-course" element={
+                  <ProtectedRoute requireAdmin>
+                    <AdminCreateCourse />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/edit-course/:courseId" element={
+                  <ProtectedRoute requireAdmin>
+                    <AdminEditCourse />
+                  </ProtectedRoute>
+                } />
+              </Routes>
+            </Suspense>
+          </Router>
+        </LazyMotion>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }

@@ -92,10 +92,17 @@ app.use('/api', cors({
     credentials: true,
 }));
 
+// ─── Security Enhancements (Enterprise Grade) ───────────────────────────────────
+const xssClean = require('xss-clean');
+// Protect against XSS by sanitizing req.body, req.query, and req.params
+app.use(xssClean());
+
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/courses', require('./routes/courses'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/progress', require('./routes/progressRoutes'));
+app.use('/api/playground', require('./routes/playgroundRoutes'));
 
 // ─── Database Connection & Crash Handlers ─────────────────────────────────────
 mongoose.connect(process.env.MONGO_URI, { family: 4 })
@@ -137,10 +144,39 @@ if (process.env.NODE_ENV === 'production') {
 // ─── Centralized Error Handler (must be LAST) ─────────────────────────────────
 app.use(errorHandler);
 
-// ─── Start Server ─────────────────────────────────────────────────────────────
+// ─── Start Server & Socket.IO ──────────────────────────────────────────────────
+const http = require('http');
+const { Server } = require('socket.io');
+const initPlaygroundWorker = require('./workers/playgroundWorker');
+
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: allowedOrigins,
+        methods: ['GET', 'POST'],
+        credentials: true
+    }
+});
+
+// Expose io to routes
+app.set('io', io);
+
+io.on('connection', (socket) => {
+    logger.info(`[Socket.IO] Client connected: ${socket.id}`);
+    
+    socket.on('disconnect', () => {
+        logger.info(`[Socket.IO] Client disconnected: ${socket.id}`);
+    });
+});
+
+// Initialize BullMQ Playground Worker
+const worker = initPlaygroundWorker(io);
+
+server.listen(PORT, () => {
     logger.info(`[Server] EduNex running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+    logger.info(`[Worker] BullMQ Execution Worker Started`);
 });
 
 // Graceful shutdown on SIGTERM

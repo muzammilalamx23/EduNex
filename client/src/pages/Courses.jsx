@@ -1,12 +1,90 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Star, ArrowRight, Search, GraduationCap, Filter } from 'lucide-react';
+import { BookOpen, Star, ArrowRight, Search, GraduationCap, Filter, Layers } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BackgroundAnimation from '../components/BackgroundAnimation';
+
+const learningPaths = [
+    {
+        id: "frontend",
+        title: "Frontend Engineering Path",
+        description: "Master the visual and interactive layers of the web.",
+        orderedTitles: [
+            "Frontend Foundations: HTML & CSS",
+            "Modern JavaScript Essentials",
+            "React.js Mastery: Zero to Hero"
+        ]
+    },
+    {
+        id: "backend-core",
+        title: "Backend Core Path",
+        description: "Build robust APIs and manage databases.",
+        orderedTitles: [
+            "Node.js Masterclass",
+            "Express.js Fundamentals",
+            "MongoDB & Mongoose Bootcamp",
+            "PostgreSQL & Prisma ORM",
+            "Secure JWT Authentication",
+            "Advanced REST APIs"
+        ]
+    },
+    {
+        id: "backend-advanced",
+        title: "Backend Advanced Architecture",
+        description: "Scale your applications and build real-time features.",
+        orderedTitles: [
+            "TypeScript for Backend",
+            "Next-Level NestJS",
+            "GraphQL Zero to Hero",
+            "WebSockets & Real-Time",
+            "Redis Caching Strategies",
+            "Background Jobs with BullMQ"
+        ]
+    },
+    {
+        id: "data-science",
+        title: "Data Scientist Path",
+        description: "Extract insights from data. Learn statistics, machine learning, and data visualization.",
+        orderedTitles: [
+            "Python for Data Science",
+            "Statistics & Probability",
+            "Data Analysis with Pandas",
+            "Data Visualization with Matplotlib",
+            "Machine Learning Basics"
+        ]
+    },
+    {
+        id: "devops-engineer",
+        title: "DevOps Engineer Path",
+        description: "Automate operations with CI/CD pipelines, containerization, and infrastructure automation.",
+        orderedTitles: [
+            "Docker for Backend Developers",
+            "Kubernetes Orchestration",
+            "Infrastructure as Code (Terraform)",
+            "CI/CD Pipelines for Backend",
+            "AWS Deployment & Serverless",
+            "Backend Security & Rate Limiting",
+            "Microservices Architecture",
+            "Apache Kafka Basics",
+            "System Design Basics"
+        ]
+    },
+    {
+        id: "ml-engineer",
+        title: "ML Engineer Path",
+        description: "Build intelligent systems at scale. Train and deploy models.",
+        orderedTitles: [
+            "Deep Learning with PyTorch",
+            "Natural Language Processing (NLP)",
+            "Computer Vision Fundamentals",
+            "MLOps & Model Deployment"
+        ]
+    }
+];
 
 const CourseCard = ({ title, instructor, lessons, rating, difficulty, thumbnail, id, index }) => {
     const navigate = useNavigate();
@@ -23,11 +101,11 @@ const CourseCard = ({ title, instructor, lessons, rating, difficulty, thumbnail,
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05, duration: 0.4 }}
             onClick={() => navigate(`/course-detail/${id}`)}
-            className="group cursor-pointer rounded-2xl border border-white/[0.06] bg-[var(--color-surface)] overflow-hidden transition-all duration-400 hover:border-blue-500/20 hover:-translate-y-1"
+            className="group cursor-pointer rounded-2xl border border-white/[0.06] bg-[var(--color-surface)] overflow-hidden transition-all duration-400 hover:border-blue-500/20 hover:-translate-y-1 h-full flex flex-col"
             style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}
         >
             {/* Thumbnail */}
-            <div className="h-48 bg-white relative overflow-hidden">
+            <div className="h-48 bg-white relative overflow-hidden flex-shrink-0">
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-surface)] via-transparent to-transparent z-10"></div>
                 <img
                     src={thumbnail || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'}
@@ -42,7 +120,7 @@ const CourseCard = ({ title, instructor, lessons, rating, difficulty, thumbnail,
 
             {/* Content */}
             <div className="p-6 flex-1 flex flex-col">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-violet-600 transition-colors line-clamp-1">
+                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-violet-600 transition-colors line-clamp-2">
                     {title}
                 </h3>
                 <p className="text-[var(--color-text-dim)] text-sm mb-5">
@@ -56,7 +134,7 @@ const CourseCard = ({ title, instructor, lessons, rating, difficulty, thumbnail,
                     </div>
                     <div className="flex items-center gap-1.5 text-amber-400 ml-auto font-semibold">
                         <Star size={14} fill="currentColor" />
-                        {rating || 4.5}
+                        {rating || 4.9}
                     </div>
                 </div>
 
@@ -76,15 +154,15 @@ const CourseCard = ({ title, instructor, lessons, rating, difficulty, thumbnail,
     );
 };
 
+import { useQuery } from '@tanstack/react-query';
+
 const Courses = () => {
-    const [courses, setCourses] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
     const [levelFilter, setLevelFilter] = useState('All');
-    const [total, setTotal] = useState(0);
-    const [page, setPage] = useState(1);
-    const LIMIT = 12;
+    
+    // Use a large limit to fetch all courses for bundling
+    const LIMIT = 100;
 
     // Debounce the search term
     useEffect(() => {
@@ -92,41 +170,95 @@ const Courses = () => {
         return () => clearTimeout(timer);
     }, [searchTerm]);
 
-    // Reset to page 1 whenever filters change
-    useEffect(() => {
-        setPage(1);
-        setCourses([]);
-    }, [debouncedSearch, levelFilter]);
+    const { data: courses = [], isLoading: loading, isError } = useQuery({
+        queryKey: ['courses', debouncedSearch, levelFilter],
+        queryFn: async () => {
+            const params = new URLSearchParams({
+                page: 1,
+                limit: LIMIT,
+            });
+            if (debouncedSearch) params.set('search', debouncedSearch);
+            if (levelFilter !== 'All') params.set('difficulty', levelFilter);
 
-    // Fetch from backend with query params — no more client-side filtering
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const params = new URLSearchParams({
-                    page,
-                    limit: LIMIT,
-                });
-                if (debouncedSearch) params.set('search', debouncedSearch);
-                if (levelFilter !== 'All') params.set('difficulty', levelFilter);
+            const res = await api.get(`/courses?${params.toString()}`);
+            return res.data.data || [];
+        }
+    });
 
-                const res = await api.get(`/courses?${params.toString()}`);
-                const data = res.data.data || [];
-                // Append for load-more, replace for new filter
-                setCourses(prev => page === 1 ? data : [...prev, ...data]);
-                setTotal(res.data.pagination?.total || 0);
-            } catch {
-                toast.error('Failed to load courses. Please try again later.');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, [debouncedSearch, levelFilter, page]);
+    if (isError) {
+        toast.error('Failed to load courses. Please try again later.');
+    }
 
-    const hasMore = courses.length < total;
     const levels = ['All', 'Beginner', 'Intermediate', 'Advanced'];
+    
+    const isFiltering = debouncedSearch !== '' || levelFilter !== 'All';
 
+    // Group courses by learning path if not filtering
+    const renderBundles = () => {
+        const renderedCourseIds = new Set();
+        
+        const pathElements = learningPaths.map((path, pathIdx) => {
+            // Find courses for this path in the correct order
+            const pathCourses = path.orderedTitles
+                .map(title => courses.find(c => c.title === title))
+                .filter(Boolean); // remove undefined
+            
+            if (pathCourses.length === 0) return null;
+            
+            // Track rendered courses
+            pathCourses.forEach(c => renderedCourseIds.add(c._id));
+
+            return (
+                <div key={path.id} className="mb-20">
+                    <div className="flex items-start gap-4 mb-8 border-b border-gray-200 pb-4">
+                        <div className="bg-violet-100 text-violet-600 p-3 rounded-2xl">
+                            <Layers size={24} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{path.title}</h2>
+                            <p className="text-gray-500 mt-1">{path.description}</p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {pathCourses.map((course, i) => (
+                            <div key={course._id} className="relative">
+                                {/* Number indicator */}
+                                <div className="absolute -top-3 -left-3 w-8 h-8 bg-gray-900 text-white rounded-full flex items-center justify-center font-bold z-30 shadow-lg border-2 border-white">
+                                    {i + 1}
+                                </div>
+                                <CourseCard {...course} id={course._id} index={i} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        });
+
+        // Other courses not in bundles
+        const otherCourses = courses.filter(c => !renderedCourseIds.has(c._id));
+        if (otherCourses.length > 0) {
+            pathElements.push(
+                <div key="other" className="mb-20">
+                    <div className="flex items-start gap-4 mb-8 border-b border-gray-200 pb-4">
+                        <div className="bg-gray-100 text-gray-600 p-3 rounded-2xl">
+                            <BookOpen size={24} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">Additional Explorations</h2>
+                            <p className="text-gray-500 mt-1">More courses to expand your knowledge.</p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {otherCourses.map((course, i) => (
+                            <CourseCard key={course._id} {...course} id={course._id} index={i} />
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        return pathElements;
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 text-gray-900 relative">
@@ -159,7 +291,7 @@ const Courses = () => {
                         transition={{ delay: 0.2 }}
                         className="text-[var(--color-text-muted)] text-lg max-w-xl leading-relaxed"
                     >
-                        Master technical skills with our structured curriculum designed for high-growth engineering roles.
+                        Master technical skills with our structured curriculum designed for high-growth engineering roles. Follow the recommended paths from phase 1 to 4.
                     </motion.p>
                 </div>
 
@@ -203,7 +335,7 @@ const Courses = () => {
                     </div>
                 </motion.div>
 
-                {/* Course grid */}
+                {/* Course Grid / Bundles */}
                 {loading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -217,21 +349,7 @@ const Courses = () => {
                             </div>
                         ))}
                     </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {courses.map((course, i) => (
-                            <CourseCard
-                                key={course._id}
-                                {...course}
-                                id={course._id}
-                                index={i}
-                            />
-                        ))}
-                    </div>
-                )}
-
-                {/* Empty state */}
-                {courses.length === 0 && !loading && (
+                ) : courses.length === 0 ? (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -247,22 +365,20 @@ const Courses = () => {
                             Clear all filters
                         </button>
                     </motion.div>
-                )}
-
-                {/* Load more */}
-                {hasMore && !loading && (
-                    <div className="flex justify-center mt-12">
-                        <button
-                            onClick={() => setPage(p => p + 1)}
-                            className="px-8 py-3 rounded-xl bg-white border border-gray-200 text-gray-900 font-semibold hover:border-violet-300 hover:text-violet-600 transition-all"
-                        >
-                            Load More Courses
-                        </button>
+                ) : isFiltering ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {courses.map((course, i) => (
+                            <CourseCard
+                                key={course._id}
+                                {...course}
+                                id={course._id}
+                                index={i}
+                            />
+                        ))}
                     </div>
-                )}
-                {loading && courses.length > 0 && (
-                    <div className="flex justify-center mt-8">
-                        <div className="w-8 h-8 border-2 border-violet-500/20 border-t-violet-600 rounded-full animate-spin" />
+                ) : (
+                    <div>
+                        {renderBundles()}
                     </div>
                 )}
             </main>

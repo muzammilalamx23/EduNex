@@ -1,99 +1,92 @@
-# EduNex: Advanced AI Learning Platform
+# EduNex - Enterprise MERN EdTech Platform
 
-EduNex is a production-grade learning management system (LMS) designed for modern technological education. It features a high-performance React frontend, a secure Express backend, and an atomic learning progress engine.
+EduNex is a high-performance, modular monolithic, gamified EdTech platform built to enterprise standards. Inspired by top-tier platforms like Duolingo, Codecademy, and LeetCode, EduNex delivers an ultra-smooth React interface powered by a deeply hardened, secure Express backend.
 
-## 🚀 Key Features
+## 🚀 Features
+- **Gamified Learning**: Live XP, daily streaks, dynamic leaderboards, and mission unlock mechanics.
+- **Distributed Playground Engine**: Write and execute real Node.js and Python code directly in the browser. Powered by BullMQ, Redis, Docker, and Socket.IO for safe, isolated execution and live log streaming.
+- **Enterprise Security**: XSS protection, MongoDB query sanitization, Rate Limiting, HTTP-only JWTs, RBAC (Role-Based Access Control), and anti-XP farming logic.
+- **Premium UI**: Framer Motion animations, dark mode SaaS aesthetics, and glassmorphic micro-interactions. Fully responsive down to 320px.
+- **Optimized Performance**: TanStack Query for cache invalidation, Zustand for lightweight state management, and Mongoose lean aggregations to defeat N+1 query overhead.
 
-- **Cyber-Neon UI**: High-contrast, accessibility-focused design system.
-- **Persistent Progress**: Server-side tracking of lesson completion and learning position.
-- **Admin Command Center**: Complete dashboard for course management and analytics.
-- **Secure Auth**: JWT-based authentication with HttpOnly cookies.
-- **Production DevOps**: Multi-stage Docker optimization and GitHub Actions CI/CD.
+## 🛠 Tech Stack
 
-## 🛠️ Architecture Overview
+### Frontend
+- **React 18 & Vite** (Lazy loading, Suspense, Error Boundaries)
+- **Tailwind CSS** (Mobile-first responsive design)
+- **Framer Motion** (Fluid layout animations)
+- **Zustand & TanStack Query** (State & Cache management)
+- **Socket.IO Client** (Real-time execution streaming)
+- **Monaco Editor** (In-browser code authoring)
 
-### Frontend (Client)
-- **Framework**: React 19 + Vite 7
-- **Styling**: Tailwind CSS 4.0 (Vanilla CSS @theme)
-- **State**: React Context API (Auth) + React Router 7 (SPA Routing)
-- **Animations**: Framer Motion + Three.js Shaders
+### Backend
+- **Node.js & Express.js** (Modular Monolithic Architecture)
+- **MongoDB & Mongoose** (Optimized schemas, indexing)
+- **Redis & BullMQ** (Scalable asynchronous job processing)
+- **Socket.IO** (Bi-directional real-time events)
+- **Docker** (Isolated code execution sandboxing)
+- **JWT & bcrypt** (Stateless authentication)
 
-### Backend (Server)
-- **Framework**: Express.js (Node.js)
-- **Database**: MongoDB Atlas via Mongoose
-- **Security**: Helmet, Rate Limiting, Mongo Sanitize
-- **Logging**: Winston with MongoDB audit transport
-- **Design Pattern**: Controller-Route Separation (MVC)
+## 📦 Local Development Setup
 
----
+### Prerequisites
+- Node.js (v18+)
+- MongoDB (Atlas or Local)
+- Redis (Local or Cloud instance like Upstash)
+- Docker Desktop (Required for Playground Engine to run code)
 
-## 💻 Getting Started
-
-### 1. Prerequisites
-- Node.js (v20+)
-- MongoDB (Local or Atlas)
-- Docker (Optional)
-
-### 2. Installation
+### 1. Clone & Install
 ```bash
-# Install root dependencies
+git clone https://github.com/muzammilalamx23/EduNex.git
+cd EduNex
 npm install
 
-# Install server and client dependencies
-npm run build
+cd client && npm install
+cd ../server && npm install
 ```
 
-### 3. Environment Setup
-Create a `.env` file in the `server` directory (use `.env.example` as a template).
-
-```bash
-MONGO_URI=your_mongo_url
-JWT_SECRET=your_secret
+### 2. Environment Variables
+Create a `.env` file inside the `server/` directory:
+```env
+# Server
 PORT=5000
+NODE_ENV=development
+
+# Database
+MONGODB_URI=mongodb+srv://<your-username>:<your-password>@cluster.mongodb.net/edunex?retryWrites=true&w=majority
+JWT_SECRET=your_super_secret_jwt_key
+JWT_EXPIRES_IN=7d
+
+# Redis Queue (Required for BullMQ)
+REDIS_URI=redis://default:<password>@<host>:<port>
+
+# Frontend
+CORS_ORIGIN=http://localhost:5173
 ```
 
-### 4. Running Locally
+### 3. Run the Development Server
+From the root of the project:
 ```bash
-# Run both frontend and backend concurrently
 npm run dev
 ```
+- Frontend will boot on `http://localhost:5173`
+- Backend API will boot on `http://localhost:5000`
 
----
+> **Note:** If Redis is offline, the backend will intelligently fallback to synchronous code execution via the Node event loop.
 
-## 🐳 Docker Deployment
+## 🔐 Deployment (Production Readiness)
+EduNex is architected for immediate zero-config deployment.
 
-For a production-ready environment, use the provided multi-stage Dockerfile:
+1. **Frontend (Vercel):** Connect your GitHub repo to Vercel and point the Root Directory to `client/`. Add `VITE_API_URL` to Vercel Env variables.
+2. **Backend (Render/Railway):** Connect your GitHub repo, set the Root Directory to `server/`, and add your MongoDB and Redis credentials.
+3. **Database (MongoDB Atlas):** Scale up clusters as needed. Add the backend IPs to your Atlas allowlist.
+4. **Redis (Upstash):** Provision a free Redis serverless database for BullMQ queue management.
 
-```bash
-# Build the image
-docker build -t edunex-platform .
+## 🔒 Security Posture
+- All user inputs are sanitized against NoSQL injection via `express-mongo-sanitize`.
+- API endpoints are heavily rate-limited (`express-rate-limit`) to prevent DDoS attacks.
+- Playgrounds prevent arbitrary host execution by encapsulating scripts in strictly limited, network-isolated Docker containers with enforced 5-second timeouts.
+- Strict anti-cheating mechanisms (`ProgressService.awardMissionXP`) prevent users from duplicate-submitting playground missions to farm XP.
 
-# Run the container
-docker run -p 5000:5000 --env-file server/.env edunex-platform
-```
-
----
-
-## 🧪 Testing and CI/CD
-
-This project uses **GitHub Actions** for continuous integration. Every push to `main` triggers:
-1. Linting and Static Analysis
-2. Production Build Verification
-3. Docker Image Assembly
-
----
-
-## 🔐 Security Standards
-
-- **HTTPOnly Cookies**: Tokens are never accessible via JavaScript (XSS Protection).
-- **Rate Limiting**: Brute-force protection on authentication endpoints.
-- **Sanitization**: Automatic NoSQL Injection shielding.
-- **Non-Root Runtime**: Docker containers run as a dedicated `edunex` user.
-
----
-
-## 📜 Documentation
-
-- [API Specification](./server/routes/README.md)
-- [Design System Spec](./cyber_neon_green_spec.md)
-- [Engineering Audit](./engineering_audit.md)
+## 📜 License
+MIT License - Use it, build on it, learn from it.

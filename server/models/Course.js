@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 // ─── Exported Categories ──────────────────────────────────────────────────────
-// Single source of truth — imported by routes and can be consumed by frontend.
 const COURSE_CATEGORIES = [
     'Development',
     'Design',
@@ -25,16 +25,11 @@ const LessonSchema = new mongoose.Schema({
         type: String,
         default: 'General'
     },
-    // Original YouTube URL as pasted by the admin (for display/audit purposes).
-    // Route validator enforces YouTube-only via isValidYouTubeUrl().
     videoUrl: {
         type: String,
         trim: true,
         default: ''
     },
-    // Pre-extracted 11-char YouTube video ID.
-    // Computed server-side from videoUrl on create/update — never set by client.
-    // Stored to avoid URL parsing at render time.
     videoId: {
         type: String,
         trim: true,
@@ -64,6 +59,17 @@ const LessonSchema = new mongoose.Schema({
     order: {
         type: Number,
         default: 0
+    },
+    // Enterprise Integration: Links specific lessons to an interactive Playground Mission
+    playgroundId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Playground',
+        default: null
+    },
+    xpReward: {
+        type: Number,
+        default: 10,
+        min: 0
     }
 }, { _id: true });
 
@@ -76,20 +82,26 @@ const CourseSchema = new mongoose.Schema({
         trim: true,
         maxlength: [150, 'Course title cannot exceed 150 characters']
     },
+    slug: {
+        type: String,
+        unique: true,
+        lowercase: true,
+        index: true
+    },
     description: {
         type: String,
         required: [true, 'Course description is required'],
         trim: true,
         maxlength: [5000, 'Description cannot exceed 5000 characters']
     },
-
     category: {
         type: String,
         enum: {
             values: COURSE_CATEGORIES,
             message: '"{VALUE}" is not a valid category.'
         },
-        default: 'Development'
+        default: 'Development',
+        index: true
     },
     difficulty: {
         type: String,
@@ -97,18 +109,23 @@ const CourseSchema = new mongoose.Schema({
             values: ['Beginner', 'Intermediate', 'Advanced'],
             message: '"{VALUE}" is not a valid difficulty level.'
         },
-        default: 'Beginner'
+        default: 'Beginner',
+        index: true
     },
     thumbnail: {
         type: String,
         trim: true,
         default: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
     },
-    // Tags enable topic-level search (e.g. "async", "closures", "flexbox").
-    // Stored lowercase for consistent matching.
     tags: {
         type: [String],
-        default: []
+        default: [],
+        index: true
+    },
+    technologies: {
+        type: [String],
+        default: [],
+        index: true
     },
     lessons: [LessonSchema],
     status: {
@@ -121,40 +138,46 @@ const CourseSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    // Denormalized counter — incremented on enroll, decremented on unenroll.
-    // Avoids an expensive User collection aggregation for enrollment counts.
     enrollmentCount: {
         type: Number,
         default: 0,
         min: 0
     },
-    // Rating: 0 = unrated. Updated when a review system is implemented.
     rating: {
         type: Number,
         default: 0,
         min: 0,
         max: 5
+    },
+    estimatedDuration: {
+        type: Number, // In minutes
+        default: 0
     }
 }, {
     timestamps: true,
-    toJSON: { virtuals: true },   // include virtuals in res.json() output
+    toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
 
 // ─── Virtual: totalDuration ───────────────────────────────────────────────────
-// Computes the sum of all lesson durations (in minutes) on the fly.
-// Only works when lessons are embedded (not projected out).
 CourseSchema.virtual('totalDuration').get(function () {
     if (!this.lessons || this.lessons.length === 0) return 0;
     return this.lessons.reduce((sum, lesson) => sum + (lesson.duration || 0), 0);
 });
 
-// ─── Indexes ──────────────────────────────────────────────────────────────────
-// Text index covers title, description, AND tags for comprehensive search.
-CourseSchema.index({ title: 'text', description: 'text', tags: 'text' });
+// ─── Pre-Save Hook: Generate Slug ──────────────────────────────────────────────
+CourseSchema.pre('save', function (next) {
+    if (this.isModified('title') || !this.slug) {
+        this.slug = slugify(this.title, { lower: true, strict: true });
+    }
+    next();
+});
 
-// ─── Static: CATEGORIES ───────────────────────────────────────────────────────
-// Expose the list so routes can validate against it without duplication.
+// ─── Compound & Text Indexes ──────────────────────────────────────────────────
+// Optimized for catalog filtering, pagination, and full-text search
+CourseSchema.index({ category: 1, difficulty: 1, status: 1 });
+CourseSchema.index({ title: 'text', description: 'text', tags: 'text', technologies: 'text' });
+
 CourseSchema.statics.CATEGORIES = COURSE_CATEGORIES;
 
 module.exports = mongoose.model('Course', CourseSchema);
