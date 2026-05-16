@@ -49,7 +49,7 @@ const Auth = () => {
                 toast.success(isLogin ? 'Welcome back!' : 'Account created! Welcome to EduNex 🚀');
                 navigate('/dashboard');
             }
-        } catch {
+        } catch (err) {
             const message = err.response?.data?.message || 'Something went wrong. Please try again.';
             toast.error(message);
         } finally {

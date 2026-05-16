@@ -51,7 +51,7 @@ const Community = () => {
                         setMessages(msgRes.data.data);
                     }
                 }
-            } catch {
+            } catch (err) {
                 console.error(err);
                 if (user) {
                     toast.error('Failed to load community data.');
@@ -154,7 +154,7 @@ const Community = () => {
                     socketRef.current.emit('typing', { courseId, isTyping: false });
                 }
             }
-        } catch {
+        } catch (err) {
             toast.error(err.response?.data?.message || 'Error sending message');
         } finally {
             setUploading(false);
@@ -167,7 +167,7 @@ const Community = () => {
             // Optimistic update
             setMessages(prev => prev.filter(m => m._id !== msgId));
             toast.success('Message deleted');
-        } catch {
+        } catch (err) {
             toast.error('Failed to delete message');
         }
     };
@@ -179,7 +179,7 @@ const Community = () => {
             // Refresh messages
             const msgRes = await api.get(`/courses/${courseId}/community`);
             setMessages(msgRes.data.data);
-        } catch {
+        } catch (err) {
             toast.error('Moderation failed');
         }
     };

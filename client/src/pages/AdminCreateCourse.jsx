@@ -84,7 +84,7 @@ const AdminCreateCourse = () => {
             await api.post('/courses', { ...courseData, tags: parsedTags });
             toast.success('Course created successfully!');
             navigate('/admin');
-        } catch {
+        } catch (err) {
             toast.error(err.response?.data?.message || 'Failed to create course.');
         } finally {
             setLoading(false);

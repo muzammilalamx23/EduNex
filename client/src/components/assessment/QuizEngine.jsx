@@ -29,7 +29,7 @@ const QuizEngine = ({ lessonId, onComplete }) => {
                     });
                     setSelectedAnswers(initialAnswers);
                 }
-            } catch {
+            } catch (err) {
                 console.error('Failed to load quiz:', err);
                 setError(err.response?.data?.message || 'Quiz not found for this lesson.');
             } finally {
@@ -83,7 +83,7 @@ const QuizEngine = ({ lessonId, onComplete }) => {
                     toast.error(`You scored ${quizResults.score.toFixed(0)}%. Passing is ${quiz.passingScore}%. Try again!`);
                 }
             }
-        } catch {
+        } catch (err) {
             toast.error(err.response?.data?.message || 'Failed to submit quiz.');
         } finally {
             setIsSubmitting(false);

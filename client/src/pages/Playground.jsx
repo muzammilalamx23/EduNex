@@ -416,7 +416,7 @@ export default function Playground() {
         savedXp = res.data.data?.awarded ?? mission.xp;
         // Refresh the user context so the header XP counter updates
         await refreshUser();
-      } catch {
+      } catch (err) {
         // Non-fatal: the mission still completes, XP save is best-effort
         console.error('Failed to save playground XP:', err?.response?.data?.message || err.message);
       }

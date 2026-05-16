@@ -24,7 +24,7 @@ const AdminEditCourse = () => {
             try {
                 const res = await api.get(`/courses/${courseId}`);
                 setCourseData(res.data.data);
-            } catch {
+            } catch (err) {
                 toast.error("Failed to load course");
                 navigate('/admin');
             } finally {
@@ -60,7 +60,7 @@ const AdminEditCourse = () => {
             await api.put(`/courses/${courseId}`, courseData);
             toast.success('Course updated successfully!');
             navigate('/admin');
-        } catch {
+        } catch (err) {
             toast.error(err.response?.data?.message || 'Update failed');
         } finally {
             setSaving(false);

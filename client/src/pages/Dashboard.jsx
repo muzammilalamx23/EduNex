@@ -35,7 +35,7 @@ const ProfileSettings = ({ user, onUpdate }) => {
             // New backend: { success: true, message: '...' }
             setMessage({ type: 'success', text: response.data.message || 'Profile updated.' });
             onUpdate();
-        } catch {
+        } catch (err) {
             setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update profile.' });
         } finally {
             setLoading(false);
@@ -152,7 +152,7 @@ const Dashboard = () => {
         try {
             const userRes = await api.get('/auth/user');
             setUserData(userRes.data.data);
-        } catch {
+        } catch (err) {
             toast.error('Session expired. Please log in again.');
             logout();
             navigate('/auth');

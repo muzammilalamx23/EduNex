@@ -42,7 +42,7 @@ const CourseDetail = () => {
             try {
                 const res = await api.get(`/courses/${courseId}`);
                 setCourse(res.data.data);
-            } catch {
+            } catch (err) {
                 console.error(err);
             } finally {
                 setLoading(false);
@@ -83,7 +83,7 @@ const CourseDetail = () => {
             setIsEnrolled(true);
             toast.success('Successfully enrolled! Starting your journey...');
             navigate(`/course/${course._id}`);
-        } catch {
+        } catch (err) {
             const msg = err.response?.data?.message || 'Enrollment failed. Please try again.';
             toast.error(msg);
         } finally {
