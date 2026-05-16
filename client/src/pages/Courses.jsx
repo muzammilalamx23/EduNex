@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Star, ArrowRight, Search, GraduationCap, Filter, Layers } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 // ============================================================
 // BACKUP — Original Features.jsx  (DO NOT MODIFY)
 // Restore: swap `Features` import in Landing.jsx to this file,

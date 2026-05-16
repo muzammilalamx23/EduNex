@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React from 'react';
 import { Terminal, Cpu, ShieldCheck, Workflow, Sparkles, Zap, Globe, Lock } from 'lucide-react';
 

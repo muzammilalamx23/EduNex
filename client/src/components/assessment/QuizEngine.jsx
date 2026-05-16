@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence  } from 'framer-motion';
 import { CheckCircle2, XCircle, Trophy, ArrowRight, Loader2, Sparkles, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../utils/api';

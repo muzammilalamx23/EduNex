@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, User, Send, Loader2, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Layout, BookOpen, User, Settings, LogOut, Zap, Trophy, Clock, Loader2, Save, Github, Linkedin, Lock, ArrowRight, Compass, ShieldCheck, FileCheck, Bell, BarChart2, Medal } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';

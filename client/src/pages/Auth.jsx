@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, Mail, Lock, User, Loader2, Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';

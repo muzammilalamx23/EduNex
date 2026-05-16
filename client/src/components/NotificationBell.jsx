@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bell } from 'lucide-react';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence  } from 'framer-motion';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { io } from 'socket.io-client';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence  } from 'framer-motion';
 import {
     ChevronLeft, Play, CheckCircle2, ChevronRight,
     Menu, X, FileText, Zap, Layout, Clock, Lock,

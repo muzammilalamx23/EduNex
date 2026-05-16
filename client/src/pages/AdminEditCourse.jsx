@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Plus, Trash2, ArrowLeft, Loader2, Video, FileText, Clock, Layout, Save, Image as ImageIcon } from 'lucide-react';

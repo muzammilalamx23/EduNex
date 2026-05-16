@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence  } from 'framer-motion';
 import Editor from '@monaco-editor/react';
 import { ArrowLeft, Send, Bot, Code2, Globe, Layout, Maximize2, Sparkles, User, RefreshCw, Layers, Flame, Zap, Trophy, CheckCircle2, Circle, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';

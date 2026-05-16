@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence  } from 'framer-motion';
 import {
     Users, Zap, Clock, Trophy, Search, Loader2, ChevronRight,
     User as UserIcon, Calendar, BookOpen, Plus, Edit, Trash2,
