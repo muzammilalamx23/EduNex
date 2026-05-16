@@ -14,6 +14,7 @@ import {
     ChevronLeft
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { io } from 'socket.io-client';
 import api, { API_BASE_URL } from '../utils/api';
 import Navbar from '../components/Navbar';
 import BackgroundAnimation from '../components/BackgroundAnimation';
@@ -30,8 +31,10 @@ const Community = () => {
     const [newMessage, setNewMessage] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
     const [uploading, setUploading] = useState(false);
+    const [typingUsers, setTypingUsers] = useState(new Set());
     
     const messagesEndRef = useRef(null);
+    const socketRef = useRef(null);
 
     // Fetch Course & Messages
     useEffect(() => {
@@ -60,27 +63,56 @@ const Community = () => {
 
         fetchInitialData();
 
-        // Polling interval for near real-time updates IF user is logged in
-        let interval;
+        fetchInitialData();
+
+        // Socket.io Real-time Setup
         if (user) {
-            interval = setInterval(async () => {
-                try {
-                    const isEnrolled = user.role === 'admin' || user.enrolledCourses?.some(c => c.courseId === courseId);
-                    if (isEnrolled) {
-                        const msgRes = await api.get(`/courses/${courseId}/community`);
-                        setMessages((prev) => {
-                            if (prev.length !== msgRes.data.data.length) {
-                                return msgRes.data.data;
-                            }
-                            return prev;
-                        });
-                    }
-                } catch(e) {}
-            }, 3000);
+            const isEnrolled = user.role === 'admin' || user.enrolledCourses?.some(c => c.courseId === courseId);
+            if (isEnrolled) {
+                // Initialize Socket
+                socketRef.current = io(API_BASE_URL.replace('/api', ''), {
+                    withCredentials: true,
+                    transports: ['websocket', 'polling']
+                });
+
+                const socket = socketRef.current;
+
+                socket.on('connect', () => {
+                    socket.emit('join_course_room', courseId);
+                });
+
+                socket.on('new_message', (msg) => {
+                    setMessages(prev => {
+                        // Prevent duplicates
+                        if (prev.some(m => m._id === msg._id)) return prev;
+                        return [...prev, msg];
+                    });
+                });
+
+                socket.on('message_deleted', (msgId) => {
+                    setMessages(prev => prev.filter(m => m._id !== msgId));
+                });
+
+                socket.on('message_moderated', (msg) => {
+                    setMessages(prev => prev.map(m => m._id === msg._id ? msg : m));
+                });
+
+                socket.on('user_typing', ({ fullName, isTyping }) => {
+                    setTypingUsers(prev => {
+                        const newSet = new Set(prev);
+                        if (isTyping) newSet.add(fullName);
+                        else newSet.delete(fullName);
+                        return newSet;
+                    });
+                });
+            }
         }
 
         return () => {
-            if (interval) clearInterval(interval);
+            if (socketRef.current) {
+                socketRef.current.emit('leave_course_room', courseId);
+                socketRef.current.disconnect();
+            }
         };
     }, [courseId, user]);
 
@@ -113,11 +145,14 @@ const Community = () => {
             }
 
             if (newMessage.trim()) {
-                const res = await api.post(`/courses/${courseId}/community`, { text: newMessage });
-                if (res.data.success) {
-                    setMessages(prev => [...prev, res.data.data]);
-                }
+                // We emit HTTP request, and the server broadcasts via socket
+                // We don't push it locally to avoid duplication unless we want optimistic updates.
+                // For simplicity, wait for the socket 'new_message' event.
+                await api.post(`/courses/${courseId}/community`, { text: newMessage });
                 setNewMessage('');
+                if (socketRef.current) {
+                    socketRef.current.emit('typing', { courseId, isTyping: false });
+                }
             }
         } catch (err) {
             toast.error(err.response?.data?.message || 'Error sending message');
@@ -129,6 +164,7 @@ const Community = () => {
     const handleDeleteMessage = async (msgId) => {
         try {
             await api.delete(`/courses/${courseId}/community/${msgId}`);
+            // Optimistic update
             setMessages(prev => prev.filter(m => m._id !== msgId));
             toast.success('Message deleted');
         } catch (err) {
@@ -307,6 +343,17 @@ const Community = () => {
                                 );
                             })}
                         </AnimatePresence>
+                        
+                        {/* Typing Indicator */}
+                        {typingUsers.size > 0 && (
+                            <div className="flex items-center gap-2 text-gray-500 text-xs mt-2 pl-4">
+                                <Loader2 className="animate-spin" size={14} />
+                                <span>
+                                    {Array.from(typingUsers).join(', ')} {typingUsers.size > 1 ? 'are' : 'is'} typing...
+                                </span>
+                            </div>
+                        )}
+                        
                         <div ref={messagesEndRef} />
                     </div>
 
@@ -341,7 +388,17 @@ const Community = () => {
                                     )}
                                     <textarea
                                         value={newMessage}
-                                        onChange={(e) => setNewMessage(e.target.value)}
+                                        onChange={(e) => {
+                                            setNewMessage(e.target.value);
+                                            if (socketRef.current) {
+                                                socketRef.current.emit('typing', { courseId, isTyping: e.target.value.length > 0 });
+                                            }
+                                        }}
+                                        onBlur={() => {
+                                            if (socketRef.current) {
+                                                socketRef.current.emit('typing', { courseId, isTyping: false });
+                                            }
+                                        }}
                                         placeholder="Type your message..."
                                         className="w-full bg-transparent border-none text-sm text-gray-900 placeholder:text-gray-400 px-2 py-1 max-h-32 resize-none focus:outline-none focus:ring-0"
                                         rows={Math.min(4, Math.max(1, newMessage.split('\n').length))}

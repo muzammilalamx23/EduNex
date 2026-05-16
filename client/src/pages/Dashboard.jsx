@@ -141,6 +141,7 @@ const ProfileSettings = ({ user, onUpdate }) => {
 const Dashboard = () => {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [generatingCertId, setGeneratingCertId] = useState(null);
     const [activeTab, setActiveTab] = useState('overview');
     const navigate = useNavigate();
     const { logout } = useAuth();
@@ -170,6 +171,8 @@ const Dashboard = () => {
         logout(); // AuthContext clears token + user state
         navigate('/');
     };
+
+    // Certificate feature removed for production stability
 
     if (loading) {
         return (
@@ -539,23 +542,13 @@ const Dashboard = () => {
                                             </div>
                                             <span className="text-violet-600 font-bold tabular-nums">{course.progress}%</span>
                                         </div>
-                                        {course.progress === 100 ? (
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); toast.success('🎓 Certificate generation coming soon!'); }}
-                                                className="w-full py-2.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-violet-600 text-xs font-bold transition-all flex items-center justify-center gap-2 hover:bg-blue-500 hover:text-gray-900"
-                                            >
-                                                <FileCheck size={14} />
-                                                Download Certificate
-                                            </button>
-                                        ) : (
-                                            <button
-                                                onClick={() => navigate(`/course/${course.courseId}`)}
-                                                className="w-full py-2.5 rounded-lg bg-gray-100 hover:bg-violet-600 text-gray-900 text-xs font-bold transition-all flex items-center justify-center gap-2 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]"
-                                            >
-                                                Continue Learning
-                                                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                                            </button>
-                                        )}
+                                        <button
+                                            onClick={() => navigate(`/course/${course.courseId}`)}
+                                            className="w-full py-2.5 rounded-lg bg-gray-100 hover:bg-violet-600 hover:text-white text-gray-900 text-xs font-bold transition-all flex items-center justify-center gap-2 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+                                        >
+                                            {course.progress === 100 ? 'Review Course' : 'Continue Learning'}
+                                            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                                        </button>
                                     </div>
                                 ))}
                             </div>

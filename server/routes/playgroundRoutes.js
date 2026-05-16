@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const playgroundController = require('../controllers/playgroundController');
+const submissionController = require('../controllers/submissionController');
 const auth = require('../middleware/auth');
 const rateLimit = require('express-rate-limit');
 
@@ -14,6 +15,7 @@ const playgroundLimiter = rateLimit({
 router.use(auth); // All playground endpoints require authentication
 
 router.post('/execute', playgroundLimiter, playgroundController.executeCode);
+router.post('/submit', submissionController.submitCode);
 router.get('/job/:jobId', playgroundController.getJobStatus);
 
 module.exports = router;

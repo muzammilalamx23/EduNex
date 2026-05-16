@@ -75,6 +75,12 @@ exports.sendMessage = async (req, res) => {
 
         const populatedMsg = await msg.populate('sender', 'fullName');
 
+        // Emit new message event to the room via socket
+        const io = req.app.get('io');
+        if (io) {
+            io.to(`course_${courseId}`).emit('new_message', populatedMsg);
+        }
+
         res.status(201).json({ success: true, data: populatedMsg });
     } catch (err) {
         console.error('sendMessage Error:', err);
@@ -112,6 +118,14 @@ exports.uploadImage = async (req, res) => {
 
         const populatedMsg = await msg.populate('sender', 'fullName');
 
+        // Emit message if it is active (admin uploaded)
+        if (isAdmin) {
+            const io = req.app.get('io');
+            if (io) {
+                io.to(`course_${courseId}`).emit('new_message', populatedMsg);
+            }
+        }
+
         res.status(201).json({ success: true, data: populatedMsg, message: isAdmin ? undefined : 'Image uploaded and pending admin approval.' });
 
     } catch (err) {
@@ -141,6 +155,12 @@ exports.deleteMessage = async (req, res) => {
         
         // Note: For Cloudinary specifically, to delete images from the cloud we would use cloudinary.uploader.destroy().
         // For simplicity, we just delete the database record for now.
+
+        // Emit delete event to the room
+        const io = req.app.get('io');
+        if (io) {
+            io.to(`course_${courseId}`).emit('message_deleted', msgId);
+        }
 
         res.status(200).json({ success: true, message: 'Message deleted' });
     } catch (err) {
@@ -173,6 +193,17 @@ exports.moderateImage = async (req, res) => {
             // Optional: delete or keep the file
         } else {
             return res.status(400).json({ success: false, message: 'Invalid action.' });
+        }
+
+        // Emit moderation event to the room
+        const io = req.app.get('io');
+        if (io) {
+            io.to(`course_${courseId}`).emit('message_moderated', message);
+            // If approved, treat as new message for real-time clients
+            if (action === 'approve') {
+                const populatedMsg = await message.populate('sender', 'fullName');
+                io.to(`course_${courseId}`).emit('new_message', populatedMsg);
+            }
         }
 
         res.status(200).json({ success: true, data: message });

@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import MobileBanner from './components/MobileBanner';
 import { Loader2 } from 'lucide-react';
 
 // ─── Lazy-loaded pages ────────────────────────────────────────────────────────
@@ -45,6 +46,7 @@ export default function App() {
       <AuthProvider>
         <LazyMotion features={domAnimation} strict>
           <Router>
+            <MobileBanner />
             <Toaster
               position="top-right"
               toastOptions={{

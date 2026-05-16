@@ -181,7 +181,8 @@ exports.lessonComplete = async (req, res) => {
     }
 
     enrollment.completedLessons.push(lessonId);
-    const totalLessons = course.lessons.length;
+    const completableLessons = course.lessons.filter(l => l.type !== 'heading');
+    const totalLessons = completableLessons.length;
     const newProgress = totalLessons > 0 ? Math.round((enrollment.completedLessons.length / totalLessons) * 100) : 100;
 
     const wasCompleteBefore = enrollment.progress >= 100;

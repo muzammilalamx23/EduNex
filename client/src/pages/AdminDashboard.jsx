@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Users, Zap, Clock, Trophy, Search, Loader2, ChevronRight,
     User as UserIcon, Calendar, BookOpen, Plus, Edit, Trash2,
-    CheckCircle, XCircle, Layout, ExternalLink, MoreVertical
+    CheckCircle, XCircle, Layout, ExternalLink, MoreVertical, ShieldAlert
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('courses'); // 'users' or 'courses'
     const [users, setUsers] = useState([]);
     const [courses, setCourses] = useState([]);
+    const [reviews, setReviews] = useState([]);
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -24,14 +25,16 @@ const AdminDashboard = () => {
 
     const fetchData = async () => {
         try {
-            const [usersRes, statsRes, coursesRes] = await Promise.all([
+            const [usersRes, statsRes, coursesRes, reviewsRes] = await Promise.all([
                 api.get('/admin/users'),
                 api.get('/admin/stats'),
-                api.get('/courses/admin/all')
+                api.get('/courses/admin/all'),
+                api.get('/admin/submissions')
             ]);
             setUsers(usersRes.data.data || []);
             setStats(statsRes.data.data || {});
             setCourses(coursesRes.data.data || []);
+            setReviews(reviewsRes.data.data || []);
         } catch (err) {
             setError(err.response?.data?.message || 'Access denied. Admin privileges required.');
         } finally {
@@ -83,6 +86,28 @@ const AdminDashboard = () => {
     const filteredCourses = courses.filter(course =>
         course.title.toLowerCase().includes(debouncedSearch.toLowerCase())
     );
+
+    const [reviewModal, setReviewModal] = useState({ isOpen: false, submission: null });
+    const [reviewFeedback, setReviewFeedback] = useState("");
+
+    const openReviewModal = (submission) => {
+        setReviewModal({ isOpen: true, submission });
+        setReviewFeedback(submission.reviewFeedback || "");
+    };
+
+    const submitReview = async (status) => {
+        try {
+            await api.post(`/admin/submissions/${reviewModal.submission._id}/review`, {
+                status,
+                reviewFeedback
+            });
+            toast.success(`Submission marked as ${status.replace('_', ' ')}`);
+            setReviewModal({ isOpen: false, submission: null });
+            fetchData();
+        } catch (err) {
+            toast.error(err.response?.data?.message || 'Failed to submit review');
+        }
+    };
 
     if (loading) return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
@@ -144,14 +169,20 @@ const AdminDashboard = () => {
                     >
                         User Directory
                     </button>
+                    <button
+                        onClick={() => { setActiveTab('reviews'); setSearchTerm(""); }}
+                        className={`pb-4 px-2 font-bold text-sm transition-all border-b-2 flex items-center gap-2 ${activeTab === 'reviews' ? 'text-cyan-400 border-cyan-400' : 'text-gray-400 border-transparent hover:text-gray-700'}`}
+                    >
+                        Code Reviews {reviews.length > 0 && <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">{reviews.length}</span>}
+                    </button>
                 </div>
 
                 {/* Management Section */}
                 <div className="edu-card overflow-hidden p-0">
                     <div className="p-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
                         <h2 className="text-xl font-bold flex items-center gap-2 text-gray-900">
-                            {activeTab === 'courses' ? <BookOpen size={20} className="text-violet-400" /> : <Users size={20} className="text-cyan-400" />}
-                            {activeTab === 'courses' ? 'Platform Courses' : 'User Management'}
+                            {activeTab === 'courses' ? <BookOpen size={20} className="text-violet-400" /> : activeTab === 'users' ? <Users size={20} className="text-cyan-400" /> : <ShieldAlert size={20} className="text-red-400" />}
+                            {activeTab === 'courses' ? 'Platform Courses' : activeTab === 'users' ? 'User Management' : 'Pending Code Reviews'}
                         </h2>
                         <div className="relative w-full md:w-64">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
@@ -241,7 +272,7 @@ const AdminDashboard = () => {
                                         ))}
                                     </tbody>
                                 </motion.table>
-                            ) : (
+                            ) : activeTab === 'users' ? (
                                 <motion.table
                                     key="users-table"
                                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -294,7 +325,57 @@ const AdminDashboard = () => {
                                         ))}
                                     </tbody>
                                 </motion.table>
-                            )}
+                            ) : activeTab === 'reviews' ? (
+                                <motion.table
+                                    key="reviews-table"
+                                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                                    className="w-full text-left"
+                                >
+                                    <thead>
+                                        <tr className="text-xs font-semibold text-gray-500 uppercase tracking-widest bg-white/20">
+                                            <th className="px-6 py-4">Student</th>
+                                            <th className="px-6 py-4">Lesson/Context</th>
+                                            <th className="px-6 py-4">Language</th>
+                                            <th className="px-6 py-4">Submitted At</th>
+                                            <th className="px-6 py-4 text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-[var(--color-border-subtle)]">
+                                        {reviews.length === 0 ? (
+                                            <tr>
+                                                <td colSpan="5" className="px-6 py-12 text-center text-gray-500 font-bold">
+                                                    No pending code reviews. You are all caught up!
+                                                </td>
+                                            </tr>
+                                        ) : reviews.map((sub) => (
+                                            <tr key={sub._id} className="hover:bg-white transition-colors group">
+                                                <td className="px-6 py-4">
+                                                    <p className="font-bold text-sm text-gray-900">{sub.user?.fullName || 'Unknown'}</p>
+                                                </td>
+                                                <td className="px-6 py-4 text-sm text-gray-500 font-semibold">
+                                                    {sub.lessonTitle}
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className="text-xs font-bold uppercase px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200">
+                                                        {sub.language}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 text-sm text-gray-400">
+                                                    {new Date(sub.createdAt).toLocaleDateString()}
+                                                </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <button
+                                                        onClick={() => openReviewModal(sub)}
+                                                        className="btn-primary px-4 py-1.5 rounded-lg text-xs font-bold"
+                                                    >
+                                                        Review
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </motion.table>
+                            ) : null}
                         </AnimatePresence>
                     </div>
                 </div>
@@ -337,6 +418,69 @@ const AdminDashboard = () => {
                                     className="flex-1 py-2.5 rounded-xl font-medium bg-red-500 text-gray-900 hover:bg-red-600 transition-colors shadow-sm"
                                 >
                                     Yes, Delete
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Review Modal */}
+            <AnimatePresence>
+                {reviewModal.isOpen && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                    >
+                        <motion.div 
+                            initial={{ scale: 0.95, opacity: 0, y: 10 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 10 }}
+                            className="bg-white border border-gray-200 rounded-2xl max-w-3xl w-full shadow-2xl relative overflow-hidden max-h-[90vh] flex flex-col"
+                        >
+                            <div className="p-6 border-b border-gray-200 shrink-0">
+                                <h3 className="text-xl font-bold text-gray-900">Code Review</h3>
+                                <p className="text-gray-500 text-sm mt-1">Student: {reviewModal.submission?.user?.fullName} | {reviewModal.submission?.lessonTitle}</p>
+                            </div>
+                            
+                            <div className="p-6 overflow-y-auto flex-1 bg-gray-50 space-y-4">
+                                <div>
+                                    <h4 className="text-sm font-bold text-gray-900 mb-2">Submitted Code ({reviewModal.submission?.language})</h4>
+                                    <pre className="bg-[#0d1117] text-gray-300 p-4 rounded-xl overflow-x-auto text-sm font-mono border border-gray-800">
+                                        {reviewModal.submission?.code}
+                                    </pre>
+                                </div>
+                                <div>
+                                    <h4 className="text-sm font-bold text-gray-900 mb-2">Provide Feedback</h4>
+                                    <textarea
+                                        value={reviewFeedback}
+                                        onChange={(e) => setReviewFeedback(e.target.value)}
+                                        className="w-full h-32 p-4 bg-white border border-gray-200 rounded-xl focus:border-violet-500 focus:outline-none resize-none"
+                                        placeholder="Write your constructive feedback here..."
+                                    ></textarea>
+                                </div>
+                            </div>
+
+                            <div className="p-6 border-t border-gray-200 bg-white shrink-0 flex gap-3 justify-end">
+                                <button 
+                                    onClick={() => setReviewModal({ isOpen: false, submission: null })}
+                                    className="px-6 py-2.5 rounded-xl font-bold text-gray-500 hover:bg-gray-100 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    onClick={() => submitReview('needs_work')}
+                                    className="px-6 py-2.5 rounded-xl font-bold bg-orange-100 text-orange-600 hover:bg-orange-200 transition-colors"
+                                >
+                                    Needs Work
+                                </button>
+                                <button 
+                                    onClick={() => submitReview('approved')}
+                                    className="px-6 py-2.5 rounded-xl font-bold bg-green-500 text-white hover:bg-green-600 transition-colors shadow-lg shadow-green-500/20"
+                                >
+                                    Approve & Close
                                 </button>
                             </div>
                         </motion.div>

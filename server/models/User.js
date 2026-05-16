@@ -24,6 +24,18 @@ const EnrolledCourseSchema = new mongoose.Schema({
     lastLessonId: {
         type: String,
         default: null
+    },
+    certificateUrl: {
+        type: String,
+        default: null
+    },
+    certificateId: {
+        type: String,
+        default: null
+    },
+    issuedAt: {
+        type: Date,
+        default: null
     }
 }, { _id: false });
 

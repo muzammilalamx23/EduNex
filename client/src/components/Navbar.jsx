@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, BookOpen, Map, User, LogOut, X, ArrowRight, GraduationCap } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import NotificationBell from './NotificationBell';
 
 const Navbar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -88,6 +89,7 @@ const Navbar = () => {
                     <div className="flex items-center gap-3">
                         {user ? (
                             <>
+                                <NotificationBell />
                                 <Link
                                     to="/dashboard"
                                     className="text-sm font-semibold text-gray-700 hover:text-violet-600 transition-colors"
@@ -132,12 +134,15 @@ const Navbar = () => {
                             Edu<span className="text-violet-600">Nex</span>
                         </span>
                     </Link>
-                    <button
-                        onClick={() => setMobileOpen((p) => !p)}
-                        className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
-                    >
-                        {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-                    </button>
+                    <div className="flex items-center gap-2">
+                        {user && <NotificationBell />}
+                        <button
+                            onClick={() => setMobileOpen((p) => !p)}
+                            className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+                        >
+                            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+                        </button>
+                    </div>
                 </div>
             </div>
 

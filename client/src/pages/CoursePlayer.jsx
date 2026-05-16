@@ -9,6 +9,7 @@ import {
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 import YouTubePlayer from '../components/YouTubePlayer';
+import QuizEngine from '../components/assessment/QuizEngine';
 
 // ─── CircularProgress ─────────────────────────────────────────────────────────
 // SVG-based circular progress ring for the header HUD.
@@ -234,7 +235,8 @@ const CoursePlayer = () => {
     );
 
     const completedCount = completedLessons.length;
-    const totalLessons = course?.lessons?.length || 0;
+    const completableLessons = course?.lessons?.filter(l => l.type !== 'heading') || [];
+    const totalLessons = completableLessons.length;
 
     return (
         <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col h-screen overflow-hidden">
@@ -365,10 +367,10 @@ const CoursePlayer = () => {
                                         {activeLesson.content}
                                     </div>
                                 </div>
-                            ) : (
-                                <div className="aspect-video bg-white rounded-3xl flex flex-col items-center justify-center border border-gray-200">
-                                    <Play size={48} className="text-zinc-700 mb-4" />
-                                    <p className="text-gray-400 text-sm">No content available for this lesson.</p>
+                            ) : activeLesson?.type !== 'quiz' && (
+                                <div className="aspect-video bg-white rounded-3xl flex flex-col items-center justify-center border border-gray-200 shadow-sm">
+                                    <Play size={48} className="text-zinc-300 mb-4" />
+                                    <p className="text-gray-400 text-sm font-medium">No video content available for this lesson.</p>
                                 </div>
                             )}
 
@@ -403,6 +405,20 @@ const CoursePlayer = () => {
                                             </a>
                                         )}
                                     </div>
+                                </div>
+                            )}
+
+                            {/* ── QUizzes ── */}
+                            {activeLesson.type === 'quiz' && (
+                                <div className="mt-8">
+                                    <QuizEngine 
+                                        lessonId={activeLesson._id} 
+                                        onComplete={() => {
+                                            setCanComplete(true);
+                                            videoWatchedRef.current = true;
+                                            handleLessonComplete(); // Auto-complete and go next on pass
+                                        }} 
+                                    />
                                 </div>
                             )}
                         </div>

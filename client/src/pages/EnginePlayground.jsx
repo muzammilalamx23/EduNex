@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
-import { Play, Loader2, Server, Terminal, ShieldAlert, Award } from 'lucide-react';
+import { Play, Loader2, Server, Terminal, ShieldAlert, Sparkles } from 'lucide-react';
 import { io } from 'socket.io-client';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
+import AIMentorPanel from '../components/playground/AIMentorPanel';
 
 export default function EnginePlayground() {
     const [language, setLanguage] = useState('nodejs');
     const [code, setCode] = useState('console.log("Hello EduNex Engine!");\n');
     const [output, setOutput] = useState('');
     const [isExecuting, setIsExecuting] = useState(false);
+    const [isSubmittingReview, setIsSubmittingReview] = useState(false);
     const [socket, setSocket] = useState(null);
+    const [activeTab, setActiveTab] = useState('console'); // 'console' or 'ai'
 
     // Setup Socket.IO connection
     useEffect(() => {
@@ -56,6 +59,7 @@ export default function EnginePlayground() {
         if (!code.trim()) return;
 
         setIsExecuting(true);
+        setActiveTab('console'); // Auto-switch to console on run
         setOutput('=> Submitting to execution queue...');
 
         try {
@@ -68,6 +72,25 @@ export default function EnginePlayground() {
         } catch (err) {
             setIsExecuting(false);
             setOutput(`=> API Error: ${err.response?.data?.message || err.message}`);
+        }
+    };
+
+    const handleSubmitForReview = async () => {
+        if (!code.trim()) return;
+        setIsSubmittingReview(true);
+        try {
+            const res = await api.post('/playground/submit', {
+                language,
+                code,
+                lessonTitle: 'Playground Exploration'
+            });
+            if (res.data.success) {
+                toast.success('Code submitted to admins for review!');
+            }
+        } catch (err) {
+            toast.error(err.response?.data?.message || 'Failed to submit code');
+        } finally {
+            setIsSubmittingReview(false);
         }
     };
 
@@ -92,6 +115,15 @@ export default function EnginePlayground() {
                         <option value="nodejs">Node.js (v18)</option>
                         <option value="python">Python (3.9)</option>
                     </select>
+
+                    <button
+                        onClick={handleSubmitForReview}
+                        disabled={isSubmittingReview || !code.trim()}
+                        className="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-5 py-2 rounded-lg font-bold transition-colors disabled:opacity-50"
+                    >
+                        {isSubmittingReview ? <Loader2 size={18} className="animate-spin" /> : <ShieldAlert size={18} />}
+                        Submit for Review
+                    </button>
 
                     <button
                         onClick={handleRunCode}
@@ -128,17 +160,41 @@ export default function EnginePlayground() {
                     />
                 </section>
 
-                {/* Output/Console Panel */}
-                <section className="w-[40%] bg-[#0d1117] flex flex-col">
-                    <div className="h-10 bg-gray-800 border-b border-gray-700 flex items-center px-4 shrink-0">
-                        <div className="flex items-center gap-2 text-gray-400 text-xs font-bold uppercase tracking-wider">
+                {/* Right Panel: Tabs for Console & AI */}
+                <section className="w-[40%] bg-[#0d1117] flex flex-col border-l border-gray-700">
+                    <div className="h-10 bg-gray-800 border-b border-gray-700 flex items-center shrink-0">
+                        <button
+                            onClick={() => setActiveTab('console')}
+                            className={`px-4 h-full flex items-center gap-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+                                activeTab === 'console' 
+                                    ? 'bg-[#0d1117] text-white border-t-2 border-t-violet-500' 
+                                    : 'text-gray-400 hover:bg-gray-700 hover:text-gray-200 border-t-2 border-t-transparent'
+                            }`}
+                        >
                             <Terminal size={14} /> Output Console
-                        </div>
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('ai')}
+                            className={`px-4 h-full flex items-center gap-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+                                activeTab === 'ai' 
+                                    ? 'bg-[#0d1117] text-teal-400 border-t-2 border-t-teal-400' 
+                                    : 'text-gray-400 hover:bg-gray-700 hover:text-gray-200 border-t-2 border-t-transparent'
+                            }`}
+                        >
+                            <Sparkles size={14} /> AI Mentor
+                        </button>
                     </div>
-                    <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
-                        <pre className="text-gray-300 whitespace-pre-wrap leading-relaxed">
-                            {output || 'Ready for execution...'}
-                        </pre>
+                    
+                    <div className="flex-1 overflow-hidden">
+                        {activeTab === 'console' ? (
+                            <div className="h-full p-4 overflow-y-auto font-mono text-sm">
+                                <pre className="text-gray-300 whitespace-pre-wrap leading-relaxed">
+                                    {output || 'Ready for execution...'}
+                                </pre>
+                            </div>
+                        ) : (
+                            <AIMentorPanel currentCode={code} lessonTitle="Interactive Playground" />
+                        )}
                     </div>
                 </section>
             </main>

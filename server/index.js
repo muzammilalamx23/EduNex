@@ -103,6 +103,9 @@ app.use('/api/courses', require('./routes/courses'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/progress', require('./routes/progressRoutes'));
 app.use('/api/playground', require('./routes/playgroundRoutes'));
+app.use('/api/quizzes', require('./routes/quizRoutes'));
+app.use('/api/ai', require('./routes/aiRoutes'));
+app.use('/api/notifications', require('./routes/notificationRoutes'));
 
 // ─── Database Connection & Crash Handlers ─────────────────────────────────────
 mongoose.connect(process.env.MONGO_URI, { family: 4 })
@@ -163,13 +166,9 @@ const io = new Server(server, {
 // Expose io to routes
 app.set('io', io);
 
-io.on('connection', (socket) => {
-    logger.info(`[Socket.IO] Client connected: ${socket.id}`);
-    
-    socket.on('disconnect', () => {
-        logger.info(`[Socket.IO] Client disconnected: ${socket.id}`);
-    });
-});
+// Initialize Socket.io Services
+const initSocket = require('./services/socketService');
+initSocket(io);
 
 // Initialize BullMQ Playground Worker
 const worker = initPlaygroundWorker(io);

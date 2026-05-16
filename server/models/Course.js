@@ -53,7 +53,7 @@ const LessonSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['video', 'reading', 'heading'],
+        enum: ['video', 'reading', 'heading', 'quiz'],
         default: 'video'
     },
     order: {
@@ -166,11 +166,10 @@ CourseSchema.virtual('totalDuration').get(function () {
 });
 
 // ─── Pre-Save Hook: Generate Slug ──────────────────────────────────────────────
-CourseSchema.pre('save', function (next) {
+CourseSchema.pre('save', function () {
     if (this.isModified('title') || !this.slug) {
         this.slug = slugify(this.title, { lower: true, strict: true });
     }
-    next();
 });
 
 // ─── Compound & Text Indexes ──────────────────────────────────────────────────
