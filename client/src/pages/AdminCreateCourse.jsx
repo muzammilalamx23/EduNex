@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Plus, Trash2, ArrowLeft, Loader2, Video, FileText, Clock, Layout, Save, Image as ImageIcon, CheckCircle2, XCircle } from 'lucide-react';
 import api from '../utils/api';
 import Navbar from '../components/Navbar';
@@ -85,7 +84,7 @@ const AdminCreateCourse = () => {
             await api.post('/courses', { ...courseData, tags: parsedTags });
             toast.success('Course created successfully!');
             navigate('/admin');
-        } catch (err) {
+        } catch {
             toast.error(err.response?.data?.message || 'Failed to create course.');
         } finally {
             setLoading(false);

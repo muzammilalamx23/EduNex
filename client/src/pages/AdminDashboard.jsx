@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import {
     Users, Zap, Clock, Trophy, Search, Loader2, ChevronRight,
     User as UserIcon, Calendar, BookOpen, Plus, Edit, Trash2,
@@ -35,7 +35,7 @@ const AdminDashboard = () => {
             setStats(statsRes.data.data || {});
             setCourses(coursesRes.data.data || []);
             setReviews(reviewsRes.data.data || []);
-        } catch (err) {
+        } catch {
             setError(err.response?.data?.message || 'Access denied. Admin privileges required.');
         } finally {
             setLoading(false);
@@ -61,7 +61,7 @@ const AdminDashboard = () => {
             await api.delete(`/courses/${deleteModal.courseId}`);
             toast.success("Course deleted");
             setCourses(courses.filter(c => c._id !== deleteModal.courseId));
-        } catch (err) {
+        } catch {
             toast.error(err.response?.data?.message || "Delete failed");
         } finally {
             setDeleteModal({ isOpen: false, courseId: null });
@@ -73,7 +73,7 @@ const AdminDashboard = () => {
             const res = await api.patch(`/courses/${id}/publish`);
             toast.success(`Course ${res.data.status}`);
             setCourses(courses.map(c => c._id === id ? { ...c, status: res.data.status } : c));
-        } catch (err) {
+        } catch {
             toast.error("Failed to update status");
         }
     };
@@ -104,7 +104,7 @@ const AdminDashboard = () => {
             toast.success(`Submission marked as ${status.replace('_', ' ')}`);
             setReviewModal({ isOpen: false, submission: null });
             fetchData();
-        } catch (err) {
+        } catch {
             toast.error(err.response?.data?.message || 'Failed to submit review');
         }
     };

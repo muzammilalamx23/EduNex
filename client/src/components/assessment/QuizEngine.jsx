@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, Trophy, ArrowRight, Loader2, Sparkles, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../utils/api';
@@ -29,7 +29,7 @@ const QuizEngine = ({ lessonId, onComplete }) => {
                     });
                     setSelectedAnswers(initialAnswers);
                 }
-            } catch (err) {
+            } catch {
                 console.error('Failed to load quiz:', err);
                 setError(err.response?.data?.message || 'Quiz not found for this lesson.');
             } finally {
@@ -83,7 +83,7 @@ const QuizEngine = ({ lessonId, onComplete }) => {
                     toast.error(`You scored ${quizResults.score.toFixed(0)}%. Passing is ${quiz.passingScore}%. Try again!`);
                 }
             }
-        } catch (err) {
+        } catch {
             toast.error(err.response?.data?.message || 'Failed to submit quiz.');
         } finally {
             setIsSubmitting(false);

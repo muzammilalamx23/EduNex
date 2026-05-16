@@ -69,7 +69,7 @@ export default function EnginePlayground() {
                 socketId: socket?.id
             });
             // Result comes via Socket.IO
-        } catch (err) {
+        } catch {
             setIsExecuting(false);
             setOutput(`=> API Error: ${err.response?.data?.message || err.message}`);
         }
@@ -87,7 +87,7 @@ export default function EnginePlayground() {
             if (res.data.success) {
                 toast.success('Code submitted to admins for review!');
             }
-        } catch (err) {
+        } catch {
             toast.error(err.response?.data?.message || 'Failed to submit code');
         } finally {
             setIsSubmittingReview(false);

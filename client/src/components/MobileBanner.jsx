@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { Monitor, X } from 'lucide-react';
 
 export default function MobileBanner() {
-    const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        // Only show if it's a mobile device and hasn't been dismissed in this session
+    const [isVisible, setIsVisible] = useState(() => {
+        if (typeof window === 'undefined') return false;
         const isMobile = window.innerWidth <= 768;
         const dismissed = sessionStorage.getItem('edunex_mobile_dismissed');
+        return isMobile && !dismissed;
+    });
 
-        if (isMobile && !dismissed) {
-            setIsVisible(true);
-        }
+    useEffect(() => {
+        // State initialized lazily above to prevent cascading renders
     }, []);
 
     const dismiss = () => {

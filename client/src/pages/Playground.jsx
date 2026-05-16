@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import Editor from '@monaco-editor/react';
 import { ArrowLeft, Send, Bot, Code2, Globe, Layout, Maximize2, Sparkles, User, RefreshCw, Layers, Flame, Zap, Trophy, CheckCircle2, Circle, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -312,6 +312,7 @@ export default function Playground() {
 
   // Initialize chat when course changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setChatMessages([
       { 
         role: 'assistant', 
@@ -415,7 +416,7 @@ export default function Playground() {
         savedXp = res.data.data?.awarded ?? mission.xp;
         // Refresh the user context so the header XP counter updates
         await refreshUser();
-      } catch (err) {
+      } catch {
         // Non-fatal: the mission still completes, XP save is best-effort
         console.error('Failed to save playground XP:', err?.response?.data?.message || err.message);
       }

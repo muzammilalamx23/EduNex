@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import {
     Monitor, Server, Layers, ChevronDown, ChevronLeft,
     Map, BookOpen, Code2, Rocket, BrainCircuit, Trophy,

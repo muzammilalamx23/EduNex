@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Terminal, Cpu, ShieldCheck, Workflow, Sparkles, Zap, Globe, Lock } from 'lucide-react';
 
 const fadeInUp = {

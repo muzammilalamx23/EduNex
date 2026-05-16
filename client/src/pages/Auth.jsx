@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { ArrowRight, Mail, Lock, User, Loader2, Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -50,7 +49,7 @@ const Auth = () => {
                 toast.success(isLogin ? 'Welcome back!' : 'Account created! Welcome to EduNex 🚀');
                 navigate('/dashboard');
             }
-        } catch (err) {
+        } catch {
             const message = err.response?.data?.message || 'Something went wrong. Please try again.';
             toast.error(message);
         } finally {

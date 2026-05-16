@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import {
     ChevronLeft, Play, CheckCircle2, ChevronRight,
     Menu, X, FileText, Zap, Layout, Clock, Lock,
@@ -127,7 +127,7 @@ const CoursePlayer = () => {
 
                     switchLesson(resumeLesson);
                 }
-            } catch (err) {
+            } catch {
                 toast.error('Could not load this course. Redirecting...');
                 navigate('/dashboard');
             } finally {
@@ -211,7 +211,7 @@ const CoursePlayer = () => {
                 toast.success('🏆 Course complete! You earned it.', { duration: 4000 });
                 navigate('/dashboard');
             }
-        } catch (err) {
+        } catch {
             toast.error('Failed to save progress. Please try again.');
         } finally {
             setIsCompleting(false);

@@ -4,7 +4,6 @@
 // or set `useRoadmap = false` in Landing.jsx.
 // ============================================================
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Terminal, Cpu, ShieldCheck, Workflow, Sparkles, Rocket, Code, Layers } from 'lucide-react';
 
 const fadeInUp = {

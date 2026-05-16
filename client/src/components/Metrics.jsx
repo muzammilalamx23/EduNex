@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Star, TrendingUp, Users, BookOpen, Award, Zap } from 'lucide-react';
 
 /* ─── Animated counter ─── */

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bell } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { io } from 'socket.io-client';
@@ -22,7 +22,7 @@ const NotificationBell = () => {
                 const res = await api.get('/notifications');
                 setNotifications(res.data.data.notifications);
                 setUnreadCount(res.data.data.unreadCount);
-            } catch (err) {
+            } catch {
                 console.error("Failed to fetch notifications");
             }
         };
@@ -44,6 +44,7 @@ const NotificationBell = () => {
             });
         });
 
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSocket(newSocket);
 
         return () => {
@@ -56,7 +57,7 @@ const NotificationBell = () => {
             await api.patch(`/notifications/${id}/read`);
             setNotifications(prev => prev.map(n => n._id === id ? { ...n, isRead: true } : n));
             setUnreadCount(prev => Math.max(0, prev - 1));
-        } catch (err) {
+        } catch {
             console.error("Failed to mark as read");
         }
     };
@@ -66,7 +67,7 @@ const NotificationBell = () => {
             await api.patch('/notifications/read-all');
             setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
             setUnreadCount(0);
-        } catch (err) {
+        } catch {
             console.error("Failed to mark all as read");
         }
     };

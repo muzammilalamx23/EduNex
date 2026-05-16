@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Plus, Trash2, ArrowLeft, Loader2, Video, FileText, Clock, Layout, Save, Image as ImageIcon } from 'lucide-react';
 import api from '../utils/api';
 import Navbar from '../components/Navbar';
@@ -25,7 +24,7 @@ const AdminEditCourse = () => {
             try {
                 const res = await api.get(`/courses/${courseId}`);
                 setCourseData(res.data.data);
-            } catch (err) {
+            } catch {
                 toast.error("Failed to load course");
                 navigate('/admin');
             } finally {
@@ -61,7 +60,7 @@ const AdminEditCourse = () => {
             await api.put(`/courses/${courseId}`, courseData);
             toast.success('Course updated successfully!');
             navigate('/admin');
-        } catch (err) {
+        } catch {
             toast.error(err.response?.data?.message || 'Update failed');
         } finally {
             setSaving(false);

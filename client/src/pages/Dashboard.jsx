@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
 import { Layout, BookOpen, User, Settings, LogOut, Zap, Trophy, Clock, Loader2, Save, Github, Linkedin, Lock, ArrowRight, Compass, ShieldCheck, FileCheck, Bell, BarChart2, Medal } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -36,7 +35,7 @@ const ProfileSettings = ({ user, onUpdate }) => {
             // New backend: { success: true, message: '...' }
             setMessage({ type: 'success', text: response.data.message || 'Profile updated.' });
             onUpdate();
-        } catch (err) {
+        } catch {
             setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update profile.' });
         } finally {
             setLoading(false);

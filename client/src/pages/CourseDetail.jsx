@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
     ChevronLeft,
     Clock,
@@ -43,7 +42,7 @@ const CourseDetail = () => {
             try {
                 const res = await api.get(`/courses/${courseId}`);
                 setCourse(res.data.data);
-            } catch (err) {
+            } catch {
                 console.error(err);
             } finally {
                 setLoading(false);
@@ -84,7 +83,7 @@ const CourseDetail = () => {
             setIsEnrolled(true);
             toast.success('Successfully enrolled! Starting your journey...');
             navigate(`/course/${course._id}`);
-        } catch (err) {
+        } catch {
             const msg = err.response?.data?.message || 'Enrollment failed. Please try again.';
             toast.error(msg);
         } finally {

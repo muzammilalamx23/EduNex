@@ -1,8 +1,6 @@
 import React from 'react';
 import { Rocket, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-
 const BottomCTA = () => {
     return (
         <section className="py-32 px-6 relative overflow-hidden flex justify-center">
