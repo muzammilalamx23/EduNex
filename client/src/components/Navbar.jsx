@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, motion  } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, BookOpen, Map, User, LogOut, X, ArrowRight, GraduationCap } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
