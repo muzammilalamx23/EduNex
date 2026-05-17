@@ -310,18 +310,18 @@ export default function Playground() {
   const [isTyping, setIsTyping] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
 
-  // Initialize chat when course changes
+  // Initialize chat when course changes (do not depend on 'user' object or it resets on XP gain!)
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setChatMessages([
       { 
         role: 'assistant', 
-        text: `Hey${user ? ` ${user.fullName?.split(' ')[0]}` : ''}! Let's master ${activeCourse.toUpperCase()}.\n\n${MISSIONS[0].task}` 
+        text: `Hey${user?.fullName ? ` ${user.fullName.split(' ')[0]}` : ''}! Let's master ${activeCourse.toUpperCase()}.\n\n${MISSIONS[0].task}` 
       }
     ]);
     setProgress(1); // Reset progress on course switch
     setActiveTab(activeCourse === 'js' ? 'js' : activeCourse === 'react' ? 'react' : 'html');
-  }, [activeCourse, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeCourse]);
 
   // Handle iframe srcDoc update
   useEffect(() => {
