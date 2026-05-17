@@ -26,10 +26,11 @@ app.use(helmet({
         directives: {
             ...helmet.contentSecurityPolicy.getDefaultDirectives(),
             "img-src": ["'self'", "data:", "https:"],
-            "script-src": ["'self'", "'unsafe-inline'"],
+            "script-src": ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
             "script-src-attr": ["'unsafe-inline'"], // needed for React event handlers
             "frame-src": ["'self'", "https://www.youtube.com"],
-            "connect-src": ["'self'", "https:", "wss:"],
+            "connect-src": ["'self'", "https:", "wss:", "ws:"],
+            "worker-src": ["'self'", "blob:"], // Often needed for Monaco
         },
     },
     crossOriginEmbedderPolicy: false
